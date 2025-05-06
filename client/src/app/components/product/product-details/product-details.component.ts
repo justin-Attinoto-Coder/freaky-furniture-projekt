@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FocusProductCardComponent } from '../focus-product-card/focus-product-card.component';
 import { SimilarProductsComponent } from '../similar-products/similar-products.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-product-details',
@@ -13,31 +14,53 @@ import { SimilarProductsComponent } from '../similar-products/similar-products.c
   styleUrls: ['./product-details.component.css']
 })
 export class ProductDetailsComponent implements OnInit {
-  product: any;
+  product: any = null;
   similarItems: any[] = [];
   averageRating: number = 0;
-  furnitureItems: any[] = []; // Replace with actual data source
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const urlSlug = params.get('urlSlug');
-      this.product = this.furnitureItems.find(item => item.urlSlug === urlSlug);
-      if (this.product) {
-        this.http.get(`http://localhost:8000/api/reviews/${this.product.id}/average`).subscribe({
-          next: (response: any) => this.averageRating = response.averageRating,
-          error: (error) => console.error('Error fetching average rating:', error)
+      if (urlSlug) {
+        // Fetch product by urlSlug
+        this.http.get<any>(`http://localhost:8000/api/furniture/${urlSlug}`).subscribe({
+          next: (product) => {
+            this.product = product;
+            // Fetch average rating
+            this.http.get<any>(`http://localhost:8000/api/reviews/${product.id}/average`).subscribe({
+              next: (response) => {
+                this.averageRating = response.averageRating || 0;
+              },
+              error: (error: HttpErrorResponse) => {
+                console.error('Error fetching average rating:', error);
+              }
+            });
+            // Fetch similar items
+            this.http.get<any[]>(`http://localhost:8000/api/furniture?category=${product.category}`).subscribe({
+              next: (items) => {
+                this.similarItems = items
+                  .filter(item => item.urlSlug !== urlSlug)
+                  .sort(() => 0.5 - Math.random())
+                  .slice(0, 4);
+              },
+              error: (error: HttpErrorResponse) => {
+                console.error('Error fetching similar items:', error);
+              }
+            });
+          },
+          error: (error: HttpErrorResponse) => {
+            console.error('Error fetching product:', error);
+            this.product = null;
+          }
         });
-        this.similarItems = this.furnitureItems
-          .filter(item => item.category === this.product.category && item.urlSlug !== this.product.urlSlug)
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 4);
       }
     });
   }
 
   onAddToCart() {
-    // Implement add to cart logic
+    // Implement add-to-cart logic (to be expanded later)
+    console.log('Add to cart:', this.product);
   }
 }

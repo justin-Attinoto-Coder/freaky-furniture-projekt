@@ -4,6 +4,11 @@
     <a [routerLink]="['/category', product?.category]" class="text-blue-500 underline"> {{ product?.category }}</a> >
     <span>{{ product?.name }}</span>
   </div>
-  <app-focus-product-card [product]="product" [averageRating]="averageRating" (addToCart)="onAddToCart()"></app-focus-product-card>
-  <app-similar-products [similarItems]="similarItems"></app-similar-products>
+  <div *ngIf="product; else notFound">
+    <app-focus-product-card [product]="product" [averageRating]="averageRating" (addToCart)="onAddToCart()"></app-focus-product-card>
+    <app-similar-products [similarItems]="similarItems"></app-similar-products>
+  </div>
+  <ng-template #notFound>
+    <div>Product not found</div>
+  </ng-template>
 </div>
