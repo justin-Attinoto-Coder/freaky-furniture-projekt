@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HeroComponent } from './hero/hero.component';
-import { NewsSectionComponent } from './news-section/news-section.component';
 import { MoblerComponent } from './mobler/mobler.component';
 import { ForvaringComponent } from './forvaring/forvaring.component';
 import { DetaljerComponent } from './detaljer/detaljer.component';
