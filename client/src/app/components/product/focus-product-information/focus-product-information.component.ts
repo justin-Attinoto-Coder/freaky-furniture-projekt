@@ -1,4 +1,3 @@
-// src/app/components/product/focus-product-information/focus-product-information.component.ts
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -6,9 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { AddToCartButtonComponent } from '../add-to-cart-button/add-to-cart-button.component';
 import { FocusOverviewAccordionComponent } from '../focus-overview-accordion/focus-overview-accordion.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { faStar as faRegStar } from '@fortawesome/free-regular-svg-icons';
-import { Product } from '../../../models/product';
+import { faStar, faStar as faRegStar } from '@fortawesome/free-regular-svg-icons';
+import { HttpErrorResponse } from '@angular/common/http';
 
 interface Review {
   rating: number;
@@ -18,15 +16,15 @@ interface Review {
 
 @Component({
   selector: 'app-focus-product-information',
-  templateUrl: './focus-product-information.component.html',
-  styleUrls: ['./focus-product-information.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterLink, AddToCartButtonComponent, FocusOverviewAccordionComponent, FaIconComponent]
+  imports: [CommonModule, RouterLink, AddToCartButtonComponent, FocusOverviewAccordionComponent, FaIconComponent],
+  templateUrl: './focus-product-information.component.html',
+  styleUrls: ['./focus-product-information.component.css']
 })
 export class FocusProductInformationComponent implements OnInit {
-  @Input({ required: true }) product!: Product;
-  @Input({ required: true }) averageRating!: number;
-  @Output() addToCart = new EventEmitter<Product>();
+  @Input({ required: true }) product: any = {};
+  @Input({ required: true }) averageRating: number = 0;
+  @Output() addToCart = new EventEmitter<any>();
   quantity = 1;
   reviews: Review[] = [];
   faStar = faStar;
@@ -39,7 +37,7 @@ export class FocusProductInformationComponent implements OnInit {
       next: reviews => {
         this.reviews = reviews;
       },
-      error: error => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error fetching reviews:', error);
       }
     });
@@ -49,7 +47,7 @@ export class FocusProductInformationComponent implements OnInit {
     this.quantity = Math.max(1, this.quantity + amount);
   }
 
-  onAddToCart(product: Product): void {
+  onAddToCart(product: any): void {
     this.addToCart.emit(product);
   }
 }
