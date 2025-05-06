@@ -21,7 +21,6 @@ import { SearchService } from '../../services/search.service';
   imports: [
     CommonModule,
     HeroComponent,
-    NewsSectionComponent,
     MoblerComponent,
     ForvaringComponent,
     DetaljerComponent,
