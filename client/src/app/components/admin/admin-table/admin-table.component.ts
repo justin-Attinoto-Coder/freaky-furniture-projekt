@@ -7,7 +7,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-admin-table', // Corrected selector
+  selector: 'app-admin-table',
   templateUrl: './admin-table.component.html',
   styleUrls: ['./admin-table.component.css'],
   standalone: true,
