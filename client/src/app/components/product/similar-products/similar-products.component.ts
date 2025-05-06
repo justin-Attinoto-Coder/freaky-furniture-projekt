@@ -1,19 +1,17 @@
-// src/app/components/product/similar-products/similar-products.component.ts
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../../common/product-card/product-card.component';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
-import { Product } from '../../../models/product';
 
 @Component({
   selector: 'app-similar-products',
-  templateUrl: './similar-products.component.html',
-  styleUrls: ['./similar-products.component.css'],
   standalone: true,
-  imports: [CommonModule, ProductCardComponent, SlickCarouselModule]
+  imports: [CommonModule, ProductCardComponent, SlickCarouselModule],
+  templateUrl: './similar-products.component.html',
+  styleUrls: ['./similar-products.component.css']
 })
 export class SimilarProductsComponent {
-  @Input({ required: true }) similarItems!: Product[];
+  @Input({ required: true }) similarItems: any[] = [];
   slideConfig = {
     dots: true,
     infinite: true,
