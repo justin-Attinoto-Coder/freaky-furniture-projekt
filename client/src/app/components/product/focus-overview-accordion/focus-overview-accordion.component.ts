@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OverviewAccordionItemComponent } from './overview-accordion-item/overview-accordion-item.component';
-import { Product } from '../../../models/product';
 
 interface Review {
   rating: number;
@@ -11,12 +10,12 @@ interface Review {
 
 @Component({
   selector: 'app-focus-overview-accordion',
-  templateUrl: './focus-overview-accordion.component.html',
-  styleUrls: ['./focus-overview-accordion.component.css'],
   standalone: true,
-  imports: [CommonModule, OverviewAccordionItemComponent]
+  imports: [CommonModule, OverviewAccordionItemComponent],
+  templateUrl: './focus-overview-accordion.component.html',
+  styleUrls: ['./focus-overview-accordion.component.css']
 })
 export class FocusOverviewAccordionComponent {
-  @Input({ required: true }) product!: Product;
+  @Input({ required: true }) product: any = {};
   @Input() reviews: Review[] = [];
 }
