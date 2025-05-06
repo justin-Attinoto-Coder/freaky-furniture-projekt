@@ -1,0 +1,13 @@
+<p>textil works!</p>
+<!-- src/app/components/home/textil/textil.component.html -->
+<section id="textil" class="my-8">
+  <h2 class="text-2xl font-bold mb-4 text-center">Textil</h2>
+  <ng-container *ngIf="products && products.length > 0; else noItems">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <app-product-card *ngFor="let product of products" [product]="product"></app-product-card>
+    </div>
+  </ng-container>
+  <ng-template #noItems>
+    <p>No textile items available.</p>
+  </ng-template>
+</section>

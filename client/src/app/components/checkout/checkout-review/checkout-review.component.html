@@ -1,0 +1,17 @@
+<div class="container mx-auto px-4 pb-40">
+  <app-checkout-review-progress-bar></app-checkout-review-progress-bar>
+  <div class="mt-4 mb-24">
+    <ng-container *ngFor="let item of cartItems">
+      <app-review-product-card
+        [product]="item"
+        (quantityChange)="handleQuantityChange(item.id, $event)"
+      ></app-review-product-card>
+    </ng-container>
+  </div>
+  <app-order-summary
+    [subtotal]="subtotal"
+    [shippingFee]="shippingFee"
+    [grandTotal]="grandTotal"
+    (confirmOrder)="handleConfirmOrder()"
+  ></app-order-summary>
+</div>

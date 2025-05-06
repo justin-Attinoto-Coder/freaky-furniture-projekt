@@ -1,0 +1,11 @@
+<!-- src/app/components/product/similar-products/similar-products.component.html -->
+<section class="similar-products p-8 mt-8 sm:mt-28">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl text-left mb-4">Liknande Produkter</h2>
+    <ngx-slick-carousel [config]="slideConfig">
+      <div *ngFor="let item of similarItems.slice(0, 8)" ngxSlickItem>
+        <app-product-card [product]="item"></app-product-card>
+      </div>
+    </ngx-slick-carousel>
+  </div>
+</section>

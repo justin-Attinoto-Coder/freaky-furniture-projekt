@@ -1,0 +1,119 @@
+<div class="container mx-auto px-4 py-4">
+  <div class="flex items-center justify-center mb-4 relative">
+    <div class="absolute left-4 flex items-center cursor-pointer text-blue-500" (click)="navigateToCart()">
+      <fa-icon [icon]="faArrowLeft" class="text-xl"></fa-icon>
+      <span class="hidden sm:inline-flex ml-2 text-lg font-medium">Return to Cart</span>
+    </div>
+    <h2 class="text-xl sm:text-2xl font-bold">Checkout</h2>
+  </div>
+
+  <div class="flex items-center justify-between mb-8 mx-auto" style="max-width: 80%;">
+    <div class="flex flex-col items-center">
+      <fa-icon [icon]="faBoxOpen" class="text-2xl text-black border-2 border-black bg-white p-2 rounded-full"></fa-icon>
+      <span class="text-sm font-bold">Shipping</span>
+    </div>
+    <div class="flex-grow border-t border-gray-300 mx-2"></div>
+    <div class="flex flex-col items-center">
+      <fa-icon [icon]="faCreditCard" class="text-2xl text-gray-300"></fa-icon>
+      <span class="text-sm text-gray-300 font-bold">Payment</span>
+    </div>
+    <div class="flex-grow border-t border-gray-300 mx-2"></div>
+    <div class="flex flex-col items-center">
+      <fa-icon [icon]="faClipboardCheck" class="text-2xl text-gray-300"></fa-icon>
+      <span class="text-sm text-gray-300 font-bold">Review</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+    <div class="sm:col-span-2">
+      <h3 class="text-xl sm:text-2xl text-center font-bold mb-4">Enter Shipping Details</h3>
+      <form (ngSubmit)="handleSubmit($event)" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-gray-700 font-bold">Full Name *</label>
+          <input type="text" name="fullName" [(ngModel)]="shippingDetails.fullName" placeholder="Enter your full name" class="w-full p-2 bg-gray-100 rounded-xl" required />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-bold">Phone Number *</label>
+          <input type="text" name="phoneNumber" [(ngModel)]="shippingDetails.phoneNumber" placeholder="12-345 67 89" class="w-full p-2 bg-gray-100 rounded-xl" required />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-bold">Province</label>
+          <select name="province" [(ngModel)]="shippingDetails.province" (change)="handleChange($event)" class="w-full p-2 bg-gray-100 rounded-xl" required>
+            <option value="">Select Province</option>
+            <option *ngFor="let province of provinces" [value]="province">{{ province }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-bold">City</label>
+          <select name="city" [(ngModel)]="shippingDetails.city" (change)="handleChange($event)" class="w-full p-2 bg-gray-100 rounded-xl" required>
+            <option value="">Select City</option>
+            <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-bold">Street Address *</label>
+          <input type="text" name="streetAddress" [(ngModel)]="shippingDetails.streetAddress" placeholder="Enter your street address" class="w-full p-2 bg-gray-100 rounded-xl" required />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-bold">Postal Code *</label>
+          <input type="text" name="postalCode" [(ngModel)]="shippingDetails.postalCode" placeholder="Enter your postal code" class="w-full p-2 bg-gray-100 rounded-xl" required />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-bold">Shipping Method *</label>
+          <select name="shippingMethod" [(ngModel)]="shippingDetails.shippingMethod" (change)="handleChange($event)" class="w-full p-2 bg-gray-100 rounded-xl" required>
+            <option value="">Select Shipping Method</option>
+            <option value="Home Delivery">Home Delivery</option>
+            <option value="Pickup at Service Point">Pickup at Service Point</option>
+            <option value="Express Shipping">Express Shipping</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-bold">Carrier *</label>
+          <select name="carrier" [(ngModel)]="shippingDetails.carrier" (change)="handleChange($event)" class="w-full p-2 bg-gray-100 rounded-xl" required [disabled]="!shippingDetails.shippingMethod">
+            <option value="">Select Carrier</option>
+            <option *ngFor="let carrier of getCarrierOptions()" [value]="carrier">{{ carrier }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-bold">Delivery Time *</label>
+          <input type="text" name="deliveryTime" [(ngModel)]="shippingDetails.deliveryTime" readonly class="w-full p-2 bg-gray-100 rounded-xl" />
+        </div>
+        <div class="col-span-1 sm:col-span-2 mt-4">
+          <label class="inline-flex items-center">
+            <input type="checkbox" class="form-checkbox text-green-500" (change)="setCustomerAddress()" />
+            <span class="ml-2 text-gray-700">Same as Customer Address</span>
+          </label>
+        </div>
+        <div class="col-span-1 sm:col-span-2 flex sm:ml-auto">
+          <button type="submit" class="mt-8 mb-8 w-md mx-auto sm:w-auto bg-black sm:bg-blue-500 text-white px-4 py-2 rounded-full sm:rounded sm:font-bold sm:text-lg">
+            <span class="block sm:hidden">Confirm</span>
+            <span class="hidden sm:block">Continue to Payment Method</span>
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="hidden sm:block bg-gray-100 p-4 rounded-lg shadow-lg">
+      <h3 class="text-lg font-bold mb-4">Order Summary</h3>
+      <ul>
+        <li *ngFor="let item of cartItems" class="flex justify-between mb-2">
+          <span>{{ item.name }} (x{{ item.quantity }})</span>
+          <span>${{ (item.price * item.quantity).toFixed(2) }}</span>
+        </li>
+        <li class="flex justify-between font-bold">
+          <span>Total</span>
+          <span>${{ totalPrice.toFixed(2) }}</span>
+        </li>
+      </ul>
+      <div class="mt-6">
+        <label class="block text-gray-700 font-bold mb-2">Discount Code</label>
+        <input type="text" placeholder="Enter discount code" class="w-full p-2 border rounded" />
+        <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded w-full">Apply</button>
+      </div>
+      <div class="mt-8">
+        <label class="block text-gray-700 font-bold mb-2">Subscribe to Newsletter</label>
+        <input type="email" placeholder="Enter your email address" class="w-full p-2 border rounded" />
+        <button class="mt-2 bg-green-500 text-white px-4 py-2 rounded w-full">Subscribe</button>
+      </div>
+    </div>
+  </div>
+</div>

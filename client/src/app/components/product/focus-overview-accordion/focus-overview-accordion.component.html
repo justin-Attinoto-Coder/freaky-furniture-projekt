@@ -1,0 +1,27 @@
+<div class="w-full mx-auto my-12 border-0 rounded-xs">
+  <app-overview-accordion-item title="Overview" id="overview" customClass="bg-gradient-to-r from-blue-500 to-purple-500">
+    <p>Size and Dimensions: {{ product.size }}</p>
+    <p>Weight: {{ product.weight }}</p>
+  </app-overview-accordion-item>
+  <app-overview-accordion-item title="Specifications" id="specifications">
+    <p>{{ product.specifications }}</p>
+  </app-overview-accordion-item>
+  <app-overview-accordion-item title="Reviews" id="reviews">
+    <p *ngIf="reviews.length === 0">No reviews available</p>
+    <div *ngFor="let review of reviews" class="review">
+      <p>Rating: {{ review.rating }}</p>
+      <p>{{ review.reviewText }}</p>
+      <p>Reviewer: {{ review.reviewerName }}</p>
+    </div>
+  </app-overview-accordion-item>
+  <app-overview-accordion-item title="Delivery" id="delivery">
+    <p>Standard: PostNord</p>
+    <p>Collect at a service point: DHL, Instabox, DB Schenker</p>
+    <p>To your personal dwelling:</p>
+    <ul>
+      <li>AirMe: 17.00-22.00</li>
+      <li>Early Bird: 02.20-06.00</li>
+      <li>PostNord: Normal working daytime hours</li>
+    </ul>
+  </app-overview-accordion-item>
+</div>

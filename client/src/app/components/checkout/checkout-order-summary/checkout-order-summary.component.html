@@ -1,0 +1,24 @@
+<div class="relative w-full bg-white shadow-2xl shadow-gray-900 p-6 rounded-t-3xl z-20">
+  <div class="absolute -top-8 left-0 right-0 mx-auto h-8 bg-transparent">
+    <div class="w-full max-h-full rounded-t-full shadow-3xl"></div>
+  </div>
+  <div class="flex justify-between mb-2">
+    <span>Subtotal:</span>
+    <span>${{ subtotal.toFixed(2) }}</span>
+  </div>
+  <div class="flex justify-between mb-2">
+    <span>Shipping Fee:</span>
+    <span>${{ shippingFee.toFixed(2) }}</span>
+  </div>
+  <hr class="my-2" />
+  <div class="flex justify-between mb-4">
+    <span class="font-bold">Grand Total:</span>
+    <span class="font-bold">${{ grandTotal.toFixed(2) }}</span>
+  </div>
+  <button
+    (click)="confirmOrder.emit()"
+    class="w-md bg-black text-white py-3 rounded-full mx-auto block"
+  >
+    Confirm Order
+  </button>
+</div>

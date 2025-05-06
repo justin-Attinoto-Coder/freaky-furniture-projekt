@@ -1,0 +1,19 @@
+<nav class="flex flex-col sm:flex sm:flex-row items-left px-2 mt-4 w-full">
+  <ul class="flex space-x-1 mb-4">
+    <li class="cursor-pointer hover:text-blue-500">
+      <a href="#mobler">Möbler</a>
+    </li>
+    <li class="cursor-pointer hover:text-blue-500">
+      <a href="#forvaring">Förvaring</a>
+    </li>
+    <li class="cursor-pointer hover:text-blue-500">
+      <a href="#detaljer">Detaljer</a>
+    </li>
+    <li class="cursor-pointer hover:text-blue-500">
+      <a href="#textil">Textil</a>
+    </li>
+  </ul>
+  <div class="px-2 w-full sm:mt-[-10px]">
+    <app-search-bar (search)="search.emit($event)"></app-search-bar>
+  </div>
+</nav>

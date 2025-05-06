@@ -1,0 +1,33 @@
+<div class="bg-gray-100 p-4 rounded-lg shadow-md">
+  <h3 class="text-lg font-bold mb-4">Order Summary</h3>
+  <p class="text-gray-700"><strong>Subtotal:</strong> ${{ subtotal.toFixed(2) }}</p>
+  <p class="text-gray-700"><strong>Shipping Fee:</strong> ${{ readily in `CheckoutPaymentComponent` and `CheckoutReviewComponent`.
+
+#### 8. Fix `CheckoutShippingComponent` Private Property Error
+The fix was applied correctly in the previous response.
+
+#### 9. Fix `ReviewProductCardComponent` Type Errors
+The fix was applied correctly in the previous response.
+
+#### 10. Verify `Product` Interface
+The refined `Product` interface (without `stock`) is correct:
+
+**File: `src/app/models/product.ts`**
+```typescript
+export interface Product {
+  id: number;
+  name: string;
+  brand?: string;
+  price: number;
+  description?: string;
+  sku?: string;
+  publishing_date?: string;
+  urlSlug: string;
+  category: string;
+  image: string;
+  size?: string;
+  dimensions?: string;
+  weight?: string;
+  material?: string;
+  specifications?: string | { [key: string]: string };
+}

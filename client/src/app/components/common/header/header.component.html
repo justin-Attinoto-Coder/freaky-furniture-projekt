@@ -1,0 +1,28 @@
+<header class="relative flex flex-col justify-between sm:text-sm md:text-xl items-center p-4 bg-white shadow-md">
+  <div class="flex items-center justify-between w-full sm:relative">
+    <div class="flex items-center">
+      <app-hamburger-menu [isMenuOpen]="isMenuOpen" (toggleMenu)="toggleMenu()"></app-hamburger-menu>
+      <a routerLink="/">
+        <img src="../../../../../../server/public/images/logotyp90x50.png" alt="Logo" class="h-10 ml-5" />
+      </a>
+      <div class="hidden sm:flex sm:flex-row ml-5">
+        <app-navbar (search)="handleSearch($event)"></app-navbar>
+      </div>
+    </div>
+    <div class="flex items-center ml-auto relative">
+      <fa-icon [icon]="faHeart" class="mx-2 cursor-pointer text-2xl"></fa-icon>
+      <a routerLink="/login">
+        <fa-icon [icon]="faUser" class="mx-2 cursor-pointer text-2xl"></fa-icon>
+      </a>
+      <a routerLink="/cart" class="relative">
+        <fa-icon [icon]="faShoppingBasket" class="mx-2 cursor-pointer text-2xl"></fa-icon>
+        <span *ngIf="totalItemsInCart > 0" class="absolute top-0 right-0 bg-blue-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+          {{ totalItemsInCart }}
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="sm:hidden w-full mt-4">
+    <app-navbar (search)="handleSearch($event)"></app-navbar>
+  </div>
+</header>

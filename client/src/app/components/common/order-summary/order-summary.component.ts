@@ -1,0 +1,16 @@
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-order-summary',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './order-summary.component.html',
+  styleUrls: ['./order-summary.component.css']
+})
+export class OrderSummaryComponent {
+  @Input() subtotal: number = 0;
+  @Input() shippingFee: number = 0;
+  @Input() grandTotal: number = 0;
+  @Output() confirmOrder = new EventEmitter<void>();
+}

@@ -1,0 +1,112 @@
+<form
+  (ngSubmit)="submit.emit()"
+  class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 px-4 sm:px-0"
+>
+  <div class="hidden sm:col-span-2 sm:block">
+    <h3 class="text-lg font-bold mb-4">Shipping Address</h3>
+    <p>{{ shippingDetails.streetAddress || 'N/A' }}, {{ shippingDetails.city || 'N/A' }}, {{ shippingDetails.postalCode || 'N/A' }}</p>
+    <h3 class="text-lg font-bold mt-4">Shipping Method</h3>
+    <p>{{ shippingDetails.carrier || 'N/A' }} - {{ shippingDetails.shippingMethod || 'N/A' }}</p>
+  </div>
+  <div class="sm:hidden block sm:col-span-2">
+    <app-payment-method-selector [paymentDetails]="paymentDetails" (change)="change.emit($event)"></app-payment-method-selector>
+  </div>
+  <ng-container *ngIf="paymentDetails.paymentMethod === 'creditCard'">
+    <div class="w-full sm:col-span-2 sm:w-auto flex flex-col">
+      <label class="ml-4 block text-black-700 font-bold text-left">Card Number *</label>
+      <input
+        type="text"
+        name="cardNumber"
+        [(ngModel)]="paymentDetails.cardNumber"
+        (ngModelChange)="change.emit($event)"
+        placeholder="4111 1111 1111 1111"
+        class="w-7/8 sm:w-auto p-3 bg-gray-100 rounded-xl"
+        required
+      />
+    </div>
+    <div class="w-full sm:w-auto flex flex-col">
+      <label class="block ml-4 text-black-700 font-bold text-left">Card Holder's Name *</label>
+      <input
+        type="text"
+        name="cardHolderName"
+        [(ngModel)]="paymentDetails.cardHolderName"
+        (ngModelChange)="change.emit($event)"
+        placeholder="John Doe"
+        class="w-7/8 sm:w-auto p-3 bg-gray-100 rounded-xl"
+        required
+      />
+    </div>
+    <div class="flex flex-row gap-x-4 sm:flex-col sm:gap-y-4 w-full items-center">
+      <div class="flex-1 flex flex-col ml-4">
+        <label class="block text-black-700 font-bold">Expiry Date *</label>
+        <input
+          type="text"
+          name="expiryDate"
+          [(ngModel)]="paymentDetails.expiryDate"
+          (ngModelChange)="change.emit($event)"
+          placeholder="MM/YY"
+          class="w-1/2 p-4 bg-gray-100 rounded-xl"
+          required
+        />
+      </div>
+      <div class="flex-1 flex flex-col sm:absolute sm:left-5/9">
+        <label class="block text-black-700 font-bold ml-4">CVV *</label>
+        <input
+          type="text"
+          name="cvv"
+          [(ngModel)]="paymentDetails.cvv"
+          (ngModelChange)="change.emit($event)"
+          placeholder="123"
+          class="w-1/3 p-4 bg-gray-100 rounded-xl"
+          required
+        />
+      </div>
+    </div>
+  </ng-container>
+  <div class="hidden sm:block sm:col-span-2">
+    <h3 class="text-lg font-bold mt-6 mb-4">Billing Address</h3>
+    <label class="block">
+      <input
+        type="radio"
+        name="billingAddress"
+        value="same"
+        [(ngModel)]="paymentDetails.billingAddress"
+        (ngModelChange)="change.emit($event)"
+        class="mr-2"
+      />
+      Same as shipping address
+    </label>
+    <label class="block">
+      <input
+        type="radio"
+        name="billingAddress"
+        value="different"
+        [(ngModel)]="paymentDetails.billingAddress"
+        (ngModelChange)="change.emit($event)"
+        class="mr-2"
+      />
+      Different than shipping address
+    </label>
+  </div>
+  <div class="hidden sm:block sm:col-span-2 mt-4">
+    <label class="inline-flex items-center">
+      <input
+        type="checkbox"
+        name="rememberMe"
+        [(ngModel)]="paymentDetails.rememberMe"
+        (ngModelChange)="change.emit($event)"
+        class="form-checkbox text-green-500"
+      />
+      <span class="ml-2 text-gray-700">Remember me</span>
+    </label>
+  </div>
+  <div class="col-span-1 sm:col-span-2 flex justify-center sm:justify-end">
+    <button
+      type="submit"
+      class="mt-8 mb-8 w-sm shadow-lg shadow-gray-500/50 sm:w-auto bg-black sm:bg-blue-500 text-white px-4 py-2 rounded-full sm:rounded sm:font-bold sm:text-lg"
+    >
+      <span class="block sm:hidden">Confirm</span>
+      <span class="hidden sm:block">Continue to Review</span>
+    </button>
+  </div>
+</form>

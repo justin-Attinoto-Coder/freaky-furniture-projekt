@@ -1,0 +1,15 @@
+<div [ngClass]="['border-b', customClass]">
+  <button
+    class="w-full text-left p-4 focus:outline-none"
+    [ngClass]="customClass"
+    (click)="toggleAccordion()"
+  >
+    <div class="flex justify-between items-center">
+      <span>{{ title }}</span>
+      <span>{{ isOpen ? '-' : '+' }}</span>
+    </div>
+  </button>
+  <div *ngIf="isOpen" class="p-4 bg-white max-h-40 overflow-y-auto">
+    <ng-content></ng-content>
+  </div>
+</div>

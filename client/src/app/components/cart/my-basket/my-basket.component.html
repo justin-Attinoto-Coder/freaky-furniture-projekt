@@ -1,0 +1,13 @@
+<!-- src/app/components/cart/my-basket/my-basket.component.html -->
+<div>
+  <p *ngIf="cartItems.length === 0">Your cart is empty.</p>
+  <ul *ngIf="cartItems.length > 0">
+    <li *ngFor="let item of cartItems" [attr.key]="item.productId">
+      <app-basket-product-card
+        [item]="item"
+        (updateCartItem)="updateCartItem.emit($event)"
+        (deleteCartItem)="deleteCartItem.emit($event)"
+      ></app-basket-product-card>
+    </li>
+  </ul>
+</div>

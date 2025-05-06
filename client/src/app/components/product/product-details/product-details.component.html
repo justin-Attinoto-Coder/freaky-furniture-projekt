@@ -1,0 +1,9 @@
+<div class="mt-8">
+  <div class="breadcrumbs mb-4">
+    <a routerLink="/" class="text-blue-500 underline ml-5">Home</a> >
+    <a [routerLink]="['/category', product?.category]" class="text-blue-500 underline"> {{ product?.category }}</a> >
+    <span>{{ product?.name }}</span>
+  </div>
+  <app-focus-product-card [product]="product" [averageRating]="averageRating" (addToCart)="onAddToCart()"></app-focus-product-card>
+  <app-similar-products [similarItems]="similarItems"></app-similar-products>
+</div>

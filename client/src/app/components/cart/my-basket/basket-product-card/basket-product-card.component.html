@@ -1,0 +1,39 @@
+<!-- src/app/components/cart/basket-product-card/basket-product-card.component.html -->
+<div class="relative flex justify-between items-center mb-4 border p-4 rounded">
+  <a [routerLink]="['/product', item.urlSlug]" class="flex-grow">
+    <div class="flex items-start">
+      <div class="flex flex-col items-center mr-4">
+        <img [src]="item.image" [alt]="item.name" class="w-16 h-16 object-cover mb-2" />
+        <div class="flex items-center">
+          <button
+            class="w-8 h-8 flex items-center justify-center bg-gray-200 text-gray-700 rounded-full border border-gray-400"
+            (click)="handleQuantityChange(-1); $event.preventDefault()"
+          >
+            -
+          </button>
+          <span class="mx-2">{{ item.quantity }}</span>
+          <button
+            class="w-8 h-8 flex items-center justify-center bg-gray-200 text-gray-700 rounded-full border border-gray-400"
+            (click)="handleQuantityChange(1); $event.preventDefault()"
+          >
+            +
+          </button>
+        </div>
+      </div>
+      <div class="flex flex-col justify-center">
+        <p class="text-gray-700">{{ item.brand }}</p>
+        <p class="font-bold text-xl">{{ item.name }}</p>
+        <p class="text-gray-700">${{ (item.price || 0).toFixed(2) }}</p>
+      </div>
+    </div>
+  </a>
+  <div class="flex flex-col items-end">
+    <button
+      class="absolute top-1 right-1 text-black"
+      (click)="deleteCartItem.emit(item.productId); $event.preventDefault()"
+    >
+      X
+    </button>
+    <p class="font-bold text-xl">${{ ((item.price || 0) * item.quantity).toFixed(2) }}</p>
+  </div>
+</div>

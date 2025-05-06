@@ -1,0 +1,47 @@
+<div class="w-md mx-auto sm:col-span-2">
+  <h3 class="text-lg text-center font-bold mb-4">Select a Payment Method</h3>
+  <div class="flex flex-col gap-6 mb-6">
+    <div class="flex items-center">
+      <div class="bg-white shadow-md shadow-gray-500/50 rounded-xl p-2">
+        <fa-icon [icon]="faMastercard" class="text-3xl text-red-500"></fa-icon>
+      </div>
+      <span class="ml-4 italic text-2xl font-medium">Credit Card</span>
+      <input
+        type="radio"
+        name="paymentMethod"
+        value="creditCard"
+        [(ngModel)]="paymentDetails.paymentMethod"
+        (ngModelChange)="change.emit($event)"
+        class="ml-auto form-radio"
+      />
+    </div>
+    <div class="flex items-center">
+      <div class="bg-white shadow-md shadow-gray-500/50 rounded-xl p-2">
+        <fa-icon [icon]="faPaypal" class="text-3xl text-blue-500"></fa-icon>
+      </div>
+      <span class="ml-4 italic text-2xl font-medium">PayPal</span>
+      <input
+        type="radio"
+        name="paymentMethod"
+        value="paypal"
+        [(ngModel)]="paymentDetails.paymentMethod"
+        (ngModelChange)="change.emit($event)"
+        class="ml-auto form-radio"
+      />
+    </div>
+    <div class="flex items-center">
+      <div class="bg-white shadow-md shadow-gray-500/50 rounded-xl p-2">
+        <fa-icon [icon]="faGoogle" class="text-3xl"></fa-icon>
+      </div>
+      <span class="ml-4 italic text-2xl font-medium">Google Pay</span>
+      <input
+        type="radio"
+        name="paymentMethod"
+        value="googlePay"
+        [(ngModel)]="paymentDetails.paymentMethod"
+        (ngModelChange)="change.emit($event)"
+        class="ml-auto form-radio"
+      />
+    </div>
+  </div>
+</div>

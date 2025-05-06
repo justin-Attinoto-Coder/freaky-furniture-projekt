@@ -1,0 +1,23 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { AdmintableComponent } from './admin-table.component';
+
+describe('AdmintableComponent', () => {
+  let component: AdmintableComponent;
+  let fixture: ComponentFixture<AdmintableComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AdmintableComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(AdmintableComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

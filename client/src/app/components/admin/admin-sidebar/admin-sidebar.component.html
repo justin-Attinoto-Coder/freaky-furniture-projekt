@@ -1,0 +1,21 @@
+<div class="w-64 bg-white shadow-md h-full">
+  <div class="p-4 text-lg font-bold text-gray-800 border-b">Admin Panel</div>
+  <nav class="p-4">
+    <a
+      routerLink="products"
+      routerLinkActive="bg-gray-200 font-semibold"
+      class="flex items-center p-2 mb-2 rounded hover:bg-gray-100"
+    >
+      <fa-icon [icon]="faTable" class="mr-2"></fa-icon>
+      Manage Products
+    </a>
+    <a
+      routerLink="products/new"
+      routerLinkActive="bg-gray-200 font-semibold"
+      class="flex items-center p-2 mb-2 rounded hover:bg-gray-100"
+    >
+      <fa-icon [icon]="faPlus" class="mr-2"></fa-icon>
+      Add New Product
+    </a>
+  </nav>
+</div>

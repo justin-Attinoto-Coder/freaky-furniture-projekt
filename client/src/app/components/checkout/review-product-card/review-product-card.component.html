@@ -1,0 +1,4 @@
+<div class="p-4 border rounded mb-4">
+  <p>{{ product?.name }} (x{{ product?.quantity }})</p>
+  <input type="number" [value]="product?.quantity" (change)="handleQuantityChange($event)" class="w-16 p-1 border rounded" />
+</div>

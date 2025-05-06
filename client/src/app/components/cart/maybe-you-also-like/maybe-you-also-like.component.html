@@ -1,0 +1,10 @@
+<!-- src/app/components/cart/maybe-you-also-like/maybe-you-also-like.component.html -->
+<div>
+  <p *ngIf="!items || items.length === 0">No recommendations available.</p>
+  <div *ngIf="items && items.length > 0">
+    <h2 class="text-xl font-bold mt-8 mb-4">Maybe You Also Like</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <app-recommended-product-card *ngFor="let item of items" [item]="item"></app-recommended-product-card>
+    </div>
+  </div>
+</div>

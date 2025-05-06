@@ -1,0 +1,113 @@
+<div class="admin-page">
+  <div class="w-3/4 p-4">
+    <h2 class="text-xl mb-4">Ny Produkt</h2>
+    <form (ngSubmit)="handleSubmit($event)">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="namn">Namn</label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="namn"
+          type="text"
+          placeholder="Namn"
+          [(ngModel)]="formData.namn"
+          name="namn"
+          (ngModelChange)="handleChange($event)"
+        />
+        <p *ngIf="errors.namn" class="text-red-500 text-xs italic">{{ errors.namn }}</p>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="beskrivning">Beskrivning</label>
+        <textarea
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="beskrivning"
+          placeholder="Beskrivning"
+          [(ngModel)]="formData.beskrivning"
+          name="beskrivning"
+          (ngModelChange)="handleChange($event)"
+        ></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="bild">Bild</label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="bild"
+          type="text"
+          placeholder="Bild URL"
+          [(ngModel)]="formData.bild"
+          name="bild"
+          (ngModelChange)="handleChange($event)"
+        />
+        <p *ngIf="errors.bild" class="text-red-500 text-xs italic">{{ errors.bild }}</p>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="marke">Märke</label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="marke"
+          type="text"
+          placeholder="Märke"
+          [(ngModel)]="formData.marke"
+          name="marke"
+          (ngModelChange)="handleChange($event)"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="sku">SKU</label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="sku"
+          type="text"
+          placeholder="XXXYYY"
+          [(ngModel)]="formData.sku"
+          name="sku"
+          (ngModelChange)="handleChange($event)"
+        />
+        <p *ngIf="errors.sku" class="text-red-500 text-xs italic">{{ errors.sku }}</p>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="pris">Pris</label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="pris"
+          type="text"
+          placeholder="Pris"
+          [(ngModel)]="formData.pris"
+          name="pris"
+          (ngModelChange)="handleChange($event)"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="publiceringsdatum">Publiceringsdatum</label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="publiceringsdatum"
+          type="date"
+          [(ngModel)]="formData.publiceringsdatum"
+          name="publiceringsdatum"
+          (ngModelChange)="handleChange($event)"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="kategori">Kategori</label>
+        <select
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="kategori"
+          [(ngModel)]="formData.kategori"
+          name="kategori"
+          (ngModelChange)="handleChange($event)"
+        >
+          <option value="mobler">Möbler</option>
+          <option value="forvaring">Förvaring</option>
+          <option value="detaljer">Detaljer</option>
+          <option value="textil">Textil</option>
+        </select>
+      </div>
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        type="submit"
+      >
+        Lägg till
+      </button>
+    </form>
+  </div>
+</div>

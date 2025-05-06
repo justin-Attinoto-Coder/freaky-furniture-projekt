@@ -1,0 +1,22 @@
+/* src/app/components/product/similar-products/similar-products.component.css */
+:host ::ng-deep .slick-prev, :host ::ng-deep .slick-next {
+  font-size: 0;
+  line-height: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+:host ::ng-deep .slick-prev { left: -20px; }
+:host ::ng-deep .slick-next { right: -20px; }
+:host ::ng-deep .slick-dots { text-align: center; margin-top: 10px; }
+:host ::ng-deep .slick-dots li { display: inline-block; margin: 0 5px; }
+:host ::ng-deep .slick-dots li button {
+  font-size: 0;
+  width: 10px;
+  height: 10px;
+  background: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+}
+:host ::ng-deep .slick-dots li.slick-active button { background: #000; }

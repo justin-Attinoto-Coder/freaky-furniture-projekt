@@ -1,0 +1,6 @@
+<div *ngIf="error" style="color: red">{{ error }}</div>
+<div *ngIf="!userData">Loading...</div>
+<div *ngIf="userData">
+  <h1>Welcome, {{ userData.username }}!</h1>
+  <p>Role: {{ userData.role }}</p>
+</div>
