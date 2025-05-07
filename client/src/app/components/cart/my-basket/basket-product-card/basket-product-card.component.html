@@ -1,9 +1,8 @@
-<!-- src/app/components/cart/basket-product-card/basket-product-card.component.html -->
 <div class="relative flex justify-between items-center mb-4 border p-4 rounded">
   <a [routerLink]="['/product', item.urlSlug]" class="flex-grow">
     <div class="flex items-start">
       <div class="flex flex-col items-center mr-4">
-        <img [src]="item.image" [alt]="item.name" class="w-16 h-16 object-cover mb-2" />
+        <img [src]="item.imageURL" [alt]="item.name" class="w-16 h-16 object-cover mb-2" />
         <div class="flex items-center">
           <button
             class="w-8 h-8 flex items-center justify-center bg-gray-200 text-gray-700 rounded-full border border-gray-400"
