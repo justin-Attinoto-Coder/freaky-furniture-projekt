@@ -1,11 +1,11 @@
 <section class="similar-products p-8 mt-8 sm:mt-28">
-  <div class="container mx-auto px-4">
+  <div class="max-w-full px-4 mx-auto">
     <h2 class="text-3xl text-left mb-4">Liknande Produkter</h2>
     <div class="relative">
       <div class="overflow-hidden">
         <div
           class="flex transition-transform duration-500 ease-in-out"
-          [style.transform]="'translateX(-' + (currentIndex * 100) + '%)'"
+          [style.transform]="'translateX(-' + (currentIndex * (100 / slidesToShow)) + '%)'"
         >
           <div
             *ngFor="let item of similarItems.slice(0, 8)"
@@ -26,15 +26,23 @@
         </svg>
       </button>
       <button
-        class="absolute top-1/2 -right-4 transform -translate-y-1/2 z-10 bg-gray-200 text-gray-700 hover:text-gray-900 px-3 py-2 rounded-full"
+        class="absolute top-1/2 -right-5 transform -translate-y-1/2 z-10 bg-gray-200 text-gray-700 hover:text-gray-900 px-3 py-2 rounded-full"
         (click)="nextSlide()"
-        [disabled]="currentIndex >= similarItems.length - 1"
-        [ngClass]="{'opacity-50 cursor-not-allowed': currentIndex >= similarItems.length - 1}"
+        [disabled]="currentIndex >= maxIndex"
+        [ngClass]="{'opacity-50 cursor-not-allowed': currentIndex >= maxIndex}"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
       </button>
+      <div class="flex justify-center mt-4">
+        <button
+          *ngFor="let i of getPaginationArray()"
+          class="w-3 h-3 mx-1 rounded-full"
+          [ngClass]="{'bg-gray-800': i === currentIndex, 'bg-gray-300': i !== currentIndex}"
+          (click)="goToSlide(i)"
+        ></button>
+      </div>
     </div>
   </div>
 </section>
