@@ -29,7 +29,7 @@
   <div class="flex flex-col items-end">
     <button
       class="absolute top-1 right-1 text-black"
-      (click)="deleteCartItem.emit(item.productId); $event.stopPropagation()"
+      (click)="onDeleteCartItem(item.productId); $event.stopPropagation()"
     >
       X
     </button>
