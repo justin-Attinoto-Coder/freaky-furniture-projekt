@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@import 'slick-carousel/slick/slick.css';
-@import 'slick-carousel/slick/slick-theme.css';
 
 @font-face {
   font-family: 'slick';
@@ -10,71 +8,53 @@
   font-style: normal;
 }
 
-@layer utilities{
+@layer utilities {
+  .toggle-btn {
+    @apply [&>div::before]:translate-y-0 [&>div::before]:rotate-45
+           [&>div::after]:translate-y-0 [&>div::after]:-rotate-45 [&>div]:bg-transparent [&>div]:rotate-[720deg];
+  }
 
-    .toggle-btn {
-        @apply [&>div::before]:translate-y-0 [&>div::before]:rotate-45
-        [&>div::after]:translate-y-0 [&>div::after]:-rotate-45 [&>div]:bg-transparent [&>div]:rotate-[720deg];
-    }
+  .animate-bounceIn {
+    animation: bounceIn 0.5s ease-in-out;
+  }
 
-    .animate-bounceIn {
-        animation: bounceIn 0.5s ease-in-out;
-      }
+  .animate-stretch {
+    animation: stretch 0.5s ease-in-out forwards;
+  }
 
-      .animate-stretch {
-        animation: stretch 0.5s ease-in-out forwards;
-      }
+  .slick-dots {
+    @apply flex justify-center mt-4;
+  }
 
-    .slick-dots {
-        @apply flex justify-center mt-4; /* Center the dots and add margin-top */
-    }
+  .slick-dots li {
+    @apply mx-1;
+  }
 
-    .slick-dots li {
-        @apply mx-1; /* Add horizontal margin between dots */
-    }
+  .slick-dots li button:before {
+    @apply text-gray-700 text-lg;
+  }
 
-    .slick-dots li button:before {
-        @apply text-gray-700 text-lg;
-    }
+  .slick-dots li.slick-active button:before {
+    @apply text-gray-800 text-lg;
+  }
 
-    .slick-dots li.slick-active button:before {
-        @apply text-gray-800 text-lg; /* Tailwind CSS gray-800 and larger font size */
-    }
+  .slick-slide {
+    @apply px-2;
+  }
 }
 
 @keyframes bounceIn {
-  0% {
-    transform: translateY(-100%);
-  }
-  20% {
-    transform: translateY(-67%);
-  }
-  40% {
-    transform: translateY(-33%);
-  }
-  60% {
-    transform: translateY(-0%);
-  }
-  80% {
-    transform: translateY(20%);
-  }
-  100% {
-    transform: translateY(0%);
-  }
+  0% { transform: translateY(-100%); }
+  20% { transform: translateY(-67%); }
+  40% { transform: translateY(-33%); }
+  60% { transform: translateY(-0%); }
+  80% { transform: translateY(20%); }
+  100% { transform: translateY(0%); }
 }
 
 @keyframes stretch {
-  0% {
-    height: 0;
-  }
-  80% {
-    height: 120vh;
-  }
-  90% {
-    height: 110vh;
-  }
-
-  100% {
-    height: 100vh;
-  }
+  0% { height: 0; }
+  80% { height: 120vh; }
+  90% { height: 110vh; }
+  100% { height: 100vh; }
 }
