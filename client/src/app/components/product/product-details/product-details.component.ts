@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { FocusProductCardComponent } from '../focus-product-card/focus-product-card.component';
-import { SimilarProductsComponent } from '../similar-products/similar-products.component';
+import { FocusProductCardComponent } from '../../product/focus-product-card/focus-product-card.component';
+import { SimilarProductsComponent } from '../../product/similar-products/similar-products.component';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -32,18 +32,21 @@ export class ProductDetailsComponent implements OnInit {
             this.http.get<any>(`http://localhost:8000/api/reviews/${product.id}/average`).subscribe({
               next: (response) => {
                 this.averageRating = response.averageRating || 0;
+                console.log('Average rating fetched:', this.averageRating);
               },
               error: (error: HttpErrorResponse) => {
                 console.error('Error fetching average rating:', error);
+                this.averageRating = 0;
               }
             });
-            // Fetch similar items
-            this.http.get<any[]>(`http://localhost:8000/api/furniture?category=${product.category}`).subscribe({
+            // Fetch similar items (limited to 8)
+            this.http.get<any[]>(`http://localhost:8000/api/furniture?category=${product.category}&limit=8`).subscribe({
               next: (items) => {
                 this.similarItems = items
                   .filter(item => item.urlSlug !== urlSlug)
                   .sort(() => 0.5 - Math.random())
-                  .slice(0, 4);
+                  .slice(0, 8);
+                console.log('Similar items:', this.similarItems.length, this.similarItems);
               },
               error: (error: HttpErrorResponse) => {
                 console.error('Error fetching similar items:', error);
@@ -60,7 +63,6 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onAddToCart() {
-    // Implement add-to-cart logic (to be expanded later)
     console.log('Add to cart:', this.product);
   }
 }

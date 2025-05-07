@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { AddToCartButtonComponent } from '../add-to-cart-button/add-to-cart-button.component';
 import { FocusOverviewAccordionComponent } from '../focus-overview-accordion/focus-overview-accordion.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faStar, faStar as faRegStar } from '@fortawesome/free-regular-svg-icons';
+import { faStar, faStar as faRegStar } from '@fortawesome/free-solid-svg-icons';
 import { HttpErrorResponse } from '@angular/common/http';
 
 interface Review {
@@ -33,6 +33,7 @@ export class FocusProductInformationComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
+    console.log('FocusProductInformation init:', { averageRating: this.averageRating, productId: this.product.id });
     this.http.get<Review[]>(`http://localhost:8000/api/reviews/${this.product.id}`).subscribe({
       next: reviews => {
         this.reviews = reviews;
