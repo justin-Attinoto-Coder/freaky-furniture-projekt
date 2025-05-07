@@ -14,6 +14,7 @@ import { SearchService } from './services/search.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  title = 'client';
   cartItems: CartItem[] = [];
 
   constructor(private cartService: CartService, private searchService: SearchService) {

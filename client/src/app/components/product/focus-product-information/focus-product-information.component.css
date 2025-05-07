@@ -1,2 +1,3 @@
-/* src/app/components/product/focus-product-information/focus-product-information.component.css */
-/* Tailwind handles styling */
+.product-information {
+  max-width: 600px;
+}
