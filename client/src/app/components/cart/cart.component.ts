@@ -69,9 +69,15 @@ export class CartComponent implements OnInit {
   }
 
   deleteCartItem(productId: number): void {
+    console.log('Attempting to delete cart item with productId:', productId);
     this.cartService.deleteCartItem(productId).subscribe({
-      next: () => console.log('Cart item deletion successful'),
-      error: (error: any) => console.error('Error deleting cart item:', error)
+      next: () => {
+        console.log('Cart item deletion successful for productId:', productId);
+      },
+      error: (error: any) => {
+        console.error('Error deleting cart item:', error);
+        this.error = 'Failed to delete cart item. Please try again.';
+      }
     });
   }
 
@@ -81,6 +87,7 @@ export class CartComponent implements OnInit {
 
   handleCheckout(event: Event): void {
     event.preventDefault();
+    console.log('Form submitted, attempting checkout with formData:', this.formData);
     const isFormValid = Object.values(this.formData).every((field: string) => field.trim() !== '');
     if (!isFormValid) {
       this.error = 'Please fill out all fields.';
@@ -90,11 +97,13 @@ export class CartComponent implements OnInit {
     this.error = null;
     this.success = false;
 
+    console.log('Sending customer data to backend:', this.formData);
     this.cartService.addCustomer(this.formData).subscribe({
-      next: () => {
+      next: (response) => {
         this.success = true;
         const totalPrice = this.getTotalPrice();
-        console.log('Checkout successful, navigating to /checkout-shipping:', { formData: this.formData, cartItems: this.cartItems, totalPrice });
+        console.log('Customer data saved, response:', response);
+        console.log('Navigating to /checkout-shipping:', { formData: this.formData, cartItems: this.cartItems, totalPrice });
         this.router.navigate(['/checkout-shipping'], {
           state: {
             customerDetails: this.formData,
@@ -104,9 +113,10 @@ export class CartComponent implements OnInit {
         });
       },
       error: (error: any) => {
-        this.error = 'Failed to proceed to shipping. Please try again.';
+        this.error = 'Failed to save customer data. Please try again.';
         console.error('Checkout error:', error);
-      }
+      },
+      complete: () => console.log('addCustomer request completed')
     });
   }
 
