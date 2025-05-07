@@ -1,4 +1,3 @@
-<!-- src/app/components/cart/cart.component.html -->
 <div class="p-4 sm:p-8">
   <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Shopping Cart</h1>
   <div class="sm:flex sm:space-x-8">
@@ -6,13 +5,13 @@
       <form (ngSubmit)="handleCheckout($event)">
         <app-my-basket
           [cartItems]="cartItems"
-          (updateCartItem)="updateCartItem($event.productId, $event.quantity)"
+          (updateCartItem)="updateCartItem($event)"
           (deleteCartItem)="deleteCartItem($event)"
         ></app-my-basket>
         <app-cart-customer-form
           [formData]="formData"
           (change)="handleChange($event)"
-          [total]="cartItems.reduce((total, item) => total + item.price * item.quantity, 0)"
+          [total]="getTotalPrice()"
         ></app-cart-customer-form>
         <div class="flex justify-between items-center mt-4 sm:mt-0">
           <button

@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators'; // Added import
-import { Product } from '../models/product';
-import { AuthService } from './auth.service';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 export interface CartItem {
   productId: number;
@@ -11,7 +9,7 @@ export interface CartItem {
   price: number;
   quantity: number;
   imageURL: string;
-  brand?: string;
+  brand: string;
   urlSlug: string;
 }
 
@@ -28,52 +26,69 @@ export interface CustomerData {
   providedIn: 'root'
 })
 export class CartService {
-  private cartItems = new BehaviorSubject<CartItem[]>([]);
-  cartItems$ = this.cartItems.asObservable();
-  private apiUrl = 'http://localhost:8000/api/cart';
+  private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
+  cartItems$: Observable<CartItem[]> = this.cartItemsSubject.asObservable();
 
-  constructor(private http: HttpClient, private authService: AuthService) {
-    this.fetchCartItems();
+  constructor(private http: HttpClient) {
+    this.loadCartItems();
   }
 
-  private getHeaders(): HttpHeaders {
-    const token = this.authService.getToken();
-    return new HttpHeaders({
-      'Authorization': token ? `Bearer ${token}` : ''
+  private loadCartItems(): void {
+    this.http.get<CartItem[]>('http://localhost:8000/api/cart').subscribe({
+      next: (items) => {
+        console.log('Loaded cart items:', items);
+        this.cartItemsSubject.next(items);
+      },
+      error: (error: HttpErrorResponse) => console.error('Error loading cart items:', error)
     });
   }
 
-  private fetchCartItems(): void {
-    this.http.get<CartItem[]>(this.apiUrl, { headers: this.getHeaders() }).subscribe(items => {
-      this.cartItems.next(items);
-    });
-  }
-
-  addToCart(item: CartItem): Observable<{ id: number }> {
-    return this.http.post<{ id: number }>(this.apiUrl, item, { headers: this.getHeaders() }).pipe(
-      tap(() => this.fetchCartItems())
+  addCartItem(item: CartItem): Observable<{ id: number }> {
+    return this.http.post<{ id: number }>('http://localhost:8000/api/cart', item).pipe(
+      tap((response) => {
+        console.log('Added cart item:', item, 'Response:', response);
+        this.loadCartItems();
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error adding cart item:', error);
+        return throwError(() => new Error('Failed to add cart item'));
+      })
     );
   }
 
-  updateCartItem(productId: number, quantity: number): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${productId}`, { quantity }, { headers: this.getHeaders() }).pipe(
-      tap(() => this.fetchCartItems())
+  updateCartItem(productId: number, quantity: number): Observable<void> {
+    return this.http.put<void>(`http://localhost:8000/api/cart/${productId}`, { quantity }).pipe(
+      tap(() => {
+        console.log('Updated cart item:', { productId, quantity });
+        this.loadCartItems();
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error updating cart item:', error);
+        return throwError(() => new Error('Failed to update cart item'));
+      })
     );
   }
 
-  deleteCartItem(productId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${productId}`, { headers: this.getHeaders() }).pipe(
-      tap(() => this.fetchCartItems())
-    );
-  }
-
-  clearCart(): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/clear`, { headers: this.getHeaders() }).pipe(
-      tap(() => this.cartItems.next([]))
+  deleteCartItem(productId: number): Observable<void> {
+    return this.http.delete<void>(`http://localhost:8000/api/cart/${productId}`).pipe(
+      tap(() => {
+        console.log('Deleted cart item:', productId);
+        this.loadCartItems();
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error deleting cart item:', error);
+        return throwError(() => new Error('Failed to delete cart item'));
+      })
     );
   }
 
   addCustomer(customerData: CustomerData): Observable<any> {
-    return this.http.post('http://localhost:8000/api/customers', customerData, { headers: this.getHeaders() });
+    return this.http.post('http://localhost:8000/api/customers', customerData).pipe(
+      tap(() => console.log('Customer added:', customerData)),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error adding customer:', error);
+        return throwError(() => new Error('Failed to add customer'));
+      })
+    );
   }
 }
