@@ -1,5 +1,5 @@
-.container {
-  max-width: 1200px;
+.max-w-full {
+  max-width: 100%;
 }
 
 .transition-transform {
