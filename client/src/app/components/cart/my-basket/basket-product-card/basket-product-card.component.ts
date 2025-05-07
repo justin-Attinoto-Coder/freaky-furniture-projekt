@@ -19,4 +19,9 @@ export class BasketProductCardComponent {
     const newQuantity = Math.max(1, this.item.quantity + amount);
     this.updateCartItem.emit({ productId: this.item.productId, quantity: newQuantity });
   }
+
+  onDeleteCartItem(productId: number): void {
+    console.log('Emitting deleteCartItem for productId:', productId);
+    this.deleteCartItem.emit(productId);
+  }
 }

@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
   const cartItems = stmt.all();
   const updatedCartItems = cartItems.map(item => ({
     ...item,
-    imageURL: path.join('/images', item.image)
+    imageURL: `/images/${path.basename(item.image)}` // Use only the filename
   }));
   res.json(updatedCartItems);
 });
@@ -32,15 +32,11 @@ router.post('/', (req, res) => {
 router.put('/:productId', (req, res) => {
   const productId = req.params.productId;
   const quantity = parseInt(req.body.quantity, 10);
-
   console.log('PUT request received with:', { productId, quantity });
-
   try {
     const stmt = db.prepare('UPDATE cart SET quantity = ? WHERE productId = ?');
     const result = stmt.run(quantity, productId);
-
     console.log('SQL query result:', result);
-
     if (result.changes > 0) {
       res.status(200).json({ message: 'Cart item updated successfully' });
     } else {
@@ -50,6 +46,23 @@ router.put('/:productId', (req, res) => {
   } catch (error) {
     console.error('Error updating cart item:', error);
     res.status(500).json({ error: 'Failed to update cart item' });
+  }
+});
+
+router.delete('/:productId', (req, res) => {
+  const productId = req.params.productId;
+  try {
+    const stmt = db.prepare('DELETE FROM cart WHERE productId = ?');
+    const result = stmt.run(productId);
+    console.log('Rows deleted:', result.changes);
+    if (result.changes > 0) {
+      res.status(200).json({ message: 'Cart item deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Cart item not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting cart item:', error);
+    res.status(500).json({ error: 'Failed to delete cart item' });
   }
 });
 
