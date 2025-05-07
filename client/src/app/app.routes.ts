@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
+import { CartComponent } from './components/cart/cart.component';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 import { AdminDashboardComponent } from './components/pages/admin/admin-dashboard/admin-dashboard.component';
 import { AdminTableComponent } from './components/admin/admin-table/admin-table.component';
@@ -14,6 +15,7 @@ import { ProductDetailsComponent } from './components/product/product-details/pr
 
 export const routes: Routes = [
   { path: '', component: HomeComponent }, // Default route
+  { path: 'cart', component: CartComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'admin/dashboard', component: AdminDashboardComponent },
   { path: 'admin/table', component: AdminTableComponent },

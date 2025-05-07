@@ -1,4 +1,3 @@
-// src/app/components/cart/my-basket/my-basket.component.ts
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BasketProductCardComponent } from './basket-product-card/basket-product-card.component';
