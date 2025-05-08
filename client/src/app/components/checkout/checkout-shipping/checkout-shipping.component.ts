@@ -42,6 +42,7 @@ export class CheckoutShippingComponent {
   customerDetails: any = {};
   cartItems: any[] = [];
   totalPrice: number = 0;
+  error: string | null = null;
 
   carrierDeliveryTimes: { [key: string]: string } = {
     "DHL Express": "08:00-16:00",
@@ -59,10 +60,13 @@ export class CheckoutShippingComponent {
   faClipboardCheck = faClipboardCheck;
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {
-    this.route.paramMap.subscribe(params => {
-      this.customerDetails = history.state.customerDetails || {};
-      this.cartItems = history.state.cartItems || [];
-      this.totalPrice = history.state.totalPrice || 0;
+    this.route.paramMap.subscribe(() => {
+      const state = history.state;
+      this.customerDetails = state.customerDetails || {};
+      this.cartItems = state.cartItems || [];
+      this.totalPrice = state.totalPrice || 0;
+      this.error = state.error || null;
+      console.log('Checkout-Shipping: Received state:', { customerDetails: this.customerDetails, cartItems: this.cartItems, totalPrice: this.totalPrice, error: this.error });
     });
   }
 
@@ -75,6 +79,7 @@ export class CheckoutShippingComponent {
     if (name === 'carrier') {
       this.shippingDetails.deliveryTime = this.carrierDeliveryTimes[value] || '';
     }
+    console.log('Checkout-Shipping: Shipping details updated:', this.shippingDetails);
   }
 
   getCarrierOptions() {
@@ -92,13 +97,34 @@ export class CheckoutShippingComponent {
 
   handleSubmit(event: Event) {
     event.preventDefault();
+    console.log('Checkout-Shipping: Submitting shipping details:', this.shippingDetails);
     if (!Object.values(this.shippingDetails).every(field => field.trim())) {
-      console.error('Form validation failed. Please fill out all fields.');
+      this.error = 'Please fill out all shipping fields.';
+      console.error('Checkout-Shipping: Form validation failed:', this.shippingDetails);
       return;
     }
     this.http.post('http://localhost:8000/api/shipping-details', this.shippingDetails).subscribe({
-      next: () => this.router.navigate(['/checkout-payment']),
-      error: (error) => console.error('Error saving shipping details:', error)
+      next: (response) => {
+        console.log('Checkout-Shipping: Shipping details saved, response:', response);
+        this.error = null;
+        this.router.navigate(['/checkout-payment'], {
+          state: {
+            customerDetails: this.customerDetails,
+            shippingDetails: this.shippingDetails,
+            cartItems: this.cartItems,
+            totalPrice: this.totalPrice
+          }
+        }).then(success => {
+          console.log('Checkout-Shipping: Navigation to /checkout-payment successful:', success);
+        }).catch(error => {
+          console.error('Checkout-Shipping: Navigation to /checkout-payment failed:', error);
+          this.error = 'Failed to navigate to payment. Please try again.';
+        });
+      },
+      error: (error) => {
+        console.error('Checkout-Shipping: Error saving shipping details:', error);
+        this.error = 'Failed to save shipping details. Please try again.';
+      }
     });
   }
 
@@ -114,9 +140,11 @@ export class CheckoutShippingComponent {
       carrier: '',
       deliveryTime: ''
     };
+    console.log('Checkout-Shipping: Set shipping details to customer address:', this.shippingDetails);
   }
 
   navigateToCart() {
+    console.log('Checkout-Shipping: Navigating to cart');
     this.router.navigate(['/cart']);
   }
 }
