@@ -1,6 +1,7 @@
 <div class="container mx-auto px-4 py-4">
   <app-checkout-header></app-checkout-header>
   <app-progress-bar></app-progress-bar>
+  <p *ngIf="error" class="text-red-500 mb-4">{{ error }}</p>
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
     <div class="sm:col-span-2">
       <app-payment-form

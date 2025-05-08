@@ -36,7 +36,7 @@ export class CartComponent implements OnInit {
 
   ngOnInit() {
     this.cartService.cartItems$.subscribe((items: CartItem[]) => {
-      console.log('Cart items updated:', items);
+      console.log('Cart: Cart items updated:', items);
       this.cartItems = items;
     });
     this.productService.getProducts().subscribe({
@@ -48,9 +48,9 @@ export class CartComponent implements OnInit {
             ...item,
             imageURL: `/images/${item.image}`
           }));
-        console.log('Recommended items:', this.recommendedItems);
+        console.log('Cart: Recommended items:', this.recommendedItems);
       },
-      error: (error: any) => console.error('Error fetching recommended items:', error)
+      error: (error: any) => console.error('Cart: Error fetching recommended items:', error)
     });
   }
 
@@ -58,24 +58,24 @@ export class CartComponent implements OnInit {
     const target = event.target as HTMLInputElement;
     const { name, value } = target;
     this.formData = { ...this.formData, [name]: value };
-    console.log('Form data updated:', this.formData);
+    console.log('Cart: Form data updated:', this.formData);
   }
 
   updateCartItem(event: { productId: number; quantity: number }): void {
     this.cartService.updateCartItem(event.productId, event.quantity).subscribe({
-      next: () => console.log('Cart item update successful'),
-      error: (error: any) => console.error('Error updating cart item:', error)
+      next: () => console.log('Cart: Cart item update successful'),
+      error: (error: any) => console.error('Cart: Error updating cart item:', error)
     });
   }
 
   deleteCartItem(productId: number): void {
-    console.log('Attempting to delete cart item with productId:', productId);
+    console.log('Cart: Attempting to delete cart item with productId:', productId);
     this.cartService.deleteCartItem(productId).subscribe({
       next: () => {
-        console.log('Cart item deletion successful for productId:', productId);
+        console.log('Cart: Cart item deletion successful for productId:', productId);
       },
       error: (error: any) => {
-        console.error('Error deleting cart item:', error);
+        console.error('Cart: Error deleting cart item:', error);
         this.error = 'Failed to delete cart item. Please try again.';
       }
     });
@@ -87,41 +87,51 @@ export class CartComponent implements OnInit {
 
   handleCheckout(event: Event): void {
     event.preventDefault();
-    console.log('Form submitted, attempting checkout with formData:', this.formData);
-    const isFormValid = Object.values(this.formData).every((field: string) => field.trim() !== '');
+    console.log('Cart: Form submitted, attempting checkout with formData:', this.formData);
+    const isFormValid = Object.values(this.formData).every((field: string) => field.trim().length > 0);
     if (!isFormValid) {
       this.error = 'Please fill out all fields.';
-      console.log('Form validation failed:', this.formData);
+      console.log('Cart: Form validation failed:', this.formData);
+      return;
+    }
+    if (this.cartItems.length === 0) {
+      this.error = 'Your cart is empty. Add items before checking out.';
+      console.log('Cart: Checkout failed: Empty cart');
       return;
     }
     this.error = null;
     this.success = false;
 
-    console.log('Sending customer data to backend:', this.formData);
+    console.log('Cart: Sending customer data to backend:', this.formData);
     this.cartService.addCustomer(this.formData).subscribe({
       next: (response) => {
         this.success = true;
         const totalPrice = this.getTotalPrice();
-        console.log('Customer data saved, response:', response);
-        console.log('Navigating to /checkout-shipping:', { formData: this.formData, cartItems: this.cartItems, totalPrice });
+        console.log('Cart: Customer data saved, response:', response);
+        console.log('Cart: Navigating to /checkout-shipping with state:', { customerDetails: this.formData, cartItems: this.cartItems, totalPrice });
         this.router.navigate(['/checkout-shipping'], {
           state: {
             customerDetails: this.formData,
             cartItems: this.cartItems,
             totalPrice
           }
+        }).then(success => {
+          console.log('Cart: Navigation to /checkout-shipping successful:', success);
+        }).catch(error => {
+          console.error('Cart: Navigation to /checkout-shipping failed:', error);
+          this.error = 'Failed to navigate to checkout. Please try again.';
         });
       },
       error: (error: any) => {
         this.error = 'Failed to save customer data. Please try again.';
-        console.error('Checkout error:', error);
+        console.error('Cart: Checkout error:', error);
       },
-      complete: () => console.log('addCustomer request completed')
+      complete: () => console.log('Cart: addCustomer request completed')
     });
   }
 
   navigateToHome(): void {
-    console.log('Navigating to home');
+    console.log('Cart: Navigating to home');
     this.router.navigate(['/']);
   }
 }

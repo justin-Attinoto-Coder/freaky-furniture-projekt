@@ -21,10 +21,13 @@ const encrypt = (text) => {
 };
 
 router.post('/', (req, res) => {
+  console.log('Received a POST request to /api/payment-details');
+  console.log('Request body:', req.body);
   try {
     const { cardHolderName, cardNumber, expiryDate, cvv } = req.body;
 
     if (!cardHolderName || !cardNumber || !expiryDate || !cvv) {
+      console.error('Validation failed: Missing required fields');
       return res.status(400).json({ error: 'All fields are required.' });
     }
 
@@ -35,9 +38,14 @@ router.post('/', (req, res) => {
       INSERT INTO payment_details (card_holder_name, card_number, expiry_date, cvv)
       VALUES (?, ?, ?, ?)
     `);
-    stmt.run(cardHolderName, encryptedCardNumber, expiryDate, encryptedCVV);
+    const result = stmt.run(cardHolderName, encryptedCardNumber, expiryDate, encryptedCVV);
+    console.log('Payment details saved successfully:', {
+      id: result.lastInsertRowid,
+      cardHolderName,
+      expiryDate
+    });
 
-    res.status(201).json({ message: 'Payment details saved successfully.' });
+    res.status(201).json({ message: 'Payment details saved successfully.', id: result.lastInsertRowid });
   } catch (error) {
     console.error('Error saving payment details:', error);
     res.status(500).json({ error: 'Failed to save payment details.' });
