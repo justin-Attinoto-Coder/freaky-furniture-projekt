@@ -18,6 +18,7 @@ export class SearchBarComponent {
 
   onSubmit(event: Event): void {
     event.preventDefault();
+    console.log('SearchBar: Emitting search query:', this.query);
     this.search.emit(this.query);
   }
 }
