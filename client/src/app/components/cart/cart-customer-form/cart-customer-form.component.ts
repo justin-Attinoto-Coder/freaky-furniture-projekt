@@ -27,4 +27,14 @@ export class CartCustomerFormComponent {
     "Helsingborg", "Jönköping", "Norrköping", "Lund", "Umeå", "Gävle", "Borås",
     "Södertälje", "Eskilstuna", "Karlstad", "Täby", "Växjö", "Halmstad"
   ];
+
+  handleChange(event: Event): void {
+    const target = event.target as HTMLInputElement | HTMLSelectElement;
+    console.log('CartCustomerForm: Input changed:', {
+      name: target.name,
+      value: target.value,
+      formData: this.formData
+    });
+    this.change.emit(event);
+  }
 }

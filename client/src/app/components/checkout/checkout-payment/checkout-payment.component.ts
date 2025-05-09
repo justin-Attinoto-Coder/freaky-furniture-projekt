@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { CheckoutHeaderComponent } from '../../common/checkout-header/checkout-header.component';
 import { ProgressBarComponent } from '../../common/progress-bar/progress-bar.component';
 import { PaymentFormComponent } from '../payment-form/payment-form.component';
@@ -25,15 +26,23 @@ export class CheckoutPaymentComponent {
     rememberMe: false
   };
 
-  shippingDetails = {
-    streetAddress: '123 Main Street',
-    city: 'Springfield',
-    postalCode: '12345',
-    carrier: 'FedEx',
-    shippingMethod: 'Express Delivery'
-  };
+  customerDetails: any = {};
+  shippingDetails: any = {};
+  cartItems: any[] = [];
+  totalPrice: number = 0;
+  error: string | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {
+    this.route.paramMap.subscribe(() => {
+      const state = history.state;
+      this.customerDetails = state.customerDetails || {};
+      this.shippingDetails = state.shippingDetails || {};
+      this.cartItems = state.cartItems || [];
+      this.totalPrice = state.totalPrice || 0;
+      this.error = state.error || null;
+      console.log('Checkout-Payment: Received state:', { customerDetails: this.customerDetails, shippingDetails: this.shippingDetails, cartItems: this.cartItems, totalPrice: this.totalPrice, error: this.error });
+    });
+  }
 
   handleChange(event: Event) {
     const { name, value, type, checked } = event.target as HTMLInputElement;
@@ -41,11 +50,40 @@ export class CheckoutPaymentComponent {
       ...this.paymentDetails,
       [name]: type === 'checkbox' ? checked : value
     };
+    console.log('Checkout-Payment: Payment details updated:', this.paymentDetails);
   }
 
   handleSubmit(event: Event) {
     event.preventDefault();
-    console.log('Sending payment data:', this.paymentDetails);
-    this.router.navigate(['/checkout-review']);
+    console.log('Checkout-Payment: Submitting payment details:', this.paymentDetails);
+    if (!this.paymentDetails.cardHolderName || !this.paymentDetails.cardNumber || !this.paymentDetails.expiryDate || !this.paymentDetails.cvv) {
+      this.error = 'Please fill out all payment fields.';
+      console.error('Checkout-Payment: Form validation failed:', this.paymentDetails);
+      return;
+    }
+    this.http.post('http://localhost:8000/api/payment-details', this.paymentDetails).subscribe({
+      next: (response) => {
+        console.log('Checkout-Payment: Payment details saved, response:', response);
+        this.error = null;
+        this.router.navigate(['/checkout-review'], {
+          state: {
+            customerDetails: this.customerDetails,
+            shippingDetails: this.shippingDetails,
+            paymentDetails: this.paymentDetails,
+            cartItems: this.cartItems,
+            totalPrice: this.totalPrice
+          }
+        }).then(success => {
+          console.log('Checkout-Payment: Navigation to /checkout-review successful:', success);
+        }).catch(error => {
+          console.error('Checkout-Payment: Navigation to /checkout-review failed:', error);
+          this.error = 'Failed to navigate to review. Please try again.';
+        });
+      },
+      error: (error) => {
+        console.error('Checkout-Payment: Error saving payment details:', error);
+        this.error = 'Failed to save payment details. Please try again.';
+      }
+    });
   }
 }

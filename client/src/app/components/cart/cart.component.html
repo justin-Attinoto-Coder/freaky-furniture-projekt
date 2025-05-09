@@ -8,11 +8,6 @@
           (updateCartItem)="updateCartItem($event)"
           (deleteCartItem)="deleteCartItem($event)"
         ></app-my-basket>
-        <app-cart-customer-form
-          [formData]="formData"
-          (change)="handleChange($event)"
-          [total]="getTotalPrice()"
-        ></app-cart-customer-form>
         <div class="flex justify-between items-center mt-4 sm:mt-0">
           <button
             class="bg-blue-500 text-white px-4 py-2 rounded mt-2 sm:mt-0"
@@ -24,6 +19,7 @@
           <button
             class="bg-green-500 text-white px-4 py-2 rounded mt-2 sm:mt-0"
             type="submit"
+            (click)="onPurchaseClick()"
           >
             Purchase
           </button>
@@ -35,5 +31,4 @@
     </div>
   </div>
   <p *ngIf="error" class="text-red-500 mt-4">{{ error }}</p>
-  <p *ngIf="success" class="text-green-500 mt-4">Customer details submitted successfully!</p>
 </div>
