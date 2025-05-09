@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../db/init');
 
 router.post('/', (req, res) => {
-  console.log('Received a POST request to /api/customers');
+  console.log('Received a POST request to http://localhost:8000/api/customers');
   console.log('Request body:', req.body);
 
   const { fullName, phoneNumber, province, city, streetAddress, postalCode } = req.body;
