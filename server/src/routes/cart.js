@@ -54,6 +54,20 @@ router.put('/:productId', (req, res) => {
   }
 });
 
+// Clear all cart items
+router.delete('/clear', (req, res) => {
+  try {
+    const stmt = db.prepare('DELETE FROM cart');
+    const result = stmt.run();
+    console.log('Rows deleted:', result.changes);
+    res.status(200).json({ message: 'Cart cleared successfully' });
+  } catch (error) {
+    console.error('Error clearing cart:', error);
+    res.status(500).json({ error: 'Failed to clear cart' });
+  }
+});
+
+// Delete a specific cart item
 router.delete('/:productId', (req, res) => {
   const productId = req.params.productId;
   try {
@@ -68,18 +82,6 @@ router.delete('/:productId', (req, res) => {
   } catch (error) {
     console.error('Error deleting cart item:', error);
     res.status(500).json({ error: 'Failed to delete cart item' });
-  }
-});
-
-router.delete('/clear', (req, res) => {
-  try {
-    const stmt = db.prepare('DELETE FROM cart');
-    const result = stmt.run();
-    console.log('Rows deleted:', result.changes);
-    res.status(200).json({ message: 'Cart cleared successfully' });
-  } catch (error) {
-    console.error('Error clearing cart:', error);
-    res.status(500).json({ error: 'Failed to clear cart' });
   }
 });
 
