@@ -12,6 +12,7 @@ import { CheckoutPaymentComponent } from './components/checkout/checkout-payment
 import { CheckoutReviewComponent } from './components/checkout/checkout-review/checkout-review.component';
 import { CheckoutConfirmationComponent } from './components/checkout/checkout-confirmation/checkout-confirmation.component';
 import { ProductDetailsComponent } from './components/product/product-details/product-details.component';
+import { SearchPageComponent } from './components/pages/search/search-page/search-page.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,6 +27,7 @@ export const routes: Routes = [
   { path: 'checkout-payment', component: CheckoutPaymentComponent },
   { path: 'checkout-review', component: CheckoutReviewComponent },
   { path: 'checkout-confirmation', component: CheckoutConfirmationComponent },
+  { path: 'search', component: SearchPageComponent },
   { path: 'product/:urlSlug', component: ProductDetailsComponent },
   { path: '**', redirectTo: '' }
 ];
