@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,4 +13,10 @@ export class OrderSummaryComponent {
   @Input() shippingFee: number = 0;
   @Input() grandTotal: number = 0;
   @Output() confirmOrder = new EventEmitter<void>();
+
+  onConfirmOrder(): void {
+    console.log('OrderSummary: Confirm Order button clicked');
+    this.confirmOrder.emit();
+    console.log('OrderSummary: confirmOrder event emitted');
+  }
 }
