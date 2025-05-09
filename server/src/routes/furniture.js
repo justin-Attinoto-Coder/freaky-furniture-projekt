@@ -5,15 +5,32 @@ const generateSlug = require('../utils/generateSlug');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  const category = req.query.category;
-  let query = 'SELECT * FROM furniture';
+  const { category, query } = req.query;
+  let sql = 'SELECT * FROM furniture';
   const params = [];
+
+  if (query && query.trim()) {
+    sql += params.length ? ' AND' : ' WHERE';
+    sql += ' (name LIKE ? OR brand LIKE ? OR category LIKE ?)';
+    const searchTerm = `%${query.trim()}%`;
+    params.push(searchTerm, searchTerm, searchTerm);
+  }
+
   if (category) {
-    query += ' WHERE category = ?';
+    sql += params.length ? ' AND' : ' WHERE';
+    sql += ' category = ?';
     params.push(category);
   }
-  const furnitureItems = db.prepare(query).all(...params);
-  res.json(furnitureItems);
+
+  try {
+    const stmt = db.prepare(sql);
+    const results = stmt.all(...params);
+    console.log('Fetched furniture items:', results);
+    res.json(results);
+  } catch (error) {
+    console.error('Error fetching furniture:', error);
+    res.status(500).json({ error: 'Failed to fetch furniture' });
+  }
 });
 
 router.get('/:urlSlug', (req, res) => {
