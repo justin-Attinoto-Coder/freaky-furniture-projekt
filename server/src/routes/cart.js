@@ -10,18 +10,23 @@ router.get('/', (req, res) => {
     JOIN furniture ON cart.productId = furniture.id
   `);
   const cartItems = stmt.all();
-  const updatedCartItems = cartItems.map(item => ({
-    ...item,
-    imageURL: `/images/${path.basename(item.image)}` // Use only the filename
-  }));
+  const updatedCartItems = cartItems.map(item => {
+    const imageFileName = path.basename(item.image).replace(/\\/g, '/');
+    return {
+      ...item,
+      imageURL: `/images/${imageFileName}`
+    };
+  });
+  console.log('Returning cart items:', updatedCartItems);
   res.json(updatedCartItems);
 });
 
 router.post('/', (req, res) => {
   const { productId, name, price, quantity, imageURL, brand } = req.body;
   try {
+    const normalizedImageURL = imageURL.replace(/\\/g, '/').replace(/^\/+/, '/');
     const stmt = db.prepare('INSERT INTO cart (productId, name, price, quantity, imageURL, brand) VALUES (?, ?, ?, ?, ?, ?)');
-    const info = stmt.run(productId, name, price, quantity, imageURL, brand);
+    const info = stmt.run(productId, name, price, quantity, normalizedImageURL, brand);
     res.json({ id: info.lastInsertRowid });
   } catch (error) {
     console.error('Error adding product to cart:', error);

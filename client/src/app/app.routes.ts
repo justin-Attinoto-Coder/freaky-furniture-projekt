@@ -14,7 +14,7 @@ import { CheckoutConfirmationComponent } from './components/checkout/checkout-co
 import { ProductDetailsComponent } from './components/product/product-details/product-details.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent }, // Default route
+  { path: '', component: HomeComponent },
   { path: 'cart', component: CartComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'admin/dashboard', component: AdminDashboardComponent },
@@ -27,5 +27,5 @@ export const routes: Routes = [
   { path: 'checkout-review', component: CheckoutReviewComponent },
   { path: 'checkout-confirmation', component: CheckoutConfirmationComponent },
   { path: 'product/:urlSlug', component: ProductDetailsComponent },
-  { path: '**', redirectTo: '' } // Redirect unknown routes to homepage
+  { path: '**', redirectTo: '' }
 ];

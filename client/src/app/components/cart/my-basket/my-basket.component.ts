@@ -14,8 +14,4 @@ export class MyBasketComponent {
   @Input({ required: true }) cartItems!: CartItem[];
   @Output() updateCartItem = new EventEmitter<{ productId: number; quantity: number }>();
   @Output() deleteCartItem = new EventEmitter<number>();
-
-  constructor() {
-    console.log('MyBasketComponent initialized');
-  }
 }
