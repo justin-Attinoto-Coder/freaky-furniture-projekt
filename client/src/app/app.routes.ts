@@ -15,7 +15,10 @@ import { ProductDetailsComponent } from './components/product/product-details/pr
 import { SearchPageComponent } from './components/pages/search/search-page/search-page.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'search', component: SearchPageComponent },
+  { path: 'product/:urlSlug', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'admin/dashboard', component: AdminDashboardComponent },
@@ -27,7 +30,5 @@ export const routes: Routes = [
   { path: 'checkout-payment', component: CheckoutPaymentComponent },
   { path: 'checkout-review', component: CheckoutReviewComponent },
   { path: 'checkout-confirmation', component: CheckoutConfirmationComponent },
-  { path: 'search', component: SearchPageComponent },
-  { path: 'product/:urlSlug', component: ProductDetailsComponent },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'home' }
 ];
