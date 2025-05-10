@@ -5,11 +5,12 @@ import { HttpClient } from '@angular/common/http';
 import { FocusProductCardComponent } from '../../product/focus-product-card/focus-product-card.component';
 import { SimilarProductsComponent } from '../../product/similar-products/similar-products.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CommonAccordionComponent } from '../../common/common-accordion/common-accordion.component';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, FocusProductCardComponent, SimilarProductsComponent],
+  imports: [CommonModule, RouterModule, FocusProductCardComponent, SimilarProductsComponent, CommonAccordionComponent],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css']
 })

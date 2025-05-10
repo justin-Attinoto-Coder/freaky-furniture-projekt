@@ -37,7 +37,7 @@ export class CartComponent implements OnInit {
           .slice(0, 4)
           .map(item => ({
             ...item,
-            imageURL: `/images/${item.image}`
+            imageURL: `${item.image}`
           }));
         console.log('Cart: Recommended items:', this.recommendedItems);
       },
@@ -46,10 +46,16 @@ export class CartComponent implements OnInit {
   }
 
   updateCartItem(event: { productId: number; quantity: number }): void {
-    console.log('Cart: Updating cart item:', event);
-    this.cartService.updateCartItem(event.productId, event.quantity).subscribe({
-      next: () => console.log('Cart: Cart item update successful'),
-      error: (error: any) => console.error('Cart: Error updating cart item:', error)
+    const quantity = Math.max(1, event.quantity); // Ensure quantity is at least 1
+    console.log('Cart: Updating cart item:', { productId: event.productId, quantity });
+    this.cartService.updateCartItem(event.productId, quantity).subscribe({
+      next: () => {
+        console.log('Cart: Cart item update successful for productId:', event.productId);
+      },
+      error: (error: any) => {
+        console.error('Cart: Error updating cart item:', error);
+        this.error = 'Failed to update cart item quantity. Please try again.';
+      }
     });
   }
 

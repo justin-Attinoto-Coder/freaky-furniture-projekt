@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SearchPageComponent } from './search-page.component';
-import { SearchService } from '../../../../services/search.service';
+import { SearchService } from '../../../services/search.service';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
-import { Product } from '../../../../models/product';
+import { Product } from '../../../models/product';
 import { Component } from '@angular/core';
 
 // Mock SearchResultsComponent
@@ -27,6 +27,14 @@ class MockModalComponent {
   isOpen: boolean = false;
   close = () => {};
 }
+
+// Mock CommonAccordionComponent
+@Component({
+  selector: 'app-common-accordion',
+  template: '',
+  standalone: true
+})
+class MockCommonAccordionComponent {}
 
 describe('SearchPageComponent', () => {
   let component: SearchPageComponent;
@@ -85,7 +93,8 @@ describe('SearchPageComponent', () => {
         CommonModule,
         SearchPageComponent,
         MockSearchResultsComponent,
-        MockModalComponent
+        MockModalComponent,
+        MockCommonAccordionComponent
       ],
       providers: [
         { provide: SearchService, useValue: mockSearchService }
@@ -111,6 +120,11 @@ describe('SearchPageComponent', () => {
     expect(component.searchPerformed).toBeFalse();
     expect(component.isSortModalOpen).toBeFalse();
     expect(component.isFilterModalOpen).toBeFalse();
+  });
+
+  it('should render common-accordion component', () => {
+    const accordionElement = fixture.debugElement.query(By.css('app-common-accordion'));
+    expect(accordionElement).toBeTruthy();
   });
 
   it('should update searchResults and filteredResults when searchResults$ emits', () => {
