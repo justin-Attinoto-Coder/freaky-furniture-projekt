@@ -10,18 +10,23 @@ router.get('/', (req, res) => {
     JOIN furniture ON cart.productId = furniture.id
   `);
   const cartItems = stmt.all();
-  const updatedCartItems = cartItems.map(item => ({
-    ...item,
-    imageURL: path.join('/images', item.image)
-  }));
+  const updatedCartItems = cartItems.map(item => {
+    const imageFileName = path.basename(item.image).replace(/\\/g, '/');
+    return {
+      ...item,
+      imageURL: `/images/${imageFileName}`
+    };
+  });
+  console.log('Returning cart items:', updatedCartItems);
   res.json(updatedCartItems);
 });
 
 router.post('/', (req, res) => {
   const { productId, name, price, quantity, imageURL, brand } = req.body;
   try {
+    const normalizedImageURL = imageURL.replace(/\\/g, '/').replace(/^\/+/, '/');
     const stmt = db.prepare('INSERT INTO cart (productId, name, price, quantity, imageURL, brand) VALUES (?, ?, ?, ?, ?, ?)');
-    const info = stmt.run(productId, name, price, quantity, imageURL, brand);
+    const info = stmt.run(productId, name, price, quantity, normalizedImageURL, brand);
     res.json({ id: info.lastInsertRowid });
   } catch (error) {
     console.error('Error adding product to cart:', error);
@@ -32,15 +37,11 @@ router.post('/', (req, res) => {
 router.put('/:productId', (req, res) => {
   const productId = req.params.productId;
   const quantity = parseInt(req.body.quantity, 10);
-
   console.log('PUT request received with:', { productId, quantity });
-
   try {
     const stmt = db.prepare('UPDATE cart SET quantity = ? WHERE productId = ?');
     const result = stmt.run(quantity, productId);
-
     console.log('SQL query result:', result);
-
     if (result.changes > 0) {
       res.status(200).json({ message: 'Cart item updated successfully' });
     } else {
@@ -53,6 +54,7 @@ router.put('/:productId', (req, res) => {
   }
 });
 
+// Clear all cart items
 router.delete('/clear', (req, res) => {
   try {
     const stmt = db.prepare('DELETE FROM cart');
@@ -62,6 +64,24 @@ router.delete('/clear', (req, res) => {
   } catch (error) {
     console.error('Error clearing cart:', error);
     res.status(500).json({ error: 'Failed to clear cart' });
+  }
+});
+
+// Delete a specific cart item
+router.delete('/:productId', (req, res) => {
+  const productId = req.params.productId;
+  try {
+    const stmt = db.prepare('DELETE FROM cart WHERE productId = ?');
+    const result = stmt.run(productId);
+    console.log('Rows deleted:', result.changes);
+    if (result.changes > 0) {
+      res.status(200).json({ message: 'Cart item deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Cart item not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting cart item:', error);
+    res.status(500).json({ error: 'Failed to delete cart item' });
   }
 });
 

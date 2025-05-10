@@ -1,9 +1,14 @@
 <!-- src/app/components/home/home.component.html -->
-<div>
-  <app-hero></app-hero>
-  <app-search-results></app-search-results>
-  <app-mobler [products]="moblerProducts"></app-mobler>
-  <app-forvaring [products]="forvaringProducts"></app-forvaring>
-  <app-detaljer [products]="detaljerProducts"></app-detaljer>
-  <app-textil [products]="textilProducts"></app-textil>
-</div>
+<section class="min-h-screen">
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl text-center font-bold mb-4">Welcome to Freaky Furniture</h1>
+    <div>
+      <app-hero></app-hero>
+      <app-search-results></app-search-results>
+      <app-mobler [products]="moblerProducts"></app-mobler>
+      <app-forvaring [products]="forvaringProducts"></app-forvaring>
+      <app-detaljer [products]="detaljerProducts"></app-detaljer>
+      <app-textil [products]="textilProducts"></app-textil>
+    </div>  </div>
+  <app-common-accordion></app-common-accordion>
+</section>
