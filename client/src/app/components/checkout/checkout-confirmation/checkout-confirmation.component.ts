@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faShoppingCart, faCheckCircle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faBoxOpen, faCreditCard, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-checkout-confirmation',
@@ -12,51 +12,36 @@ import { faShoppingCart, faCheckCircle, faThumbsUp } from '@fortawesome/free-sol
   styleUrls: ['./checkout-confirmation.component.css']
 })
 export class CheckoutConfirmationComponent implements OnInit {
-  customerName: string = 'Customer';
-  shippingAddress: string = 'N/A';
-  billingAddress: string = 'N/A';
-  shippingMethod: string = 'Standard Shipping';
-  paymentMethod: string = 'Credit Card';
-  orderSummary: { subtotal: number; shippingFee: number; grandTotal: number } = {
-    subtotal: 0,
-    shippingFee: 0,
-    grandTotal: 0
-  };
+  customerDetails: any = {};
+  shippingDetails: any = {};
+  paymentDetails: any = {};
+  orderSummary: any = {};
 
-  faShoppingCart = faShoppingCart;
-  faCheckCircle = faCheckCircle;
-  faThumbsUp = faThumbsUp;
+  // FontAwesome icons for progress bar
+  faBoxOpen = faBoxOpen;
+  faCreditCard = faCreditCard;
+  faClipboardCheck = faClipboardCheck;
 
-  constructor(private router: Router, private route: ActivatedRoute) {
-    this.route.paramMap.subscribe(() => {
-      const state = history.state;
-      this.customerName = state.customerDetails?.fullName || 'Customer';
-      this.shippingAddress = `${state.shippingDetails?.streetAddress || ''}, ${state.shippingDetails?.city || ''}, ${state.shippingDetails?.postalCode || ''}`;
-      this.billingAddress = state.paymentDetails?.billingAddress === 'same' ? this.shippingAddress : 'N/A';
-      this.shippingMethod = state.shippingDetails?.shippingMethod || 'Standard Shipping';
-      this.paymentMethod = state.paymentDetails?.paymentMethod || 'Credit Card';
-      this.orderSummary = state.orderSummary || { subtotal: 0, shippingFee: 0, grandTotal: 0 };
-      console.log('Checkout-Confirmation: Received state:', state);
-    });
-  }
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
-    console.log('Checkout-Confirmation: Initialized with:', {
-      customerName: this.customerName,
-      shippingAddress: this.shippingAddress,
-      billingAddress: this.billingAddress,
-      shippingMethod: this.shippingMethod,
-      paymentMethod: this.paymentMethod,
-      orderSummary: this.orderSummary
+    this.route.paramMap.subscribe(() => {
+      const state = history.state;
+      this.customerDetails = state.customerDetails || {};
+      this.shippingDetails = state.shippingDetails || {};
+      this.paymentDetails = state.paymentDetails || {};
+      this.orderSummary = state.orderSummary || {};
+      console.log('Checkout-Confirmation: Received state:', {
+        customerDetails: this.customerDetails,
+        shippingDetails: this.shippingDetails,
+        paymentDetails: this.paymentDetails,
+        orderSummary: this.orderSummary
+      });
     });
   }
 
-  handleContinueShopping() {
+  goToHome() {
     console.log('Checkout-Confirmation: Navigating to home');
-    this.router.navigate(['/']).then(success => {
-      console.log('Checkout-Confirmation: Navigation to home successful:', success);
-    }).catch(error => {
-      console.error('Checkout-Confirmation: Navigation to home failed:', error);
-    });
+    this.router.navigate(['/home']);
   }
 }
