@@ -12,6 +12,7 @@ export class OrderSummaryComponent {
   @Input() subtotal: number = 0;
   @Input() shippingFee: number = 0;
   @Input() grandTotal: number = 0;
+  @Input() hideConfirmButton: boolean = false; // New input to hide button
   @Output() confirmOrder = new EventEmitter<void>();
 
   onConfirmOrder(): void {

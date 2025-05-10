@@ -1,11 +1,35 @@
 <div class="container mx-auto px-4 pb-40">
-  <app-checkout-review-progress-bar></app-checkout-review-progress-bar>
+  <div class="flex items-center justify-center mb-4 relative">
+    <div class="absolute left-4 flex items-center cursor-pointer text-blue-500" (click)="navigateToPayment()">
+      <fa-icon [icon]="faCreditCard" class="text-xl"></fa-icon>
+      <span class="hidden sm:inline-flex ml-2 text-lg font-medium">Return to Payment</span>
+    </div>
+    <h2 class="text-xl sm:text-2xl font-bold">Checkout</h2>
+  </div>
+
+  <div class="flex items-center justify-between mb-8 mx-auto" style="max-width: 80%;">
+    <div class="flex flex-col items-center">
+      <fa-icon [icon]="faBoxOpen" class="text-2xl text-gray-300 p-2"></fa-icon>
+      <span class="text-sm text-gray-300 font-bold">Shipping</span>
+    </div>
+    <div class="flex-grow border-t border-gray-300 mx-2"></div>
+    <div class="flex flex-col items-center">
+      <fa-icon [icon]="faCreditCard" class="text-2xl text-gray-300 p-2"></fa-icon>
+      <span class="text-sm text-gray-300 font-bold">Payment</span>
+    </div>
+    <div class="flex-grow border-t border-gray-300 mx-2"></div>
+    <div class="flex flex-col items-center">
+      <fa-icon [icon]="faClipboardCheck" class="text-2xl text-black border-2 border-black bg-white p-2 rounded-full"></fa-icon>
+      <span class="text-sm font-bold">Review</span>
+    </div>
+  </div>
+
   <p *ngIf="error" class="text-red-500 mb-4">{{ error }}</p>
   <div class="mt-4 mb-24">
     <ng-container *ngFor="let item of cartItems">
       <app-review-product-card
         [product]="item"
-        (quantityChange)="handleQuantityChange(item.id, $event)"
+        (quantityChange)="handleQuantityChange(item.productId, $event)"
       ></app-review-product-card>
     </ng-container>
   </div>
