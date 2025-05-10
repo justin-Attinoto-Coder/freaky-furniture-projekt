@@ -4,13 +4,13 @@ import { SearchResultsComponent } from '../../../home/search-results/search-resu
 import { ModalComponent } from '../../../common/modal/modal.component';
 import { Product } from '../../../../models/product';
 import { SearchService } from '../../../../services/search.service';
-
+import { CommonAccordionComponent} from '../../../common/common-accordion/common-accordion.component';
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.html',
   styleUrls: ['./search-page.component.css'],
   standalone: true,
-  imports: [CommonModule, SearchResultsComponent, ModalComponent]
+  imports: [CommonModule, SearchResultsComponent, ModalComponent, CommonAccordionComponent]
 })
 export class SearchPageComponent implements OnInit {
   sortOption = 'Namn';

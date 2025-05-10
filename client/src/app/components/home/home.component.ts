@@ -11,6 +11,7 @@ import { SearchResultsComponent } from './search-results/search-results.componen
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
 import { SearchService } from '../../services/search.service';
+import { CommonAccordionComponent } from '../common/common-accordion/common-accordion.component';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,8 @@ import { SearchService } from '../../services/search.service';
     ForvaringComponent,
     DetaljerComponent,
     TextilComponent,
-    SearchResultsComponent
+    SearchResultsComponent,
+    CommonAccordionComponent
   ]
 })
 export class HomeComponent implements OnInit {
