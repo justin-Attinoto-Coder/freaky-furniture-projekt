@@ -37,7 +37,11 @@ export class HeaderComponent implements OnInit {
   handleSearch(query: string): void {
     console.log('Header: Handling search query:', query);
     this.searchService.search(query);
-    this.router.navigate(['/search']);
+    this.router.navigate(['/search']).then(success => {
+      console.log('Header: Navigation to /search successful:', success);
+    }).catch(error => {
+      console.error('Header: Navigation to /search failed:', error);
+    });
   }
 
   toggleMenu(): void {

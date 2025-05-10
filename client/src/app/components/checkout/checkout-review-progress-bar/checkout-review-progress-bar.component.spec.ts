@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CheckoutreviewprogressbarComponent } from './checkout-review-progress-bar.component';
+import { CheckoutReviewProgressBarComponent } from './checkout-review-progress-bar.component';
 
-describe('CheckoutreviewprogressbarComponent', () => {
-  let component: CheckoutreviewprogressbarComponent;
-  let fixture: ComponentFixture<CheckoutreviewprogressbarComponent>;
+describe('CheckoutReviewProgressBarComponent', () => {
+  let component: CheckoutReviewProgressBarComponent;
+  let fixture: ComponentFixture<CheckoutReviewProgressBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CheckoutreviewprogressbarComponent]
+      imports: [CheckoutReviewProgressBarComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CheckoutreviewprogressbarComponent);
+    fixture = TestBed.createComponent(CheckoutReviewProgressBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

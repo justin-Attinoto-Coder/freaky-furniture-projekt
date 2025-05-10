@@ -1,14 +1,20 @@
-<div class="mt-8">
-  <div class="breadcrumbs mb-4">
-    <a routerLink="/" class="text-blue-500 underline ml-5">Home</a> >
-    <a [routerLink]="['/category', product?.category]" class="text-blue-500 underline"> {{ product?.category }}</a> >
-    <span>{{ product?.name }}</span>
-  </div>
-  <div *ngIf="product; else notFound">
-    <app-focus-product-card [product]="product" [averageRating]="averageRating" (addToCart)="onAddToCart()"></app-focus-product-card>
-    <app-similar-products [similarItems]="similarItems"></app-similar-products>
-  </div>
-  <ng-template #notFound>
-    <div>Product not found</div>
-  </ng-template>
-</div>
+<!-- This is the HTML template for the Product Details component -->
+<section class="min-h-screen">
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl font-bold mb-4">Product Details</h1>
+    <div class="mt-8">
+      <div class="breadcrumbs mb-4">
+        <a routerLink="/" class="text-blue-500 underline ml-5">Home</a> >
+        <a [routerLink]="['/category', product?.category]" class="text-blue-500 underline"> {{ product?.category }}</a> >
+        <span>{{ product?.name }}</span>
+      </div>
+      <div *ngIf="product; else notFound">
+        <app-focus-product-card [product]="product" [averageRating]="averageRating" (addToCart)="onAddToCart()"></app-focus-product-card>
+        <app-similar-products [similarItems]="similarItems"></app-similar-products>
+      </div>
+      <ng-template #notFound>
+        <div>Product not found</div>
+      </ng-template>
+    </div>  </div>
+  <app-common-accordion></app-common-accordion>
+</section>
