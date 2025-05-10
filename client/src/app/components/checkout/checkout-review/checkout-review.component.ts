@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CheckoutReviewProgressBarComponent } from '../checkout-review-progress-bar/checkout-review-progress-bar.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faBoxOpen, faCreditCard, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 import { ReviewProductCardComponent } from '../review-product-card/review-product-card.component';
 import { OrderSummaryComponent } from '../../common/order-summary/order-summary.component';
 
 @Component({
   selector: 'app-checkout-review',
   standalone: true,
-  imports: [CommonModule, CheckoutReviewProgressBarComponent, ReviewProductCardComponent, OrderSummaryComponent],
+  imports: [CommonModule, FontAwesomeModule, ReviewProductCardComponent, OrderSummaryComponent],
   templateUrl: './checkout-review.component.html',
   styleUrls: ['./checkout-review.component.css']
 })
@@ -21,6 +22,11 @@ export class CheckoutReviewComponent implements OnInit {
   paymentDetails: any = {};
   totalPrice: number = 0;
   error: string | null = null;
+
+  // FontAwesome icons for progress bar
+  faBoxOpen = faBoxOpen;
+  faCreditCard = faCreditCard;
+  faClipboardCheck = faClipboardCheck;
 
   constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     this.route.paramMap.subscribe(() => {
@@ -36,13 +42,18 @@ export class CheckoutReviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchCartItems();
+    if (!this.cartItems.length) {
+      this.fetchCartItems();
+    }
   }
 
   fetchCartItems() {
     this.http.get('http://localhost:8000/api/cart').subscribe({
       next: (data: any) => {
-        this.cartItems = data;
+        this.cartItems = data.map((item: any) => ({
+          ...item,
+          imageURL: item.imageURL || '/images/default.jpg' // Ensure imageURL exists
+        }));
         console.log('Checkout-Review: Fetched cart items:', this.cartItems);
       },
       error: (error) => console.error('Checkout-Review: Error fetching cart items:', error)
@@ -61,11 +72,40 @@ export class CheckoutReviewComponent implements OnInit {
     return this.subtotal + this.shippingFee;
   }
 
-  handleQuantityChange(id: number, newQuantity: number) {
-    this.cartItems = this.cartItems.map(item =>
-      item.id === id ? { ...item, quantity: Math.max(newQuantity, 1) } : item
-    );
-    console.log('Checkout-Review: Updated cart item quantity:', this.cartItems);
+  handleQuantityChange(productId: number, newQuantity: number) {
+    const quantity = Math.max(newQuantity, 1); // Ensure quantity is at least 1
+    const item = this.cartItems.find(item => item.productId === productId);
+    if (!item) {
+      console.error('Checkout-Review: Item not found for productId:', productId);
+      this.error = 'Item not found. Please try again.';
+      return;
+    }
+    console.log('Checkout-Review: Updating quantity for productId:', productId, 'to:', quantity);
+    this.http.put(`http://localhost:8000/api/cart/${productId}`, {
+      productId,
+      quantity,
+      name: item.name || 'Unknown Product',
+      price: item.price || 0,
+      imageURL: item.imageURL || '/images/default.jpg',
+      brand: item.brand || '',
+      urlSlug: item.urlSlug || ''
+    }).subscribe({
+      next: () => {
+        this.cartItems = this.cartItems.map(item =>
+          item.productId === productId ? { ...item, quantity } : item
+        );
+        console.log('Checkout-Review: Updated cart items:', this.cartItems);
+        this.error = null;
+      },
+      error: (error) => {
+        console.error('Checkout-Review: Error updating quantity:', {
+          status: error.status,
+          message: error.message,
+          response: error.error
+        });
+        this.error = 'Failed to update quantity. Please try again.';
+      }
+    });
   }
 
   handleConfirmOrder() {
@@ -97,6 +137,19 @@ export class CheckoutReviewComponent implements OnInit {
       error: (error) => {
         console.error('Checkout-Review: Error clearing cart:', error);
         this.error = 'Failed to clear cart. Please try again.';
+      }
+    });
+  }
+
+  navigateToPayment() {
+    console.log('Checkout-Review: Navigating to checkout-payment');
+    this.router.navigate(['/checkout-payment'], {
+      state: {
+        customerDetails: this.customerDetails,
+        shippingDetails: this.shippingDetails,
+        paymentDetails: this.paymentDetails,
+        cartItems: this.cartItems,
+        totalPrice: this.totalPrice
       }
     });
   }
