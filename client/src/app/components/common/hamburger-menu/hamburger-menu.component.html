@@ -1,21 +1,27 @@
-<div class="relative">
+<div class="sm:hidden relative">
   <button
     id="hamburger-button"
-    class="text-2xl cursor-pointer relative w-6 h-6 z-[1001]"
+    class="text-2xl cursor-pointer relative w-6 h-6 z-[1001] hover:bg-blue-100 rounded-md p-2 transition-transform duration-300 hover:rotate-[10deg]"
     [ngClass]="isMenuOpen ? 'toggle-btn' : ''"
-    (click)="toggleMenu.emit()"
+    (click)="toggle()"
   >
-    <div class="bg-black w-6 h-0.5 rounded absolute top-3 -mt-0.5 transition-all duration-500 before:content-[''] before:bg-black before:w-6 before:h-0.5 before:rounded before:absolute before:-translate-x-3 before:-translate-y-2 before:transition-all before:duration-500 after:content-[''] after:bg-black after:w-6 after:h-0.5 after:rounded after:absolute after:-translate-x-3 after:translate-y-2 after:transition-all after:duration-500"></div>
+    <div
+      class="bg-black w-6 h-0.5 rounded absolute top-3 -mt-0.5 transition-all duration-500 before:content-[''] before:bg-black before:w-6 before:h-0.5 before:rounded before:absolute before:-translate-x-3 before:-translate-y-2 before:transition-all before:duration-500 after:content-[''] after:bg-black after:w-6 after:h-0.5 after:rounded after:absolute after:-translate-x-3 after:translate-y-2 after:transition-all after:duration-500"
+    ></div>
   </button>
-  <div *ngIf="isMenuOpen" class="menu-content animate-bounceIn fixed top-0 left-0 w-full h-full bg-white z-[1000]">
-    <ul class="flex flex-col items-center justify-center h-full">
-      <li *ngFor="let category of categories" class="text-2xl my-4" (click)="handleCategoryClick(category)">
-        {{ category.charAt(0).toUpperCase() + category.slice(1) }}
-      </li>
-      <hr class="w-3/4 my-4 border-t-2 border-gray-300" />
-      <li *ngFor="let link of additionalLinks" class="text-2xl my-4" (click)="handleLinkClick(link.href)">
-        {{ link.name }}
-      </li>
-    </ul>
+  <div
+    *ngIf="isMenuOpen"
+    class="animate-bounceIn fixed top-0 left-0 w-full h-full bg-gradient-to-r from-blue-300 to-purple-300 z-[1000] shadow-lg"
+  >
+    <nav class="flex flex-col items-center space-y-4 mt-16 text-white text-lg">
+      <a
+        *ngFor="let route of routes"
+        [routerLink]="route.path"
+        class="hover:text-gray-200 transition-transform transition-opacity duration-200 ease-in-out hover:scale-105 hover:opacity-90"
+        (click)="toggle()"
+      >
+        {{ route.name }}
+      </a>
+    </nav>
   </div>
 </div>

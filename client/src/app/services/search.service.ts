@@ -1,4 +1,3 @@
-// src/app/services/search.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -28,6 +27,7 @@ export class SearchService {
   }
 
   search(query: string): void {
+    console.log('SearchService: Searching for:', query);
     this.searchQuery.next(query);
     if (!query.trim()) {
       this.searchResults.next([]);
@@ -35,11 +35,13 @@ export class SearchService {
       return;
     }
     this.http.get<Product[]>(`${this.apiUrl}?query=${encodeURIComponent(query)}`, { headers: this.getHeaders() }).subscribe({
-      next: results => {
-        this.searchResults.next(results);
+      next: (results) => {
+        console.log('SearchService: Search results:', results);
+        this.searchResults.next(results || []);
         this.searchPerformed.next(true);
       },
-      error: () => {
+      error: (error) => {
+        console.error('SearchService: Error searching:', error);
         this.searchResults.next([]);
         this.searchPerformed.next(true);
       }
@@ -47,6 +49,7 @@ export class SearchService {
   }
 
   clearSearch(): void {
+    console.log('SearchService: Clearing search');
     this.searchResults.next([]);
     this.searchPerformed.next(false);
     this.searchQuery.next('');
