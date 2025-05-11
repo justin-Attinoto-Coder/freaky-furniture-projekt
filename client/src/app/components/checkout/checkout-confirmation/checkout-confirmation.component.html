@@ -1,71 +1,18 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="flex items-center justify-center mb-4 relative">
-    <div class="absolute left-4 flex items-center cursor-pointer text-blue-500" (click)="goToHome()">
-      <fa-icon [icon]="faClipboardCheck" class="text-xl"></fa-icon>
-      <span class="hidden sm:inline-flex ml-2 text-lg font-medium">Return to Home</span>
-    </div>
-    <h2 class="text-xl sm:text-2xl font-bold">Checkout</h2>
+<div class="container mx-auto px-4 py-8 text-center min-h-screen">
+  <h1 class="text-4xl font-bold text-gray-800 mb-4">Order Confirmed!</h1>
+  <p class="text-xl text-gray-600 mb-6">Yay! Your order is on its way! 🎉</p>
+  <div class="flex justify-center space-x-4 mb-8">
+    <fa-icon [icon]="faCheckCircle" class="text-4xl text-green-500 animate-bounce"></fa-icon>
+    <fa-icon [icon]="faStroopwafel" class="text-4xl text-yellow-500 animate-pulse"></fa-icon>
+    <fa-icon [icon]="faStar" class="text-4xl text-blue-500 animate-spin"></fa-icon>
   </div>
-
-  <div class="flex items-center justify-between mb-8 mx-auto" style="max-width: 80%;">
-    <div class="flex flex-col items-center">
-      <fa-icon [icon]="faBoxOpen" class="text-2xl text-gray-300 p-2"></fa-icon>
-      <span class="text-sm text-gray-300 font-bold">Shipping</span>
-    </div>
-    <div class="flex-grow border-t border-gray-300 mx-2"></div>
-    <div class="flex flex-col items-center">
-      <fa-icon [icon]="faCreditCard" class="text-2xl text-gray-300 p-2"></fa-icon>
-      <span class="text-sm text-gray-300 font-bold">Payment</span>
-    </div>
-    <div class="flex-grow border-t border-gray-300 mx-2"></div>
-    <div class="flex flex-col items-center">
-      <fa-icon [icon]="faClipboardCheck" class="text-2xl text-black border-2 border-black bg-white p-2 rounded-full"></fa-icon>
-      <span class="text-sm font-bold">Review</span>
-    </div>
-  </div>
-
-  <h1 class="text-3xl font-bold mb-4">Order Confirmed</h1>
-  <p class="text-lg mb-6">Thank you for your order! You'll receive a confirmation email soon.</p>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-    <!-- Customer Details -->
-    <div class="bg-gray-100 p-4 rounded-md">
-      <h2 class="text-xl font-semibold mb-2">Customer Details</h2>
-      <p *ngIf="customerDetails.name" class="mb-1">Name: {{ customerDetails.name }}</p>
-      <p *ngIf="customerDetails.email" class="mb-1">Email: {{ customerDetails.email }}</p>
-      <p *ngIf="customerDetails.phone" class="mb-1">Phone: {{ customerDetails.phone }}</p>
-    </div>
-
-    <!-- Shipping Details -->
-    <div class="bg-gray-100 p-4 rounded-md">
-      <h2 class="text-xl font-semibold mb-2">Shipping Details</h2>
-      <p *ngIf="shippingDetails.address" class="mb-1">Address: {{ shippingDetails.address }}</p>
-      <p *ngIf="shippingDetails.city" class="mb-1">City: {{ shippingDetails.city }}</p>
-      <p *ngIf="shippingDetails.postalCode" class="mb-1">Postal Code: {{ shippingDetails.postalCode }}</p>
-      <p *ngIf="shippingDetails.method" class="mb-1">Method: {{ shippingDetails.method }}</p>
-    </div>
-
-    <!-- Payment Details -->
-    <div class="bg-gray-100 p-4 rounded-md">
-      <h2 class="text-xl font-semibold mb-2">Payment Details</h2>
-      <p *ngIf="paymentDetails.cardNumber" class="mb-1">Card: **** **** **** {{ paymentDetails.cardNumber?.slice(-4) }}</p>
-      <p *ngIf="paymentDetails.expiry" class="mb-1">Expiry: {{ paymentDetails.expiry }}</p>
-      <p *ngIf="paymentDetails.cardHolder" class="mb-1">Cardholder: {{ paymentDetails.cardHolder }}</p>
-    </div>
-
-    <!-- Order Summary -->
-    <div class="bg-gray-100 p-4 rounded-md">
-      <h2 class="text-xl font-semibold mb-2">Order Summary</h2>
-      <p *ngIf="orderSummary.subtotal" class="mb-1">Subtotal: ${{ orderSummary.subtotal.toFixed(2) }}</p>
-      <p *ngIf="orderSummary.shippingFee" class="mb-1">Shipping Fee: ${{ orderSummary.shippingFee.toFixed(2) }}</p>
-      <p *ngIf="orderSummary.grandTotal" class="mb-1 font-bold">Grand Total: ${{ orderSummary.grandTotal.toFixed(2) }}</p>
-    </div>
-  </div>
-
   <button
-    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+    class="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition-colors"
     (click)="goToHome()"
   >
     Return to Home
   </button>
 </div>
+<app-common-accordion>
+
+</app-common-accordion>

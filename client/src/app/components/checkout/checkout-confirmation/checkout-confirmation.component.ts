@@ -1,44 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBoxOpen, faCreditCard, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faStroopwafel , faStar } from '@fortawesome/free-solid-svg-icons';
+import { CommonAccordionComponent } from 'app/components/common/common-accordion/common-accordion.component';
+import { CommonAccordionItemComponent } from 'app/components/common/common-accordion-item/common-accordion-item.component';
 
 @Component({
   selector: 'app-checkout-confirmation',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, FontAwesomeModule, CommonAccordionComponent, CommonAccordionItemComponent],
+  // Note: The imports array is used to import other components or modules that this component depends on.
+  // In this case, it imports CommonModule for common Angular directives, FontAwesomeModule for FontAwesome icons,
+  // and two custom components: CommonAccordionComponent and CommonAccordionItemComponent.
   templateUrl: './checkout-confirmation.component.html',
   styleUrls: ['./checkout-confirmation.component.css']
 })
-export class CheckoutConfirmationComponent implements OnInit {
-  customerDetails: any = {};
-  shippingDetails: any = {};
-  paymentDetails: any = {};
-  orderSummary: any = {};
+export class CheckoutConfirmationComponent {
+  faCheckCircle = faCheckCircle;
+  faStroopwafel = faStroopwafel;
+  faStar = faStar;
 
-  // FontAwesome icons for progress bar
-  faBoxOpen = faBoxOpen;
-  faCreditCard = faCreditCard;
-  faClipboardCheck = faClipboardCheck;
-
-  constructor(private route: ActivatedRoute, private router: Router) {}
-
-  ngOnInit() {
-    this.route.paramMap.subscribe(() => {
-      const state = history.state;
-      this.customerDetails = state.customerDetails || {};
-      this.shippingDetails = state.shippingDetails || {};
-      this.paymentDetails = state.paymentDetails || {};
-      this.orderSummary = state.orderSummary || {};
-      console.log('Checkout-Confirmation: Received state:', {
-        customerDetails: this.customerDetails,
-        shippingDetails: this.shippingDetails,
-        paymentDetails: this.paymentDetails,
-        orderSummary: this.orderSummary
-      });
-    });
-  }
+  constructor(private router: Router) {}
 
   goToHome() {
     console.log('Checkout-Confirmation: Navigating to home');
