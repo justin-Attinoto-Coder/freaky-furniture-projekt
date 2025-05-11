@@ -1,62 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faShoppingCart, faCheckCircle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-
+import { faCheckCircle, faStroopwafel , faStar } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-checkout-confirmation',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, FontAwesomeModule ],
+  // Note: The imports array is used to import other components or modules that this component depends on.
+  // In this case, it imports CommonModule for common Angular directives, FontAwesomeModule for FontAwesome icons,
+  // and two custom components: CommonAccordionComponent and CommonAccordionItemComponent.
   templateUrl: './checkout-confirmation.component.html',
   styleUrls: ['./checkout-confirmation.component.css']
 })
-export class CheckoutConfirmationComponent implements OnInit {
-  customerName: string = 'Customer';
-  shippingAddress: string = 'N/A';
-  billingAddress: string = 'N/A';
-  shippingMethod: string = 'Standard Shipping';
-  paymentMethod: string = 'Credit Card';
-  orderSummary: { subtotal: number; shippingFee: number; grandTotal: number } = {
-    subtotal: 0,
-    shippingFee: 0,
-    grandTotal: 0
-  };
-
-  faShoppingCart = faShoppingCart;
+export class CheckoutConfirmationComponent {
   faCheckCircle = faCheckCircle;
-  faThumbsUp = faThumbsUp;
+  faStroopwafel = faStroopwafel;
+  faStar = faStar;
 
-  constructor(private router: Router, private route: ActivatedRoute) {
-    this.route.paramMap.subscribe(() => {
-      const state = history.state;
-      this.customerName = state.customerDetails?.fullName || 'Customer';
-      this.shippingAddress = `${state.shippingDetails?.streetAddress || ''}, ${state.shippingDetails?.city || ''}, ${state.shippingDetails?.postalCode || ''}`;
-      this.billingAddress = state.paymentDetails?.billingAddress === 'same' ? this.shippingAddress : 'N/A';
-      this.shippingMethod = state.shippingDetails?.shippingMethod || 'Standard Shipping';
-      this.paymentMethod = state.paymentDetails?.paymentMethod || 'Credit Card';
-      this.orderSummary = state.orderSummary || { subtotal: 0, shippingFee: 0, grandTotal: 0 };
-      console.log('Checkout-Confirmation: Received state:', state);
-    });
-  }
+  constructor(private router: Router) {}
 
-  ngOnInit() {
-    console.log('Checkout-Confirmation: Initialized with:', {
-      customerName: this.customerName,
-      shippingAddress: this.shippingAddress,
-      billingAddress: this.billingAddress,
-      shippingMethod: this.shippingMethod,
-      paymentMethod: this.paymentMethod,
-      orderSummary: this.orderSummary
-    });
-  }
-
-  handleContinueShopping() {
+  goToHome() {
     console.log('Checkout-Confirmation: Navigating to home');
-    this.router.navigate(['/']).then(success => {
-      console.log('Checkout-Confirmation: Navigation to home successful:', success);
-    }).catch(error => {
-      console.error('Checkout-Confirmation: Navigation to home failed:', error);
-    });
+    this.router.navigate(['/home']);
   }
 }

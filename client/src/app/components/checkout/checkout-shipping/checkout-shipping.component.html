@@ -79,12 +79,6 @@
           <label class="block text-gray-700 font-bold">Delivery Time *</label>
           <input type="text" name="deliveryTime" [(ngModel)]="shippingDetails.deliveryTime" readonly class="w-full p-2 bg-gray-100 rounded-xl" />
         </div>
-        <div class="col-span-1 sm:col-span-2 mt-4">
-          <label class="inline-flex items-center">
-            <input type="checkbox" class="form-checkbox text-green-500" (change)="setCustomerAddress()" />
-            <span class="ml-2 text-gray-700">Same as Customer Address</span>
-          </label>
-        </div>
         <div class="col-span-1 sm:col-span-2 flex sm:ml-auto">
           <button type="submit" class="mt-8 mb-8 w-md mx-auto sm:w-auto bg-black sm:bg-blue-500 text-white px-4 py-2 rounded-full sm:rounded sm:font-bold sm:text-lg">
             <span class="block sm:hidden">Confirm</span>

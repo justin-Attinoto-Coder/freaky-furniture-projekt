@@ -13,18 +13,22 @@ import { CheckoutReviewComponent } from './components/checkout/checkout-review/c
 import { CheckoutConfirmationComponent } from './components/checkout/checkout-confirmation/checkout-confirmation.component';
 import { ProductDetailsComponent } from './components/product/product-details/product-details.component';
 import { SearchPageComponent } from './components/pages/search/search-page/search-page.component';
+import { ProductReviewsComponent } from './components/product/product-reviews/product-reviews.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'search', component: SearchPageComponent },
   { path: 'product/:urlSlug', component: ProductDetailsComponent },
+  { path: 'product/:urlSlug/reviews', component: ProductReviewsComponent },
   { path: 'cart', component: CartComponent },
   { path: 'login', component: LoginPageComponent },
-  { path: 'admin/dashboard', component: AdminDashboardComponent },
-  { path: 'admin/table', component: AdminTableComponent },
-  { path: 'admin/new-product', component: AdminNewProductComponent },
-  { path: 'admin/users', component: AdminUsersTableComponent },
+  { path: 'admin', component: AdminDashboardComponent, children: [
+    { path: 'table', component: AdminTableComponent },
+    { path: 'new-product', component: AdminNewProductComponent },
+    { path: 'users', component: AdminUsersTableComponent },
+    { path: '', redirectTo: 'table', pathMatch: 'full' }
+  ]},
   { path: 'user/dashboard', component: UserDashboardComponent },
   { path: 'checkout-shipping', component: CheckoutShippingComponent },
   { path: 'checkout-payment', component: CheckoutPaymentComponent },
