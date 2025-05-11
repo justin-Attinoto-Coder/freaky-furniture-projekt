@@ -29,13 +29,14 @@ export interface CustomerData {
 export class CartService {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   cartItems$: Observable<CartItem[]> = this.cartItemsSubject.asObservable();
+  private apiUrl = 'https://freaky-angular-furniture-backend.onrender.com/api';
 
   constructor(private http: HttpClient) {
     this.loadCartItems();
   }
 
   private loadCartItems(): void {
-    this.http.get<CartItem[]>('http://localhost:8000/api/cart').subscribe({
+    this.http.get<CartItem[]>(`${this.apiUrl}/cart`).subscribe({
       next: (items) => {
         const normalizedItems = items.map(item => ({
           ...item,
@@ -49,7 +50,7 @@ export class CartService {
   }
 
   addCartItem(item: CartItem): Observable<{ id: number }> {
-    return this.http.post<{ id: number }>('http://localhost:8000/api/cart', {
+    return this.http.post<{ id: number }>(`${this.apiUrl}/cart`, {
       ...item,
       imageURL: item.imageURL.replace(/\\/g, '/').replace(/^\/+/, '/')
     }).pipe(
@@ -65,7 +66,7 @@ export class CartService {
   }
 
   updateCartItem(productId: number, quantity: number): Observable<void> {
-    return this.http.put<void>(`http://localhost:8000/api/cart/${productId}`, { quantity }).pipe(
+    return this.http.put<void>(`${this.apiUrl}/cart/${productId}`, { quantity }).pipe(
       tap(() => {
         console.log('Updated cart item:', { productId, quantity });
         this.loadCartItems();
@@ -79,7 +80,7 @@ export class CartService {
 
   deleteCartItem(productId: number): Observable<void> {
     console.log('Sending DELETE request for cart item productId:', productId);
-    return this.http.delete<void>(`http://localhost:8000/api/cart/${productId}`).pipe(
+    return this.http.delete<void>(`${this.apiUrl}/cart/${productId}`).pipe(
       tap(() => {
         console.log('Deleted cart item with productId:', productId);
         this.loadCartItems();
@@ -93,7 +94,7 @@ export class CartService {
 
   addCustomer(customerData: CustomerData): Observable<any> {
     console.log('POST /api/customers with data:', customerData);
-    return this.http.post('http://localhost:8000/api/customers', customerData).pipe(
+    return this.http.post(`${this.apiUrl}/customers`, customerData).pipe(
       tap((response) => console.log('Customer added, response:', response)),
       catchError((error: HttpErrorResponse) => {
         console.error('Error adding customer:', error, 'Status:', error.status, 'Message:', error.message);

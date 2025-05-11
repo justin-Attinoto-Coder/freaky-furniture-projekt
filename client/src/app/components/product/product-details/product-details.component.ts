@@ -26,11 +26,11 @@ export class ProductDetailsComponent implements OnInit {
       const urlSlug = params.get('urlSlug');
       if (urlSlug) {
         // Fetch product by urlSlug
-        this.http.get<any>(`http://localhost:8000/api/furniture/${urlSlug}`).subscribe({
+        this.http.get<any>(`https://freaky-angular-furniture-backend.onrender.com/api/furniture/${urlSlug}`).subscribe({
           next: (product) => {
             this.product = product;
             // Fetch average rating
-            this.http.get<any>(`http://localhost:8000/api/reviews/${product.id}/average`).subscribe({
+            this.http.get<any>(`https://freaky-angular-furniture-backend.onrender.com/api/reviews/${product.id}/average`).subscribe({
               next: (response) => {
                 this.averageRating = response.averageRating || 0;
                 console.log('Average rating fetched:', this.averageRating);
@@ -41,7 +41,7 @@ export class ProductDetailsComponent implements OnInit {
               }
             });
             // Fetch similar items (limited to 8)
-            this.http.get<any[]>(`http://localhost:8000/api/furniture?category=${product.category}&limit=8`).subscribe({
+            this.http.get<any[]>(`https://freaky-angular-furniture-backend.onrender.com/api/furniture?category=${product.category}&limit=8`).subscribe({
               next: (items) => {
                 this.similarItems = items
                   .filter(item => item.urlSlug !== urlSlug)

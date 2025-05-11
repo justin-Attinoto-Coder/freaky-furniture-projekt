@@ -48,7 +48,7 @@ export class CheckoutReviewComponent implements OnInit {
   }
 
   fetchCartItems() {
-    this.http.get('http://localhost:8000/api/cart').subscribe({
+    this.http.get('https://freaky-angular-furniture-backend.onrender.com/api/cart').subscribe({
       next: (data: any) => {
         this.cartItems = data.map((item: any) => ({
           ...item,
@@ -81,7 +81,7 @@ export class CheckoutReviewComponent implements OnInit {
       return;
     }
     console.log('Checkout-Review: Updating quantity for productId:', productId, 'to:', quantity);
-    this.http.put(`http://localhost:8000/api/cart/${productId}`, {
+    this.http.put(`https://freaky-angular-furniture-backend.onrender.com/api/cart/${productId}`, {
       productId,
       quantity,
       name: item.name || 'Unknown Product',
@@ -110,7 +110,7 @@ export class CheckoutReviewComponent implements OnInit {
 
   handleConfirmOrder() {
     console.log('Checkout-Review: Confirming order, clearing cart');
-    this.http.delete('http://localhost:8000/api/cart/clear').subscribe({
+    this.http.delete('https://freaky-angular-furniture-backend.onrender.com/api/cart/clear').subscribe({
       next: () => {
         console.log('Checkout-Review: Cart cleared in the backend');
         this.cartItems = [];

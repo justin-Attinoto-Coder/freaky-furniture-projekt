@@ -34,7 +34,7 @@ export class ProductReviewsComponent implements OnInit {
       const urlSlug = params.get('urlSlug');
       if (urlSlug) {
         // Fetch product by urlSlug to get productId
-        this.http.get<any>(`http://localhost:8000/api/furniture/${urlSlug}`).subscribe({
+        this.http.get<any>(`https://freaky-angular-furniture-backend.onrender.com/api/furniture/${urlSlug}`).subscribe({
           next: (product) => {
             this.productId = product.id;
             this.fetchReviews();
@@ -51,7 +51,7 @@ export class ProductReviewsComponent implements OnInit {
 
   fetchReviews() {
     if (this.productId) {
-      this.http.get<Review[]>(`http://localhost:8000/api/reviews/${this.productId}`).subscribe({
+      this.http.get<Review[]>(`https://freaky-angular-furniture-backend.onrender.com/api/reviews/${this.productId}`).subscribe({
         next: reviews => {
           this.reviews = reviews;
           console.log('ProductReviews: Fetched reviews:', reviews);
