@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-admin-table',
-  templateUrl: './admin-table.component.html',
-  styleUrls: ['./admin-table.component.css'],
   standalone: true,
-  imports: [CommonModule, FaIconComponent]
+  imports: [CommonModule, FontAwesomeModule],
+  templateUrl: './admin-table.component.html',
+  styleUrls: ['./admin-table.component.css']
 })
 export class AdminTableComponent implements OnInit {
   furniture: Product[] = [];
@@ -42,6 +42,6 @@ export class AdminTableComponent implements OnInit {
   }
 
   navigateToNewProduct(): void {
-    this.router.navigate(['admin/products/new']);
+    this.router.navigate(['admin/new-product']);
   }
 }
