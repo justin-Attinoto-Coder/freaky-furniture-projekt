@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class SearchService {
-  private apiUrl = 'http://localhost:8000/api/furniture';
+  private apiUrl = 'https://freaky-angular-furniture-backend.onrender.com/api/furniture';
   private searchResults = new BehaviorSubject<Product[]>([]);
   private searchPerformed = new BehaviorSubject<boolean>(false);
   private searchQuery = new BehaviorSubject<string>('');
@@ -33,25 +33,25 @@ export class SearchService {
       this.searchResults.next([]);
       this.searchPerformed.next(false);
       return;
-    }
-    this.http.get<Product[]>(`${this.apiUrl}?query=${encodeURIComponent(query)}`, { headers: this.getHeaders() }).subscribe({
-      next: (results) => {
-        console.log('SearchService: Search results:', results);
-        this.searchResults.next(results || []);
-        this.searchPerformed.next(true);
-      },
-      error: (error) => {
-        console.error('SearchService: Error searching:', error);
-        this.searchResults.next([]);
-        this.searchPerformed.next(true);
       }
-    });
-  }
+      this.http.get<Product[]>(`${this.apiUrl}?query=${encodeURIComponent(query)}`, { headers: this.getHeaders() }).subscribe({
+        next: (results) => {
+          console.log('SearchService: Search results:', results);
+          this.searchResults.next(results || []);
+          this.searchPerformed.next(true);
+        },
+        error: (error) => {
+          console.error('SearchService: Error searching:', error);
+          this.searchResults.next([]);
+          this.searchPerformed.next(true);
+        }
+      });
+    }
 
-  clearSearch(): void {
-    console.log('SearchService: Clearing search');
-    this.searchResults.next([]);
-    this.searchPerformed.next(false);
-    this.searchQuery.next('');
+    clearSearch(): void {
+      console.log('SearchService: Clearing search');
+      this.searchResults.next([]);
+      this.searchPerformed.next(false);
+      this.searchQuery.next('');
+    }
   }
-}

@@ -66,7 +66,7 @@ export class CheckoutPaymentComponent {
       console.error('Checkout-Payment: Form validation failed:', this.paymentDetails);
       return;
     }
-    this.http.post('http://localhost:8000/api/payment-details', this.paymentDetails).subscribe({
+    this.http.post('https://freaky-angular-furniture-backend.onrender.com/api/payment-details', this.paymentDetails).subscribe({
       next: (response) => {
         console.log('Checkout-Payment: Payment details saved, response:', response);
         this.error = null;
