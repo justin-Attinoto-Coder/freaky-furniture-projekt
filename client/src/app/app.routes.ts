@@ -20,17 +20,19 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'search', component: SearchPageComponent },
   { path: 'product/:urlSlug', component: ProductDetailsComponent },
+  { path: 'product/:urlSlug/reviews', component: ProductReviewsComponent },
   { path: 'cart', component: CartComponent },
   { path: 'login', component: LoginPageComponent },
-  { path: 'admin/dashboard', component: AdminDashboardComponent },
-  { path: 'admin/table', component: AdminTableComponent },
-  { path: 'admin/new-product', component: AdminNewProductComponent },
-  { path: 'admin/users', component: AdminUsersTableComponent },
+  { path: 'admin', component: AdminDashboardComponent, children: [
+    { path: 'table', component: AdminTableComponent },
+    { path: 'new-product', component: AdminNewProductComponent },
+    { path: 'users', component: AdminUsersTableComponent },
+    { path: '', redirectTo: 'table', pathMatch: 'full' }
+  ]},
   { path: 'user/dashboard', component: UserDashboardComponent },
   { path: 'checkout-shipping', component: CheckoutShippingComponent },
   { path: 'checkout-payment', component: CheckoutPaymentComponent },
   { path: 'checkout-review', component: CheckoutReviewComponent },
   { path: 'checkout-confirmation', component: CheckoutConfirmationComponent },
-  { path: 'product/:urlSlug/reviews', component: ProductReviewsComponent },
   { path: '**', redirectTo: 'home' }
 ];

@@ -1,17 +1,27 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faTable, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faBox, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-admin-sidebar',
-  templateUrl: './admin-sidebar.component.html',
-  styleUrls: ['./admin-sidebar.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, FontAwesomeModule]
+  imports: [CommonModule, RouterModule, FontAwesomeModule],
+  templateUrl: './admin-sidebar.component.html',
+  styleUrls: ['./admin-sidebar.component.css']
 })
 export class AdminSidebarComponent {
-  faTable = faTable;
+  faBox = faBox;
   faPlus = faPlus;
+
+  constructor(private router: Router) {}
+
+  navigateToManageProducts() {
+    this.router.navigate(['/admin/table']);
+  }
+
+  navigateToAddProduct() {
+    this.router.navigate(['/admin/new-product']);
+  }
 }
