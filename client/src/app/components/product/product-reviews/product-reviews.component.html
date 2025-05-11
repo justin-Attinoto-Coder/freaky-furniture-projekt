@@ -1,0 +1,20 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">Product Reviews</h1>
+  <div *ngIf="reviews.length > 0; else noReviews" class="space-y-4">
+    <div *ngFor="let review of reviews" class="border border-gray-200 rounded-md p-4">
+      <div class="flex items-center mb-2">
+        <span *ngFor="let _ of [1, 2, 3, 4, 5]; let i = index" class="text-xl">
+          <fa-icon
+            [icon]="i < review.rating ? faStar : faRegStar"
+            [ngClass]="i < review.rating ? 'text-yellow-500' : 'text-gray-300'"
+          ></fa-icon>
+        </span>
+        <span class="ml-2 text-gray-700 font-semibold">{{ review.reviewerName }}</span>
+      </div>
+      <p class="text-gray-600">{{ review.reviewText }}</p>
+    </div>
+  </div>
+  <ng-template #noReviews>
+    <p class="text-gray-600">No reviews available for this product.</p>
+  </ng-template>
+</div>

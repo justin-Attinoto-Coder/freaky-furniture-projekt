@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AddToCartButtonComponent } from '../add-to-cart-button/add-to-cart-button.component';
 import { FocusOverviewAccordionComponent } from '../focus-overview-accordion/focus-overview-accordion.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faStar, faStar as faRegStar } from '@fortawesome/free-solid-svg-icons';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -17,7 +17,7 @@ interface Review {
 @Component({
   selector: 'app-focus-product-information',
   standalone: true,
-  imports: [CommonModule, RouterLink, AddToCartButtonComponent, FocusOverviewAccordionComponent, FaIconComponent],
+  imports: [CommonModule, RouterModule, AddToCartButtonComponent, FocusOverviewAccordionComponent, FontAwesomeModule],
   templateUrl: './focus-product-information.component.html',
   styleUrls: ['./focus-product-information.component.css']
 })
