@@ -1,11 +1,10 @@
-<div class="bg-white shadow-md p-4 flex justify-between items-center">
-  <h1 class="text-xl font-bold text-gray-800">Admin Dashboard</h1>
-  <div>
-    <button
-      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-      (click)="logout()"
-    >
-      Logout
-    </button>
-  </div>
+<div class="bg-gray-900 text-white p-4 flex justify-between items-center">
+  <h1 class="text-xl font-semibold">Admin Dashboard</h1>
+  <button
+    class="flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md"
+    (click)="logout()"
+  >
+    <fa-icon [icon]="faSignOutAlt" class="mr-2"></fa-icon>
+    Logout
+  </button>
 </div>

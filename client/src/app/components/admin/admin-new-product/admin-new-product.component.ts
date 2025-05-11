@@ -12,10 +12,10 @@ interface FormErrors {
 
 @Component({
   selector: 'app-admin-new-product',
-  templateUrl: './admin-new-product.component.html',
-  styleUrls: ['./admin-new-product.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule],
+  templateUrl: './admin-new-product.component.html',
+  styleUrls: ['./admin-new-product.component.css']
 })
 export class AdminNewProductComponent {
   formData = {
@@ -77,7 +77,7 @@ export class AdminNewProductComponent {
 
       this.productService.addProduct(productData).subscribe({
         next: () => {
-          this.router.navigate(['/admin/products']);
+          this.router.navigate(['/admin/table']);
         },
         error: error => {
           console.error('Error submitting form:', error);

@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { CheckoutHeaderComponent } from '../../common/checkout-header/checkout-header.component';
-import { ProgressBarComponent } from '../../common/progress-bar/progress-bar.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faBoxOpen, faCreditCard, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 import { PaymentFormComponent } from '../payment-form/payment-form.component';
 import { OrderSummaryComponent } from '../../common/order-summary/order-summary.component';
 
 @Component({
   selector: 'app-checkout-payment',
   standalone: true,
-  imports: [CommonModule, FormsModule, CheckoutHeaderComponent, ProgressBarComponent, PaymentFormComponent, OrderSummaryComponent],
+  imports: [CommonModule, FormsModule, FontAwesomeModule, PaymentFormComponent, OrderSummaryComponent],
   templateUrl: './checkout-payment.component.html',
   styleUrls: ['./checkout-payment.component.css']
 })
@@ -31,6 +31,11 @@ export class CheckoutPaymentComponent {
   cartItems: any[] = [];
   totalPrice: number = 0;
   error: string | null = null;
+
+  // FontAwesome icons for progress bar
+  faBoxOpen = faBoxOpen;
+  faCreditCard = faCreditCard;
+  faClipboardCheck = faClipboardCheck;
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {
     this.route.paramMap.subscribe(() => {
@@ -83,6 +88,18 @@ export class CheckoutPaymentComponent {
       error: (error) => {
         console.error('Checkout-Payment: Error saving payment details:', error);
         this.error = 'Failed to save payment details. Please try again.';
+      }
+    });
+  }
+
+  navigateToShipping() {
+    console.log('Checkout-Payment: Navigating to checkout-shipping');
+    this.router.navigate(['/checkout-shipping'], {
+      state: {
+        customerDetails: this.customerDetails,
+        shippingDetails: this.shippingDetails,
+        cartItems: this.cartItems,
+        totalPrice: this.totalPrice
       }
     });
   }

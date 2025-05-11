@@ -8,13 +8,13 @@ import { faUser, faLock, faSignInAlt, faUserPlus } from '@fortawesome/free-solid
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, FontAwesomeModule]
+  imports: [CommonModule, FormsModule, FontAwesomeModule],
+  templateUrl: './login-page.component.html',
+  styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent {
-  isLoginMode = true; // Toggle between login and registration
+  isLoginMode = true;
   username = '';
   password = '';
   error = '';
@@ -47,7 +47,7 @@ export class LoginPageComponent {
       next: response => {
         const from = this.route.snapshot.queryParams['from'] || '/';
         if (response.role.toLowerCase().includes('admin')) {
-          this.router.navigate(['/admin']);
+          this.router.navigate(['/admin/table']);
         } else {
           this.router.navigate([from]);
         }
@@ -66,7 +66,7 @@ export class LoginPageComponent {
     this.authService.register(this.username, this.password).subscribe({
       next: response => {
         this.success = response.message || 'Registration successful! Please log in.';
-        this.isLoginMode = true; // Switch to login mode
+        this.isLoginMode = true;
         this.username = '';
         this.password = '';
       },

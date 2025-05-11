@@ -11,7 +11,7 @@
         [ngClass]="i < averageRating ? 'text-yellow-500' : 'text-gray-300'"
       ></fa-icon>
     </span>
-    <a [routerLink]="['/reviews', product.id]" class="text-blue-500 underline ml-4">See all reviews</a>
+    <a [routerLink]="['/product', product.urlSlug, 'reviews']" class="text-blue-500 underline ml-4">See all reviews</a>
   </div>
   <p class="text-gray-600 mb-4">{{ product.description }}</p>
   <div class="quantity-selector flex items-center mb-4 sm:mb-0">
