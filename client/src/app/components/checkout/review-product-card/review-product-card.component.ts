@@ -13,8 +13,7 @@ export class ReviewProductCardComponent {
   @Output() quantityChange = new EventEmitter<number>();
 
   // Base URL for images
-  readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com/api';
-
+readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
   // Compute image URL or fallback
   getImageUrl(): string {
     const imagePath = this.product.imageURL?.trim();
