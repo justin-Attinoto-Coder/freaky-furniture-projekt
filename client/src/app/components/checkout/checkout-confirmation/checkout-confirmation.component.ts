@@ -3,13 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCheckCircle, faStroopwafel , faStar } from '@fortawesome/free-solid-svg-icons';
-import { CommonAccordionComponent } from 'app/components/common/common-accordion/common-accordion.component';
-import { CommonAccordionItemComponent } from 'app/components/common/common-accordion-item/common-accordion-item.component';
-
 @Component({
   selector: 'app-checkout-confirmation',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, CommonAccordionComponent, CommonAccordionItemComponent],
+  imports: [CommonModule, FontAwesomeModule ],
   // Note: The imports array is used to import other components or modules that this component depends on.
   // In this case, it imports CommonModule for common Angular directives, FontAwesomeModule for FontAwesome icons,
   // and two custom components: CommonAccordionComponent and CommonAccordionItemComponent.
