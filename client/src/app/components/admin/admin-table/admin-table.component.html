@@ -1,6 +1,6 @@
-<div class="w-3/4 p-4">
+<div class="p-4">
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-xl">Produkter</h2>
+    <h2 class="text-xl font-bold text-gray-800">Produkter</h2>
     <button
       class="bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-600"
       (click)="navigateToNewProduct()"
@@ -8,20 +8,20 @@
       Ny produkt
     </button>
   </div>
-  <table class="min-w-full bg-white">
+  <table class="min-w-full bg-white border border-gray-200">
     <thead>
       <tr>
-        <th class="py-2 px-4 border-b text-left">Namn</th>
-        <th class="py-2 px-4 border-b text-left">SKU</th>
-        <th class="py-2 px-4 border-b text-left">Pris</th>
-        <th class="py-2 px-4 border-b text-left"></th>
+        <th class="py-2 px-4 border-b text-left text-gray-700">Namn</th>
+        <th class="py-2 px-4 border-b text-left text-gray-700">SKU</th>
+        <th class="py-2 px-4 border-b text-left text-gray-700">Pris</th>
+        <th class="py-2 px-4 border-b text-left text-gray-700"></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of furniture">
-        <td class="py-2 px-4 border-b">{{ item.name }}</td>
-        <td class="py-2 px-4 border-b">{{ item.sku }}</td>
-        <td class="py-2 px-4 border-b">{{ item.price }}</td>
+        <td class="py-2 px-4 border-b text-gray-600">{{ item.name }}</td>
+        <td class="py-2 px-4 border-b text-gray-600">{{ item.sku }}</td>
+        <td class="py-2 px-4 border-b text-gray-600">{{ item.price }}</td>
         <td class="py-2 px-4 border-b text-center">
           <button
             class="text-blue-500 hover:text-blue-700 mr-2"
