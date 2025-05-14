@@ -34,7 +34,7 @@ export class FocusProductInformationComponent implements OnInit {
 
   ngOnInit() {
     console.log('FocusProductInformation init:', { averageRating: this.averageRating, productId: this.product.id });
-    this.http.get<Review[]>(`http://localhost:8000/api/reviews/${this.product.id}`).subscribe({
+    this.http.get<Review[]>(`https://freaky-angular-furniture-backend.onrender.com/api/reviews/${this.product.id}`).subscribe({
       next: reviews => {
         this.reviews = reviews;
       },

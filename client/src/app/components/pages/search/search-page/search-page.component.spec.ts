@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SearchPageComponent } from './search-page.component';
-import { SearchService } from '../../../services/search.service';
+import { SearchService } from '../../../../services/search.service';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
-import { Product } from '../../../models/product';
+import { Product } from '../../../../models/product';
 import { Component } from '@angular/core';
 
 // Mock SearchResultsComponent
@@ -53,7 +53,7 @@ describe('SearchPageComponent', () => {
       publishing_date: '2023-01-01',
       urlSlug: 'table',
       category: 'mobler',
-      image: 'http://localhost:8000/images/table.jpg'
+      image: 'https://freaky-angular-furniture-backend.onrender.com/images/table.jpg'
     },
     {
       id: 2,
@@ -63,7 +63,7 @@ describe('SearchPageComponent', () => {
       publishing_date: '2023-02-01',
       urlSlug: 'chair',
       category: 'mobler',
-      image: 'http://localhost:8000/images/chair.jpg'
+      image: 'https://freaky-angular-furniture-backend.onrender.com/images/chair.jpg'
     },
     {
       id: 3,
@@ -73,7 +73,7 @@ describe('SearchPageComponent', () => {
       publishing_date: '2023-03-01',
       urlSlug: 'lamp',
       category: 'detaljer',
-      image: 'http://localhost:8000/images/lamp.jpg'
+      image: 'https://freaky-angular-furniture-backend.onrender.com/images/lamp.jpg'
     }
   ];
 
