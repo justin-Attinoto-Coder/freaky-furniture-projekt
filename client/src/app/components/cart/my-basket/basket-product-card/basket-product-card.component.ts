@@ -16,8 +16,7 @@ export class BasketProductCardComponent {
   @Output() deleteCartItem = new EventEmitter<number>();
 
   // Base URL for images
-  readonly imageBaseUrl = 'http://localhost:8000';
-
+readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
   // Compute image URL or fallback
   getImageUrl(): string {
     const imagePath = this.item.imageURL?.trim();

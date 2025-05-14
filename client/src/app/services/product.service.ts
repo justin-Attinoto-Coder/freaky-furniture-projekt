@@ -5,13 +5,13 @@ import { tap, catchError } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { Product } from '../models/product';
 
-export type { Product }; // Ensure Product interface is exported
+export type { Product };
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:8000/api/furniture';
+  private apiUrl = 'https://freaky-angular-furniture-backend.onrender.com/api/furniture';
   private cachedItems: Product[] | null = null;
 
   constructor(private http: HttpClient, private authService: AuthService) {}

@@ -8,7 +8,7 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/api/users';
+  private apiUrl = 'https://freaky-angular-furniture-backend.onrender.com/api/users';
   private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('token'));
   private roleSubject = new BehaviorSubject<string | null>(localStorage.getItem('role'));
   token$ = this.tokenSubject.asObservable();

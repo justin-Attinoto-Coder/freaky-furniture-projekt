@@ -22,7 +22,7 @@ export class AdminUsersTableComponent implements OnInit {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   ngOnInit() {
-    this.http.get<User[]>('http://localhost:8000/api/users', {
+    this.http.get<User[]>('https://freaky-angular-furniture-backend.onrender.com/api/users', {
       headers: this.authService.getHeaders()
     }).subscribe({
       next: users => {

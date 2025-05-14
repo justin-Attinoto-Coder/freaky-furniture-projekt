@@ -103,7 +103,7 @@ export class CheckoutShippingComponent {
       console.error('Checkout-Shipping: Form validation failed:', this.shippingDetails);
       return;
     }
-    this.http.post('http://localhost:8000/api/shipping-details', this.shippingDetails).subscribe({
+    this.http.post('https://freaky-angular-furniture-backend.onrender.com/api/shipping-details', this.shippingDetails).subscribe({
       next: (response) => {
         console.log('Checkout-Shipping: Shipping details saved, response:', response);
         this.error = null;
