@@ -6,7 +6,7 @@
           [src]="getImageUrl()"
           [alt]="item.name"
           class="w-16 h-16 object-cover mb-2"
-          (error)="getImageUrl()"
+          (error)="handleImageError($event)"
         />
         <div class="flex items-center space-x-2">
           <button
