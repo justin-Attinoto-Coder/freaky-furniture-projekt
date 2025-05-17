@@ -1,10 +1,13 @@
 <div class="product-card-container p-4 flex flex-col items-center w-full relative">
   <a [routerLink]="['/product', item.urlSlug]" class="w-full">
     <div class="image-container border border-gray-200 p-2 mb-4 rounded-lg relative">
+      <div *ngIf="!isImageLoaded" class="w-full h-48 bg-gray-200 animate-pulse rounded-lg"></div>
       <img
         [src]="getImageUrl()"
         [alt]="item.name"
         class="w-full h-auto rounded-lg"
+        [ngClass]="{'hidden': !isImageLoaded}"
+        (load)="handleImageLoad()"
         (error)="handleImageError($event)"
       />
       <div class="absolute bottom-6 right-6">
