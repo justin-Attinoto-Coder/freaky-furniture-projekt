@@ -27,12 +27,17 @@ export class ProductCardComponent {
     console.log(`ProductCard: Raw image path for ${this.item.name}: ${imagePath || 'null/undefined'}`);
     if (imagePath) {
       let normalizedPath = imagePath;
-      if (!imagePath.startsWith('http') && !imagePath.startsWith('/')) {
-        normalizedPath = `/images/${imagePath.replace(/^images\//, '')}`;
-      } else if (!imagePath.startsWith('http') && imagePath.startsWith('/')) {
-        normalizedPath = imagePath.replace(/^\/+images\//, '/images/');
+      // Replace localhost URLs with production backend
+      if (imagePath.startsWith('http://localhost:8000')) {
+        normalizedPath = imagePath.replace('http://localhost:8000', this.imageBaseUrl);
       }
-      const url = imagePath.startsWith('http') ? imagePath : `${this.imageBaseUrl}${normalizedPath}`;
+      // Handle relative paths or other non-http URLs
+      if (!normalizedPath.startsWith('http') && !normalizedPath.startsWith('/')) {
+        normalizedPath = `/images/${normalizedPath.replace(/^images\//, '')}`;
+      } else if (!normalizedPath.startsWith('http') && normalizedPath.startsWith('/')) {
+        normalizedPath = normalizedPath.replace(/^\/+images\//, '/images/');
+      }
+      const url = normalizedPath.startsWith('http') ? normalizedPath : `${this.imageBaseUrl}${normalizedPath}`;
       console.log(`ProductCard: Normalized path for ${this.item.name}: ${normalizedPath}`);
       console.log(`ProductCard: Computed URL for ${this.item.name}: ${url}`);
       return url;
