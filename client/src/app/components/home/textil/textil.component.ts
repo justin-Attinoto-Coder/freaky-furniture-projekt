@@ -1,6 +1,5 @@
-// src/app/components/home/textil/textil.component.ts
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Import CommonModule for ngIf, ngFor, etc.
+import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../../common/product-card/product-card.component';
 import { Product } from '../../../models/product';
 
