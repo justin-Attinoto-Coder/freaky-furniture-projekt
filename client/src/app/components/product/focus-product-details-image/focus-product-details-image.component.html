@@ -1,9 +1,9 @@
 <div class="w-full h-full flex items-center justify-center relative">
-  <div *ngIf="!isImageLoaded" class="w-full h-full bg-gray-200 animate-pulse rounded-lg absolute inset-0"></div>
+  <div *ngIf="!isImageLoaded" class="w-full h-full bg-gray-200 animate-pulse rounded-lg"></div>
   <img
     [src]="getImageUrl(image)"
     [alt]="name"
-    class="object-cover h-full w-full rounded-lg"
+    class="object-cover h-full w-full rounded-lg z-10"
     (load)="handleImageLoad()"
     (error)="handleImageError($event)"
   />

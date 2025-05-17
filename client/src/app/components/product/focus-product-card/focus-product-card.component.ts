@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductDetailsImageComponent } from '../focus-product-details-image/focus-product-details-image.component';
 import { FocusProductInformationComponent } from '../focus-product-information/focus-product-information.component';
@@ -11,7 +11,8 @@ import { Product } from '../../../models/product';
   standalone: true,
   imports: [CommonModule, ProductDetailsImageComponent, FocusProductInformationComponent, FaIconComponent],
   templateUrl: './focus-product-card.component.html',
-  styleUrls: ['./focus-product-card.component.css']
+  styleUrls: ['./focus-product-card.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FocusProductCardComponent {
   @Input({ required: true }) product!: Product;
@@ -23,10 +24,16 @@ export class FocusProductCardComponent {
   readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
   isImageLoaded = false;
 
-  // Compute image URL or fallback
+  constructor() {
+    console.log(`FocusProductCard: Component initialized for ${this.product?.name}`);
+  }
+
+  ngOnChanges() {
+    console.log(`FocusProductCard: ngOnChanges for ${this.product?.name}, product:`, this.product);
+  }
+
   getImageUrl(): string {
     const imagePath = this.product.image?.trim();
-    console.log(`FocusProductCard: Item for ${this.product.name}:`, JSON.stringify(this.product));
     console.log(`FocusProductCard: Raw image path for ${this.product.name}: ${imagePath || 'null/undefined'}`);
     if (imagePath) {
       let normalizedPath = imagePath;
@@ -44,22 +51,20 @@ export class FocusProductCardComponent {
       return url;
     }
     console.log(`FocusProductCard: No image for ${this.product.name}, using fallback`);
-    return 'https://via.placeholder.com/300?text=No+Image';
+    return `${this.imageBaseUrl}/images/hero-one.jfif`; // Use known working image
   }
 
-  // Handle image load success
   handleImageLoad(): void {
     this.isImageLoaded = true;
     console.log(`FocusProductCard: Image loaded for ${this.product.name}, isImageLoaded: ${this.isImageLoaded}`);
   }
 
-  // Handle image load error
   handleImageError(event: Event): void {
     console.log(`FocusProductCard: Image failed to load for ${this.product.name}:`, (event.target as HTMLImageElement).src);
     const imgElement = event.target as HTMLImageElement;
-    imgElement.src = 'https://via.placeholder.com/300?text=No+Image';
-    imgElement.onerror = null; // Prevent infinite error loop
-    this.isImageLoaded = true; // Treat fallback as loaded
+    imgElement.src = `${this.imageBaseUrl}/images/hero-one.jfif`; // Use known working image
+    imgElement.onerror = null;
+    this.isImageLoaded = true;
     console.log(`FocusProductCard: Fallback set for ${this.product.name}, isImageLoaded: ${this.isImageLoaded}`);
   }
 
