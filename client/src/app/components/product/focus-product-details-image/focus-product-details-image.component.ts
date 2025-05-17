@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,13 +6,22 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './focus-product-details-image.component.html',
-  styleUrls: ['./focus-product-details-image.component.css']
+  styleUrls: ['./focus-product-details-image.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductDetailsImageComponent {
   @Input({ required: true }) image: string = '';
   @Input({ required: true }) name: string = '';
   readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
   isImageLoaded = false;
+
+  constructor() {
+    console.log(`ProductDetailsImage: Component initialized for ${this.name}`);
+  }
+
+  ngOnChanges() {
+    console.log(`ProductDetailsImage: ngOnChanges for ${this.name}, image: ${this.image}`);
+  }
 
   getImageUrl(image: string): string {
     const imagePath = image?.trim();
@@ -33,22 +42,20 @@ export class ProductDetailsImageComponent {
       return url;
     }
     console.log(`ProductDetailsImage: No image for ${this.name}, using fallback`);
-    return 'https://via.placeholder.com/300?text=No+Image';
+    return `${this.imageBaseUrl}/images/hero-one.jfif`; // Use known working image
   }
 
-  // Handle image load success
   handleImageLoad(): void {
     this.isImageLoaded = true;
     console.log(`ProductDetailsImage: Image loaded for ${this.name}, isImageLoaded: ${this.isImageLoaded}`);
   }
 
-  // Handle image load error
   handleImageError(event: Event): void {
     console.log(`ProductDetailsImage: Image failed to load for ${this.name}:`, (event.target as HTMLImageElement).src);
     const imgElement = event.target as HTMLImageElement;
-    imgElement.src = 'https://via.placeholder.com/300?text=No+Image';
-    imgElement.onerror = null; // Prevent infinite error loop
-    this.isImageLoaded = true; // Treat fallback as loaded
+    imgElement.src = `${this.imageBaseUrl}/images/hero-one.jfif`; // Use known working image
+    imgElement.onerror = null;
+    this.isImageLoaded = true;
     console.log(`ProductDetailsImage: Fallback set for ${this.name}, isImageLoaded: ${this.isImageLoaded}`);
   }
 }
