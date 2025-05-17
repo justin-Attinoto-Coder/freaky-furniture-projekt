@@ -50,16 +50,17 @@ export class FocusProductCardComponent {
   // Handle image load success
   handleImageLoad(): void {
     this.isImageLoaded = true;
-    console.log(`FocusProductCard: Image loaded for ${this.product.name}`);
+    console.log(`FocusProductCard: Image loaded for ${this.product.name}, isImageLoaded: ${this.isImageLoaded}`);
   }
 
   // Handle image load error
   handleImageError(event: Event): void {
-    console.log(`FocusProductCard: Image failed to load for ${this.product.name}`);
+    console.log(`FocusProductCard: Image failed to load for ${this.product.name}:`, (event.target as HTMLImageElement).src);
     const imgElement = event.target as HTMLImageElement;
     imgElement.src = 'https://via.placeholder.com/300?text=No+Image';
     imgElement.onerror = null; // Prevent infinite error loop
     this.isImageLoaded = true; // Treat fallback as loaded
+    console.log(`FocusProductCard: Fallback set for ${this.product.name}, isImageLoaded: ${this.isImageLoaded}`);
   }
 
   toggleFavorite(event: Event): void {

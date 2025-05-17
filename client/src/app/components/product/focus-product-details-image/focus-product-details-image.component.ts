@@ -19,11 +19,9 @@ export class ProductDetailsImageComponent {
     console.log(`ProductDetailsImage: Raw image path for ${this.name}: ${imagePath || 'null/undefined'}`);
     if (imagePath) {
       let normalizedPath = imagePath;
-      // Replace localhost URLs with production backend
       if (imagePath.startsWith('http://localhost:8000')) {
         normalizedPath = imagePath.replace('http://localhost:8000', this.imageBaseUrl);
       }
-      // Handle relative paths
       if (!normalizedPath.startsWith('http') && !normalizedPath.startsWith('/')) {
         normalizedPath = `/images/${normalizedPath.replace(/^images\//, '')}`;
       } else if (!normalizedPath.startsWith('http') && normalizedPath.startsWith('/')) {
@@ -41,7 +39,7 @@ export class ProductDetailsImageComponent {
   // Handle image load success
   handleImageLoad(): void {
     this.isImageLoaded = true;
-    console.log(`ProductDetailsImage: Image loaded for ${this.name}`);
+    console.log(`ProductDetailsImage: Image loaded for ${this.name}, isImageLoaded: ${this.isImageLoaded}`);
   }
 
   // Handle image load error
@@ -51,5 +49,6 @@ export class ProductDetailsImageComponent {
     imgElement.src = 'https://via.placeholder.com/300?text=No+Image';
     imgElement.onerror = null; // Prevent infinite error loop
     this.isImageLoaded = true; // Treat fallback as loaded
+    console.log(`ProductDetailsImage: Fallback set for ${this.name}, isImageLoaded: ${this.isImageLoaded}`);
   }
 }
