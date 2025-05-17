@@ -28,30 +28,31 @@ export class SearchService {
 
   search(query: string): void {
     console.log('SearchService: Searching for:', query);
-    this.searchQuery.next(query);
-    if (!query.trim()) {
+    const normalizedQuery = query.toLowerCase().trim(); // Normalize query to lowercase
+    this.searchQuery.next(query); // Keep original query for display
+    if (!normalizedQuery) {
       this.searchResults.next([]);
       this.searchPerformed.next(false);
       return;
+    }
+    this.http.get<Product[]>(`${this.apiUrl}?query=${encodeURIComponent(normalizedQuery)}`, { headers: this.getHeaders() }).subscribe({
+      next: (results) => {
+        console.log('SearchService: Search results:', results);
+        this.searchResults.next(results || []);
+        this.searchPerformed.next(true);
+      },
+      error: (error) => {
+        console.error('SearchService: Error searching:', error);
+        this.searchResults.next([]);
+        this.searchPerformed.next(true);
       }
-      this.http.get<Product[]>(`${this.apiUrl}?query=${encodeURIComponent(query)}`, { headers: this.getHeaders() }).subscribe({
-        next: (results) => {
-          console.log('SearchService: Search results:', results);
-          this.searchResults.next(results || []);
-          this.searchPerformed.next(true);
-        },
-        error: (error) => {
-          console.error('SearchService: Error searching:', error);
-          this.searchResults.next([]);
-          this.searchPerformed.next(true);
-        }
-      });
-    }
-
-    clearSearch(): void {
-      console.log('SearchService: Clearing search');
-      this.searchResults.next([]);
-      this.searchPerformed.next(false);
-      this.searchQuery.next('');
-    }
+    });
   }
+
+  clearSearch(): void {
+    console.log('SearchService: Clearing search');
+    this.searchResults.next([]);
+    this.searchPerformed.next(false);
+    this.searchQuery.next('');
+  }
+}
