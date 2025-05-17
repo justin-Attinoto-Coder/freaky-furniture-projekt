@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../../common/product-card/product-card.component';
+import { Product } from '../../../models/product';
 
 @Component({
   selector: 'app-similar-products',
@@ -10,7 +11,7 @@ import { ProductCardComponent } from '../../common/product-card/product-card.com
   styleUrls: ['./similar-products.component.css']
 })
 export class SimilarProductsComponent {
-  @Input({ required: true }) similarItems: any[] = [];
+  @Input({ required: true }) similarItems: Product[] = [];
   currentIndex: number = 0;
 
   // Number of slides to show per breakpoint
