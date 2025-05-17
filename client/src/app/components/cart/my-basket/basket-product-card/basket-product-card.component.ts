@@ -19,6 +19,7 @@ export class BasketProductCardComponent {
   // Compute image URL or fallback
   getImageUrl(): string {
     const imagePath = this.item.imageURL?.trim();
+    console.log(`BasketProductCard: Raw image path for ${this.item.name}: ${imagePath || 'null/undefined'}`);
     if (imagePath) {
       let normalizedPath = imagePath;
       if (!imagePath.startsWith('http') && !imagePath.startsWith('/')) {
@@ -27,7 +28,7 @@ export class BasketProductCardComponent {
         normalizedPath = imagePath.replace(/^\/+images\//, '/images/');
       }
       const url = imagePath.startsWith('http') ? imagePath : `${this.imageBaseUrl}${normalizedPath}`;
-      console.log(`BasketProductCard: Raw image path for ${this.item.name}: ${imagePath}`);
+      console.log(`BasketProductCard: Normalized path for ${this.item.name}: ${normalizedPath}`);
       console.log(`BasketProductCard: Computed URL for ${this.item.name}: ${url}`);
       return url;
     }
