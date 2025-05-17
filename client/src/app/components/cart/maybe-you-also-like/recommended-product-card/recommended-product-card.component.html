@@ -1,6 +1,11 @@
 <a [routerLink]="['/product', item.urlSlug]" class="block mb-4">
   <div class="border p-4 rounded">
-    <img [src]="item.image" [alt]="item.name" class="w-full h-32 object-cover mb-2" />
+    <img
+      [src]="getImageUrl()"
+      [alt]="item.name"
+      class="w-full h-32 object-cover mb-2"
+      (error)="handleImageError($event)"
+    />
     <h3 class="text-lg font-bold">{{ item.name }}</h3>
     <p class="text-gray-700">{{ item.brand }}</p>
     <p class="text-gray-700">${{ item.price.toFixed(2) }}</p>
