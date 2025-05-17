@@ -14,7 +14,7 @@ import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
   imports: [CommonModule, RouterLink, FaIconComponent]
 })
 export class ProductCardComponent {
-  @Input({ required: true }) product!: Product;
+  @Input({ required: true }) item!: Product;
   isFavorite = false;
   faHeart = faSolidHeart;
   faRegHeart = faRegularHeart;
@@ -22,27 +22,26 @@ export class ProductCardComponent {
 
   // Compute image URL or fallback
   getImageUrl(): string {
-    const imagePath = this.product.image?.trim();
+    const imagePath = this.item.image?.trim();
     if (imagePath) {
-      // Handle various path formats
       let normalizedPath = imagePath;
       if (!imagePath.startsWith('http') && !imagePath.startsWith('/')) {
-        normalizedPath = `/images/${imagePath}`; // Add /images/ if missing
-      } else if (imagePath.startsWith('http')) {
-        normalizedPath = imagePath; // Use absolute URL as-is
+        normalizedPath = `/images/${imagePath.replace(/^images\//, '')}`;
+      } else if (!imagePath.startsWith('http') && imagePath.startsWith('/')) {
+        normalizedPath = imagePath.replace(/^\/+images\//, '/images/');
       }
       const url = imagePath.startsWith('http') ? imagePath : `${this.imageBaseUrl}${normalizedPath}`;
-      console.log(`ProductCard: Image raw path for ${this.product.name}: ${imagePath}`);
-      console.log(`ProductCard: Image computed URL for ${this.product.name}: ${url}`);
+      console.log(`ProductCard: Raw image path for ${this.item.name}: ${imagePath}`);
+      console.log(`ProductCard: Computed URL for ${this.item.name}: ${url}`);
       return url;
     }
-    console.log(`ProductCard: No image for ${this.product.name}, using fallback`);
+    console.log(`ProductCard: No image for ${this.item.name}, using fallback`);
     return 'https://via.placeholder.com/150?text=No+Image';
   }
 
   // Handle image load error
   handleImageError(event: Event): void {
-    console.log(`ProductCard: Image failed to load for ${this.product.name}`);
+    console.log(`ProductCard: Image failed to load for ${this.item.name}`);
     const imgElement = event.target as HTMLImageElement;
     imgElement.src = 'https://via.placeholder.com/150?text=No+Image';
     imgElement.onerror = null; // Prevent infinite error loop

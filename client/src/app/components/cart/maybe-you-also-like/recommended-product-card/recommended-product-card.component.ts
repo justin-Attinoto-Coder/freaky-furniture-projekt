@@ -18,16 +18,15 @@ export class RecommendedProductCardComponent {
   getImageUrl(): string {
     const imagePath = this.item.image?.trim();
     if (imagePath) {
-      // Handle various path formats
       let normalizedPath = imagePath;
       if (!imagePath.startsWith('http') && !imagePath.startsWith('/')) {
-        normalizedPath = `/images/${imagePath}`; // Add /images/ if missing
-      } else if (imagePath.startsWith('http')) {
-        normalizedPath = imagePath; // Use absolute URL as-is
+        normalizedPath = `/images/${imagePath.replace(/^images\//, '')}`;
+      } else if (!imagePath.startsWith('http') && imagePath.startsWith('/')) {
+        normalizedPath = imagePath.replace(/^\/+images\//, '/images/');
       }
       const url = imagePath.startsWith('http') ? imagePath : `${this.imageBaseUrl}${normalizedPath}`;
-      console.log(`RecommendedProductCard: Image raw path for ${this.item.name}: ${imagePath}`);
-      console.log(`RecommendedProductCard: Image computed URL for ${this.item.name}: ${url}`);
+      console.log(`RecommendedProductCard: Raw image path for ${this.item.name}: ${imagePath}`);
+      console.log(`RecommendedProductCard: Computed URL for ${this.item.name}: ${url}`);
       return url;
     }
     console.log(`RecommendedProductCard: No image for ${this.item.name}, using fallback`);

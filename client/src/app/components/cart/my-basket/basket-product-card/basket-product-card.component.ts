@@ -14,18 +14,33 @@ export class BasketProductCardComponent {
   @Input({ required: true }) item!: CartItem;
   @Output() updateCartItem = new EventEmitter<{ productId: number; quantity: number }>();
   @Output() deleteCartItem = new EventEmitter<number>();
+  readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
 
-  // Base URL for images
-readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
   // Compute image URL or fallback
   getImageUrl(): string {
     const imagePath = this.item.imageURL?.trim();
     if (imagePath) {
-      // Handle relative paths (e.g., "/images/product.jpg")
-      return imagePath.startsWith('http') ? imagePath : `${this.imageBaseUrl}${imagePath}`;
+      let normalizedPath = imagePath;
+      if (!imagePath.startsWith('http') && !imagePath.startsWith('/')) {
+        normalizedPath = `/images/${imagePath.replace(/^images\//, '')}`;
+      } else if (!imagePath.startsWith('http') && imagePath.startsWith('/')) {
+        normalizedPath = imagePath.replace(/^\/+images\//, '/images/');
+      }
+      const url = imagePath.startsWith('http') ? imagePath : `${this.imageBaseUrl}${normalizedPath}`;
+      console.log(`BasketProductCard: Raw image path for ${this.item.name}: ${imagePath}`);
+      console.log(`BasketProductCard: Computed URL for ${this.item.name}: ${url}`);
+      return url;
     }
-    // Fallback placeholder image
+    console.log(`BasketProductCard: No image for ${this.item.name}, using fallback`);
     return 'https://via.placeholder.com/64?text=No+Image';
+  }
+
+  // Handle image load error
+  handleImageError(event: Event): void {
+    console.log(`BasketProductCard: Image failed to load for ${this.item.name}`);
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'https://via.placeholder.com/64?text=No+Image';
+    imgElement.onerror = null; // Prevent infinite error loop
   }
 
   handleQuantityChange(amount: number): void {
