@@ -4,7 +4,7 @@
       [src]="getImageUrl()"
       [alt]="item.name"
       class="w-full h-32 object-cover mb-2"
-      (error)="getImageUrl()"
+      (error)="handleImageError($event)"
     />
     <h3 class="text-lg font-bold">{{ item.name }}</h3>
     <p class="text-gray-700">{{ item.brand }}</p>
