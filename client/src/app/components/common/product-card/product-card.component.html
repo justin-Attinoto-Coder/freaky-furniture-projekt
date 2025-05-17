@@ -1,8 +1,12 @@
-<!-- src/app/components/common/product-card/product-card.component.html -->
 <div class="product-card-container p-4 flex flex-col items-center w-full relative">
   <a [routerLink]="['/product', product.urlSlug]" class="w-full">
     <div class="image-container border border-gray-200 p-2 mb-4 rounded-lg relative">
-      <img [src]="product.image" [alt]="product.name" class="w-full h-auto rounded-lg" />
+      <img
+        [src]="getImageUrl()"
+        [alt]="product.name"
+        class="w-full h-auto rounded-lg"
+        (error)="handleImageError($event)"
+      />
       <div class="absolute bottom-6 right-6">
         <fa-icon
           [icon]="isFavorite ? faHeart : faRegHeart"
