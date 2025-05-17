@@ -1,10 +1,9 @@
 <div class="focus-product-card-container p-4 flex flex-col sm:flex-row items-stretch w-full relative">
   <div class="image-container border border-gray-200 rounded-lg shadow-md p-2 mb-4 sm:mb-0 sm:mr-4 sm:w-2/5 lg:w-2/5 relative flex-shrink-0 sm:h-[43rem]">
-    <div *ngIf="!isImageLoaded" class="w-full h-full bg-gray-200 animate-pulse rounded-lg"></div>
+    <div *ngIf="!isImageLoaded" class="w-full h-full bg-gray-200 animate-pulse rounded-lg absolute inset-0"></div>
     <app-product-details-image
       [image]="getImageUrl()"
       [name]="product.name"
-      [ngClass]="{'hidden': !isImageLoaded}"
       (load)="handleImageLoad()"
       (error)="handleImageError($event)"
     ></app-product-details-image>
