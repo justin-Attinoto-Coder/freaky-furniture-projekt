@@ -19,6 +19,7 @@ export class ProductCardComponent {
   faHeart = faSolidHeart;
   faRegHeart = faRegularHeart;
   readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
+  isImageLoaded = false;
 
   // Compute image URL or fallback
   getImageUrl(): string {
@@ -27,11 +28,9 @@ export class ProductCardComponent {
     console.log(`ProductCard: Raw image path for ${this.item.name}: ${imagePath || 'null/undefined'}`);
     if (imagePath) {
       let normalizedPath = imagePath;
-      // Replace localhost URLs with production backend
       if (imagePath.startsWith('http://localhost:8000')) {
         normalizedPath = imagePath.replace('http://localhost:8000', this.imageBaseUrl);
       }
-      // Handle relative paths or other non-http URLs
       if (!normalizedPath.startsWith('http') && !normalizedPath.startsWith('/')) {
         normalizedPath = `/images/${normalizedPath.replace(/^images\//, '')}`;
       } else if (!normalizedPath.startsWith('http') && normalizedPath.startsWith('/')) {
@@ -46,12 +45,19 @@ export class ProductCardComponent {
     return 'https://via.placeholder.com/150?text=No+Image';
   }
 
+  // Handle image load success
+  handleImageLoad(): void {
+    this.isImageLoaded = true;
+    console.log(`ProductCard: Image loaded for ${this.item.name}`);
+  }
+
   // Handle image load error
   handleImageError(event: Event): void {
     console.log(`ProductCard: Image failed to load for ${this.item.name}`);
     const imgElement = event.target as HTMLImageElement;
     imgElement.src = 'https://via.placeholder.com/150?text=No+Image';
     imgElement.onerror = null; // Prevent infinite error loop
+    this.isImageLoaded = true; // Treat fallback as loaded to hide placeholder
   }
 
   toggleFavorite(event: Event): void {
