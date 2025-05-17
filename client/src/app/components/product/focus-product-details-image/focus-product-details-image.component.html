@@ -1,4 +1,11 @@
-<!-- src/app/components/product/focus-product-details-image/focus-product-details-image.component.html -->
 <div class="w-full h-full flex items-center justify-center">
-  <img [src]="image" [alt]="name" class="object-cover h-full w-full rounded-lg" />
+  <div *ngIf="!isImageLoaded" class="w-full h-full bg-gray-200 animate-pulse rounded-lg"></div>
+  <img
+    [src]="getImageUrl(image)"
+    [alt]="name"
+    class="object-cover h-full w-full rounded-lg"
+    [ngClass]="{'hidden': !isImageLoaded}"
+    (load)="handleImageLoad()"
+    (error)="handleImageError($event)"
+  />
 </div>
