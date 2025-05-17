@@ -1,10 +1,8 @@
-<p>forvaring works!</p>
-<!-- src/app/components/home/forvaring/forvaring.component.html -->
 <section id="forvaring" class="my-8">
   <h2 class="text-2xl font-bold mb-4 text-center">Förvaring</h2>
   <ng-container *ngIf="products && products.length > 0; else noItems">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <app-product-card *ngFor="let product of products" [product]="product"></app-product-card>
+      <app-product-card *ngFor="let product of products" [item]="product"></app-product-card>
     </div>
   </ng-container>
   <ng-template #noItems>
