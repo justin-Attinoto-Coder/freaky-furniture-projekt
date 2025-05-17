@@ -1,6 +1,13 @@
 <div class="focus-product-card-container p-4 flex flex-col sm:flex-row items-stretch w-full relative">
   <div class="image-container border border-gray-200 rounded-lg shadow-md p-2 mb-4 sm:mb-0 sm:mr-4 sm:w-2/5 lg:w-2/5 relative flex-shrink-0 sm:h-[43rem]">
-    <app-product-details-image [image]="product.image" [name]="product.name"></app-product-details-image>
+    <div *ngIf="!isImageLoaded" class="w-full h-full bg-gray-200 animate-pulse rounded-lg"></div>
+    <app-product-details-image
+      [image]="getImageUrl()"
+      [name]="product.name"
+      [ngClass]="{'hidden': !isImageLoaded}"
+      (load)="handleImageLoad()"
+      (error)="handleImageError($event)"
+    ></app-product-details-image>
     <div class="absolute bottom-4 right-4">
       <fa-icon
         [icon]="isFavorite ? faHeart : faRegHeart"
