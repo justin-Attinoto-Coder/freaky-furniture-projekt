@@ -1,5 +1,5 @@
 <div class="focus-product-card-container p-4 flex flex-col sm:flex-row items-stretch w-full relative">
-  <div class="image-container border border-gray-200 rounded-lg shadow-md p-2 mb-4 sm:mb-0 sm:mr-4 sm:w-2/5 lg:w-2/5 relative flex-shrink-0 sm:h-[43rem]">
+  <div class="image-container border border-gray-200 rounded-lg shadow-md p-2 mb-4 sm:mb-0 sm:mr-4 sm:w-2/5 lg:w-2/5 flex-shrink-0 flex flex-col justify-center">
     <div *ngIf="!isImageLoaded" class="w-full h-full bg-gray-200 animate-pulse rounded-lg"></div>
     <app-product-details-image
       [image]="getImageUrl()"
@@ -16,7 +16,11 @@
       ></fa-icon>
     </div>
   </div>
-  <div class="flex flex-col w-full sm:w-2/3 mt-4 sm:mt-0 sm:absolute sm:top-0 sm:-right-1/11 sm:h-full">
-    <app-focus-product-information [product]="product" [averageRating]="averageRating" (addToCart)="addToCart.emit($event)"></app-focus-product-information>
+  <div class="flex flex-col w-full sm:w-3/5 mt-4 sm:mt-0">
+    <app-focus-product-information
+      [product]="product"
+      [averageRating]="averageRating"
+      (addToCart)="addToCart.emit($event)">
+    </app-focus-product-information>
   </div>
 </div>
