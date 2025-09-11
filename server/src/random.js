@@ -93,5 +93,5 @@ function createRandomCustomers(count) {
 }
 
 /* clearTables(); */
-createRandomProducts(1000);
-createRandomCustomers(100);
+createRandomProducts(500);
+createRandomCustomers(50);
