@@ -247,5 +247,28 @@ namespace FreakyFurnitureAPI.Controllers
                 });
             }
         }
+
+        [HttpGet("debug-products")] // Remove this in production!
+        public async Task<IActionResult> DebugProducts()
+        {
+            try
+            {
+                var productCount = await _context.Products.CountAsync();
+                var products = await _context.Products.Take(5).ToListAsync();
+                
+                return Ok(new { 
+                    productCount = productCount,
+                    sampleProducts = products,
+                    message = productCount > 0 ? "Products found!" : "No products in database"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { 
+                    error = ex.Message,
+                    message = "Error accessing Products table - table may not exist"
+                });
+            }
+        }
     }
 }

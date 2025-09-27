@@ -42,6 +42,7 @@ namespace FreakyFurnitureAPI.Controllers
                         Image = p.Image,
                         Brand = p.Brand,
                         UrlSlug = p.UrlSlug,
+                        Sku = p.Sku ?? "", // Add this line
                         CategoryId = p.CategoryId,
                         CategoryName = p.Category != null ? p.Category.Name : null
                     })
@@ -66,6 +67,7 @@ namespace FreakyFurnitureAPI.Controllers
                     Image = p.Image,
                     Brand = p.Brand,
                     UrlSlug = p.UrlSlug,
+                    Sku = p.Sku ?? "", // Add this line
                     CategoryId = p.CategoryId,
                     CategoryName = p.Category != null ? p.Category.Name : null
                 })
@@ -103,6 +105,7 @@ namespace FreakyFurnitureAPI.Controllers
                 Image = product.Image,
                 Brand = product.Brand,
                 UrlSlug = product.UrlSlug,
+                Sku = product.Sku ?? "", // Add this line
                 CategoryId = product.CategoryId,
                 CategoryName = product.Category?.Name
             });
@@ -121,6 +124,7 @@ namespace FreakyFurnitureAPI.Controllers
                 Image = createProductDto.Image,
                 Brand = createProductDto.Brand,
                 UrlSlug = createProductDto.UrlSlug,
+                Sku = createProductDto.Sku, // Add this line
                 CategoryId = createProductDto.CategoryId,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -138,6 +142,7 @@ namespace FreakyFurnitureAPI.Controllers
                 Image = product.Image,
                 Brand = product.Brand,
                 UrlSlug = product.UrlSlug,
+                Sku = product.Sku ?? "", // Add this line
                 CategoryId = product.CategoryId
             };
 
@@ -181,6 +186,7 @@ namespace FreakyFurnitureAPI.Controllers
             if (productToUpdate.Brand != null) product.Brand = productToUpdate.Brand;
             if (productToUpdate.UrlSlug != null) product.UrlSlug = productToUpdate.UrlSlug;
             if (productToUpdate.CategoryId.HasValue) product.CategoryId = productToUpdate.CategoryId;
+            if (productToUpdate.Sku != null) product.Sku = productToUpdate.Sku;
 
             product.UpdatedAt = DateTime.UtcNow;
 
