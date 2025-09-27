@@ -2,55 +2,63 @@
   <h2 class="text-xl font-bold text-gray-800 mb-4">Ny Produkt</h2>
   <form (ngSubmit)="handleSubmit($event)">
     <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="namn">Namn</label>
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="namn">Namn *</label>
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="namn"
         type="text"
-        placeholder="Namn"
+        placeholder="Produktnamn (t.ex. Modern Soffa)"
         [(ngModel)]="formData.namn"
         name="namn"
-        (ngModelChange)="handleChange($event)"
+        (input)="handleChange($event)"
       />
       <p *ngIf="errors.namn" class="text-red-500 text-xs italic">{{ errors.namn }}</p>
     </div>
+
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="beskrivning">Beskrivning</label>
       <textarea
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="beskrivning"
-        placeholder="Beskrivning"
+        placeholder="Beskriv produkten..."
+        rows="3"
         [(ngModel)]="formData.beskrivning"
         name="beskrivning"
-        (ngModelChange)="handleChange($event)"
+        (input)="handleChange($event)"
       ></textarea>
     </div>
+
     <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="bild">Bild</label>
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="bild">Bild URL *</label>
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="bild"
         type="text"
-        placeholder="Bild URL"
+        placeholder="/images/product-name.jpg"
         [(ngModel)]="formData.bild"
         name="bild"
-        (ngModelChange)="handleChange($event)"
+        (input)="handleChange($event)"
       />
       <p *ngIf="errors.bild" class="text-red-500 text-xs italic">{{ errors.bild }}</p>
+      <p class="text-gray-500 text-xs mt-1">Exempel: /images/modern-sofa.jpg</p>
     </div>
+
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="marke">Märke</label>
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="marke"
         type="text"
-        placeholder="Märke"
+        placeholder="FreakyFurniture (standard)"
         [(ngModel)]="formData.marke"
         name="marke"
-        (ngModelChange)="handleChange($event)"
+        (input)="handleChange($event)"
       />
+      <p class="text-gray-500 text-xs mt-1">Lämna tomt för standardmärke "FreakyFurniture"</p>
     </div>
-    <div class="mb-4">
+
+    <!-- Temporarily hide SKU field since it's not in API -->
+    <div class="mb-4" style="display: none;">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="sku">SKU</label>
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -59,23 +67,29 @@
         placeholder="XXXYYY"
         [(ngModel)]="formData.sku"
         name="sku"
-        (ngModelChange)="handleChange($event)"
+        (input)="handleChange($event)"
       />
       <p *ngIf="errors.sku" class="text-red-500 text-xs italic">{{ errors.sku }}</p>
     </div>
+
     <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="pris">Pris</label>
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="pris">Pris (SEK) *</label>
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="pris"
-        type="text"
-        placeholder="Pris"
+        type="number"
+        step="0.01"
+        min="0"
+        placeholder="899.99"
         [(ngModel)]="formData.pris"
         name="pris"
-        (ngModelChange)="handleChange($event)"
+        (input)="handleChange($event)"
       />
+      <p class="text-gray-500 text-xs mt-1">Ange pris utan valutasymbol</p>
     </div>
-    <div class="mb-4">
+
+    <!-- Temporarily hide publishing date since it's not in API -->
+    <div class="mb-4" style="display: none;">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="publiceringsdatum">Publiceringsdatum</label>
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -83,29 +97,50 @@
         type="date"
         [(ngModel)]="formData.publiceringsdatum"
         name="publiceringsdatum"
-        (ngModelChange)="handleChange($event)"
+        (input)="handleChange($event)"
       />
     </div>
+
     <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="kategori">Kategori</label>
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="kategori">Kategori *</label>
       <select
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="kategori"
         [(ngModel)]="formData.kategori"
         name="kategori"
-        (ngModelChange)="handleChange($event)"
+        (change)="handleChange($event)"
       >
-        <option value="mobler">Möbler</option>
-        <option value="forvaring">Förvaring</option>
-        <option value="detaljer">Detaljer</option>
-        <option value="textil">Textil</option>
+        <option value="sofas">Soffor</option>
+        <option value="chairs">Stolar</option>
+        <option value="tables">Bord</option>
+        <option value="storage">Förvaring</option>
+        <option value="lighting">Belysning</option>
+        <option value="vardagsrum">Vardagsrum</option>
+        <option value="kontor">Kontor</option>
+        <option value="kok">Kök</option>
+        <option value="sovrum">Sovrum</option>
       </select>
+      <p class="text-gray-500 text-xs mt-1">Välj den kategori som bäst beskriver produkten</p>
     </div>
-    <button
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      type="submit"
-    >
-      Lägg till
-    </button>
+
+    <div class="flex items-center justify-between">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200"
+        type="submit"
+      >
+        Skapa Produkt
+      </button>
+
+      <button
+        class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200"
+        type="button"
+        (click)="router.navigate(['/admin/table'])"
+      >
+        Avbryt
+      </button>
+    </div>
+
+    <!-- Show required fields note -->
+    <p class="text-gray-500 text-xs mt-4">* = Obligatoriska fält</p>
   </form>
 </div>
