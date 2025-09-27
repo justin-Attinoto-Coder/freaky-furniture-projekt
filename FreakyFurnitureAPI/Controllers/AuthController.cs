@@ -35,7 +35,8 @@ namespace FreakyFurnitureAPI.Controllers
             }
 
             var token = GenerateJwtToken(user);
-            var expiresIn = int.Parse(_configuration["JwtSettings:ExpirationInHours"]) * 3600;
+            var expirationHours = _configuration["JwtSettings:ExpirationInHours"] ?? "24";
+            var expiresIn = int.Parse(expirationHours) * 3600;
 
             return Ok(new AuthResponseDto
             {
@@ -48,10 +49,10 @@ namespace FreakyFurnitureAPI.Controllers
         private string GenerateJwtToken(User user)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
-            var secretKey = jwtSettings["SecretKey"];
-            var issuer = jwtSettings["Issuer"];
-            var audience = jwtSettings["Audience"];
-            var expirationHours = int.Parse(jwtSettings["ExpirationInHours"]);
+            var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey is missing");
+            var issuer = jwtSettings["Issuer"] ?? "FreakyFurnitureAPI";
+            var audience = jwtSettings["Audience"] ?? "FreakyFurnitureAPI";
+            var expirationHours = int.Parse(jwtSettings["ExpirationInHours"] ?? "24");
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(secretKey);
