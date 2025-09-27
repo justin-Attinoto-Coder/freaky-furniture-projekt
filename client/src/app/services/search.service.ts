@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class SearchService {
-  private apiUrl = 'https://freaky-angular-furniture-backend.onrender.com/api/furniture';
+  private apiUrl = 'http://localhost:5186/api/products'; // Updated to ASP.NET Core API
   private searchResults = new BehaviorSubject<Product[]>([]);
   private searchPerformed = new BehaviorSubject<boolean>(false);
   private searchQuery = new BehaviorSubject<string>('');

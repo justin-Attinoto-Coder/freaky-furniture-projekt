@@ -8,7 +8,7 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://freaky-angular-furniture-backend.onrender.com/api/users';
+  private apiUrl = 'http://localhost:5186/api/auth'; // Updated to ASP.NET Core API
   private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('token'));
   private roleSubject = new BehaviorSubject<string | null>(localStorage.getItem('role'));
   token$ = this.tokenSubject.asObservable();

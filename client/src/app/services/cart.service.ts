@@ -29,7 +29,7 @@ export interface CustomerData {
 export class CartService {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   cartItems$: Observable<CartItem[]> = this.cartItemsSubject.asObservable();
-  private apiUrl = 'https://freaky-angular-furniture-backend.onrender.com/api';
+  private apiUrl = 'http://localhost:5186/api'; // Updated to ASP.NET Core API
 
   constructor(private http: HttpClient) {
     this.loadCartItems();
