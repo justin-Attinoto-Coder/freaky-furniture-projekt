@@ -1,14 +1,98 @@
 <!-- src/app/components/home/home.component.html -->
-<section class="min-h-screen">
-  <div class="container mx-auto px-4">
-    <h1 class="text-3xl text-center font-bold mb-4">Welcome to Freaky Furniture</h1>
-    <div>
+<section class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-4 py-6">
+
+    <!-- Page Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-2">
+        Welcome to Freaky Furniture
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Discover unique furniture pieces that transform your space into something extraordinary
+      </p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
+      <span class="ml-4 text-lg text-gray-600">Loading amazing furniture...</span>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">Error Loading Products</h3>
+          <p class="mt-1 text-sm text-red-700">{{ error }}</p>
+          <button
+            (click)="retryLoading()"
+            class="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors">
+            Try Again
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div *ngIf="!isLoading && !error">
+
+      <!-- Hero Section -->
       <app-hero></app-hero>
-      <app-search-results></app-search-results>
-      <app-mobler [products]="moblerProducts"></app-mobler>
-      <app-forvaring [products]="forvaringProducts"></app-forvaring>
-      <app-detaljer [products]="detaljerProducts"></app-detaljer>
-      <app-textil [products]="textilProducts"></app-textil>
-    </div>  </div>
-  <app-common-accordion></app-common-accordion>
+
+      <!-- Search Results (conditionally shown) -->
+      <div *ngIf="showSearchResults" class="mb-12">
+        <app-search-results></app-search-results>
+      </div>
+
+      <!-- Product Categories -->
+      <div class="space-y-16">
+
+        <!-- Möbler Section -->
+        <section id="mobler" class="scroll-mt-20">
+          <app-mobler [products]="moblerProducts"></app-mobler>
+        </section>
+
+        <!-- Förvaring Section -->
+        <section id="forvaring" class="scroll-mt-20">
+          <app-forvaring [products]="forvaringProducts"></app-forvaring>
+        </section>
+
+        <!-- Detaljer Section -->
+        <section id="detaljer" class="scroll-mt-20">
+          <app-detaljer [products]="detaljerProducts"></app-detaljer>
+        </section>
+
+        <!-- Textil Section -->
+        <section id="textil" class="scroll-mt-20">
+          <app-textil [products]="textilProducts"></app-textil>
+        </section>
+
+      </div>
+
+      <!-- Debug Info (remove in production) -->
+      <div *ngIf="false" class="mt-12 p-4 bg-gray-100 rounded-lg text-sm">
+        <h3 class="font-bold mb-2">Debug Info:</h3>
+        <p>Total Products: {{ furnitureItems.length }}</p>
+        <p>Recent: {{ recentProducts.length }}</p>
+        <p>Möbler: {{ moblerProducts.length }}</p>
+        <p>Förvaring: {{ forvaringProducts.length }}</p>
+        <p>Detaljer: {{ detaljerProducts.length }}</p>
+        <p>Textil: {{ textilProducts.length }}</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FAQ/Accordion Section -->
+  <div class="bg-white py-16">
+    <div class="container mx-auto px-4">
+      <app-common-accordion></app-common-accordion>
+    </div>
+  </div>
+
 </section>

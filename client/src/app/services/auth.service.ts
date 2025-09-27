@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { jwtDecode } from 'jwt-decode'; // Install: npm install jwt-decode
+import { jwtDecode } from 'jwt-decode';
 
 interface AuthResponse {
   accessToken: string;
@@ -18,6 +18,14 @@ interface JwtPayload {
   exp: number;
 }
 
+// Add this interface for the header component
+export interface AuthState {
+  isLoggedIn: boolean;
+  username: string | null;
+  role: string | null;
+  token: string | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,6 +38,20 @@ export class AuthService {
   token$ = this.tokenSubject.asObservable();
   role$ = this.roleSubject.asObservable();
   username$ = this.usernameSubject.asObservable();
+
+  // Add this combined observable for the header component
+  authState$: Observable<AuthState> = combineLatest([
+    this.token$,
+    this.role$,
+    this.username$
+  ]).pipe(
+    map(([token, role, username]) => ({
+      isLoggedIn: !!token && this.isAuthenticated(),
+      username,
+      role,
+      token
+    }))
+  );
 
   constructor(private http: HttpClient) {
     // Check token validity on service init
@@ -50,6 +72,12 @@ export class AuthService {
         this.tokenSubject.next(response.accessToken);
         this.roleSubject.next(decodedToken.role);
         this.usernameSubject.next(decodedToken.name);
+
+        console.log('🎉 Login successful, auth state updated:', {
+          token: response.accessToken,
+          role: decodedToken.role,
+          username: decodedToken.name
+        });
       }),
       map(response => {
         const decodedToken = jwtDecode<JwtPayload>(response.accessToken);
@@ -103,6 +131,7 @@ export class AuthService {
   }
 
   logout(): void {
+    console.log('🚪 Logging out, clearing auth state');
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     localStorage.removeItem('username');

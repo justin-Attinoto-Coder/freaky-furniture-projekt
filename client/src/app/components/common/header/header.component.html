@@ -11,9 +11,21 @@
     </div>
     <div class="flex items-center ml-auto relative">
       <fa-icon [icon]="faHeart" class="mx-2 cursor-pointer text-2xl"></fa-icon>
-      <a routerLink="/login">
-        <fa-icon [icon]="faUser" class="mx-2 cursor-pointer text-2xl"></fa-icon>
+
+      <!-- 👑 ADMIN ICON - Only visible when isAdmin = true -->
+      <a *ngIf="isAdmin" routerLink="/admin-dashboard" title="Admin Dashboard">
+        <fa-icon [icon]="faCog" class="mx-2 cursor-pointer text-2xl text-red-600 hover:text-red-800"></fa-icon>
       </a>
+
+      <!-- User Icon - Dynamic routing based on login status -->
+      <a [routerLink]="isLoggedIn ? '/user-dashboard' : '/login'" [title]="isLoggedIn ? 'User Dashboard' : 'Login'">
+        <fa-icon [icon]="faUser" class="mx-2 cursor-pointer text-2xl" [class.text-green-600]="isLoggedIn"></fa-icon>
+      </a>
+
+      <!-- Logout Icon - Only show if logged in -->
+      <fa-icon *ngIf="isLoggedIn" [icon]="faSignOutAlt" class="mx-2 cursor-pointer text-2xl text-gray-600 hover:text-red-600"
+               title="Logout" (click)="logout()"></fa-icon>
+
       <a routerLink="/cart" class="relative">
         <fa-icon [icon]="faShoppingBasket" class="mx-2 cursor-pointer text-2xl"></fa-icon>
         <span *ngIf="totalItemsInCart > 0" class="absolute top-0 right-0 bg-blue-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
