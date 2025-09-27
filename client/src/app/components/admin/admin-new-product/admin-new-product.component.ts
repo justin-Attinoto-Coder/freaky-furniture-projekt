@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ProductService } from '../../../services/product.service';
+import { ProductService, CreateProductRequest, ApiResponse } from '../../../services/product.service';
+import { Product } from '../../../models/product';
 
 interface FormErrors {
   namn?: string;
@@ -30,10 +31,8 @@ export class AdminNewProductComponent {
   };
   errors: FormErrors = {};
 
-  // Make router public so template can access it
   constructor(private productService: ProductService, public router: Router) {}
 
-  // Add a cancel method for better practice
   cancel(): void {
     this.router.navigate(['/admin/table']);
   }
@@ -43,7 +42,6 @@ export class AdminNewProductComponent {
     this.formData = { ...this.formData, [id]: value };
   }
 
-  // Helper method to generate URL slug from product name
   private generateUrlSlug(name: string): string {
     return name
       .toLowerCase()
@@ -55,21 +53,14 @@ export class AdminNewProductComponent {
       .replace(/^-+|-+$/g, '');
   }
 
-  // Helper method to map category string to categoryId
   private getCategoryId(categoryString: string): number {
     const categoryMap: { [key: string]: number } = {
       'mobler': 1,
-      'sofas': 1,
-      'chairs': 2,
-      'tables': 3,
-      'storage': 4,
-      'lighting': 5,
-      'vardagsrum': 1,
-      'kontor': 2,
-      'kok': 3,
-      'sovrum': 4
+      'forvaring': 2,
+      'detaljer': 3,
+      'textil': 4
     };
-    return categoryMap[categoryString.toLowerCase()] || 1; // Default to 1 if not found
+    return categoryMap[categoryString.toLowerCase()] || 1;
   }
 
   validateForm(): boolean {
@@ -85,7 +76,6 @@ export class AdminNewProductComponent {
       newErrors.bild = 'Bild är obligatoriskt';
     }
 
-    // Make SKU required with strict validation
     const skuRegex = /^[A-Z]{3}[0-9]{3}$/;
     if (!this.formData.sku) {
       newErrors.sku = 'SKU är obligatoriskt';
@@ -105,26 +95,26 @@ export class AdminNewProductComponent {
     console.log('Validation result:', this.validateForm());
 
     if (this.validateForm()) {
-      const productData = {
+      const productData: CreateProductRequest = {
         name: this.formData.namn,
         description: this.formData.beskrivning || '',
         image: this.formData.bild,
         brand: this.formData.marke || 'FreakyFurniture',
         price: parseFloat(this.formData.pris) || 0,
         urlSlug: this.generateUrlSlug(this.formData.namn),
-        sku: this.formData.sku, // Required field
+        sku: this.formData.sku,
         categoryId: this.getCategoryId(this.formData.kategori)
       };
 
       console.log('Submitting product data:', productData);
 
       this.productService.addProduct(productData).subscribe({
-        next: (response) => {
+        next: (response: ApiResponse<Product>) => {
           console.log('Product created successfully:', response);
           alert('Produkt skapad framgångsrikt!');
           this.router.navigate(['/admin/table']);
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error submitting form:', error);
           alert('Ett fel uppstod när produkten skulle sparas.');
         }

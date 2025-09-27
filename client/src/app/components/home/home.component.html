@@ -75,14 +75,22 @@
       </div>
 
       <!-- Debug Info (remove in production) -->
-      <div *ngIf="false" class="mt-12 p-4 bg-gray-100 rounded-lg text-sm">
-        <h3 class="font-bold mb-2">Debug Info:</h3>
-        <p>Total Products: {{ furnitureItems.length }}</p>
-        <p>Recent: {{ recentProducts.length }}</p>
-        <p>Möbler: {{ moblerProducts.length }}</p>
-        <p>Förvaring: {{ forvaringProducts.length }}</p>
-        <p>Detaljer: {{ detaljerProducts.length }}</p>
-        <p>Textil: {{ textilProducts.length }}</p>
+      <div *ngIf="true" class="mt-12 p-4 bg-gray-100 rounded-lg text-sm">
+        <h3 class="font-bold mb-2">🐛 Debug Info:</h3>
+        <p><strong>Total Products:</strong> {{ furnitureItems.length }}</p>
+        <p><strong>Recent:</strong> {{ recentProducts.length }}</p>
+        <p><strong>Möbler:</strong> {{ moblerProducts.length }}</p>
+        <p><strong>Förvaring:</strong> {{ forvaringProducts.length }}</p>
+        <p><strong>Detaljer:</strong> {{ detaljerProducts.length }}</p>
+        <p><strong>Textil:</strong> {{ textilProducts.length }}</p>
+
+        <!-- Sample product names -->
+        <div class="mt-2 text-xs">
+          <p *ngIf="moblerProducts.length > 0"><strong>Sample Möbler:</strong> {{ moblerProducts[0].name }}</p>
+          <p *ngIf="forvaringProducts.length > 0"><strong>Sample Förvaring:</strong> {{ forvaringProducts[0].name }}</p>
+          <p *ngIf="detaljerProducts.length > 0"><strong>Sample Detaljer:</strong> {{ detaljerProducts[0].name }}</p>
+          <p *ngIf="textilProducts.length > 0"><strong>Sample Textil:</strong> {{ textilProducts[0].name }}</p>
+        </div>
       </div>
 
     </div>

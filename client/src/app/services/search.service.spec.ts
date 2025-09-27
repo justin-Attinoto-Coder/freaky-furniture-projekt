@@ -44,7 +44,6 @@ describe('SearchService', () => {
         brand: 'IKEA',
         image: '/images/sofa.jpg',
         urlSlug: 'modern-sofa',
-        stock: 5
       }
     ];
 

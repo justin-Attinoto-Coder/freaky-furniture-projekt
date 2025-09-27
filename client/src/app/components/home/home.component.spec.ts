@@ -65,7 +65,7 @@ describe('HomeComponent', () => {
         id: index + 1,
         name,
         category,
-        price: Math.floor(Math.random() * 4000) + 200, // Premium prices for artistic pieces
+        price: Math.floor(Math.random() * 4000) + 200,
         description: `Extraordinary ${name.toLowerCase()} that defies conventional design. This ${brand.toLowerCase()} masterpiece transforms any space into an artistic statement. Perfect for those who embrace bold, unconventional style.`,
         image: imageUrl,
         urlSlug,
@@ -77,16 +77,14 @@ describe('HomeComponent', () => {
     });
   };
 
-  const mockProducts: Product[] = generateMockProducts(44); // 11 images x 4 categories
+  const mockProducts: Product[] = generateMockProducts(44);
 
   beforeEach(async () => {
-    // Create spies for services
     mockProductService = jasmine.createSpyObj('ProductService', ['getFurnitureItems']);
     mockSearchService = jasmine.createSpyObj('SearchService', [], {
       searchResults$: of([])
     });
 
-    // Setup service mocks
     mockProductService.getFurnitureItems.and.returnValue(of(mockProducts));
 
     await TestBed.configureTestingModule({
@@ -115,9 +113,8 @@ describe('HomeComponent', () => {
   });
 
   it('should categorize products correctly', () => {
-    // Each category should have some products (11 products per category)
     expect(component.moblerProducts.length).toBeGreaterThan(0);
-    expect(component.moblerProducts.length).toBeLessThanOrEqual(4); // Limited by component
+    expect(component.moblerProducts.length).toBeLessThanOrEqual(4);
 
     expect(component.forvaringProducts.length).toBeGreaterThan(0);
     expect(component.forvaringProducts.length).toBeLessThanOrEqual(4);
@@ -133,7 +130,7 @@ describe('HomeComponent', () => {
     mockProducts.forEach(product => {
       expect(product.image).toContain('https://localhost:7001/images/products/');
       expect(product.image).toContain('freaky-furniture-ai-cs-');
-      expect(product.image).toEndWith('.jpg');
+      expect(product.image).toMatch(/\.jpg$/); // Fixed: Use toMatch instead of toEndWith
     });
   });
 
@@ -144,7 +141,6 @@ describe('HomeComponent', () => {
     expect(sampleProduct.description).toContain('Extraordinary');
     expect(sampleProduct.brand).toContain('Freaky');
 
-    // Should have creative adjectives
     const hasCreativeNames = mockProducts.some(p =>
       p.name.includes('Psychedelic') ||
       p.name.includes('Rainbow') ||
@@ -169,7 +165,6 @@ describe('HomeComponent', () => {
   });
 
   it('should handle recent products filtering', () => {
-    // Should have some recent products (within last 30 days)
     expect(component.recentProducts.length).toBeGreaterThanOrEqual(0);
     expect(component.recentProducts.length).toBeLessThanOrEqual(4);
   });

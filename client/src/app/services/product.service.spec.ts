@@ -1,29 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-
-import { ProductService } from './product.service';
-import { AuthService } from './auth.service';
+import { ProductService, CreateProductRequest, ApiResponse } from './product.service';
 import { Product } from '../models/product';
 
 describe('ProductService', () => {
   let service: ProductService;
   let httpMock: HttpTestingController;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('AuthService', ['getToken']);
-
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        ProductService,
-        { provide: AuthService, useValue: spy }
-      ]
+      providers: [ProductService]
     });
-
     service = TestBed.inject(ProductService);
     httpMock = TestBed.inject(HttpTestingController);
-    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
   });
 
   afterEach(() => {
@@ -34,115 +24,120 @@ describe('ProductService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should fetch furniture items', () => {
+  it('should get products from API', () => {
     const mockProducts: Product[] = [
       {
         id: 1,
-        name: 'Modern Sofa',
-        description: 'A comfortable modern sofa',
-        price: 999.99,
-        category: 'Living Room',
-        brand: 'IKEA',
-        image: '/images/sofa.jpg', // Correct property name
-        urlSlug: 'modern-sofa',
-        stock: 5
-      },
-      {
-        id: 2,
-        name: 'Office Chair',
-        description: 'Ergonomic office chair',
-        price: 299.99,
-        category: 'Office',
-        brand: 'IKEA',
-        image: '/images/chair.jpg', // Correct property name
-        urlSlug: 'office-chair',
-        stock: 10
+        name: 'Test Chair',
+        category: 'mobler',
+        price: 1000,
+        description: 'Test description',
+        image: 'test.jpg',
+        urlSlug: 'test-chair',
+        brand: 'Test Brand',
+        sku: 'TST001',
+        categoryId: 1,
+        publishing_date: new Date().toISOString()
       }
     ];
 
-    authServiceSpy.getToken.and.returnValue('mock-token');
-
-    service.getFurnitureItems().subscribe(products => {
+    service.getProducts().subscribe((products: Product[]) => {
       expect(products).toEqual(mockProducts);
-      expect(products.length).toBe(2);
+      expect(products.length).toBe(1);
     });
 
-    const req = httpMock.expectOne('http://localhost:5186/api/products');
-    expect(req.request.method).toBe('GET');
-    expect(req.request.headers.get('Authorization')).toBe('Bearer mock-token');
-    req.flush(mockProducts);
-  });
-
-  it('should fetch products by category', () => {
-    const mockProducts: Product[] = [
-      {
-        id: 1,
-        name: 'Modern Sofa',
-        description: 'A comfortable modern sofa',
-        price: 999.99,
-        category: 'Living Room',
-        brand: 'IKEA',
-        image: '/images/sofa.jpg', // Correct property name
-        urlSlug: 'modern-sofa',
-        stock: 5
-      }
-    ];
-
-    authServiceSpy.getToken.and.returnValue('mock-token');
-
-    service.getProducts('Living Room').subscribe(products => {
-      expect(products).toEqual(mockProducts);
-    });
-
-    const req = httpMock.expectOne('http://localhost:5186/api/products?category=Living Room');
+    const req = httpMock.expectOne('https://localhost:7001/api/products');
     expect(req.request.method).toBe('GET');
     req.flush(mockProducts);
   });
 
-  it('should fetch product by id', () => {
+  it('should get product by id', () => {
     const mockProduct: Product = {
       id: 1,
-      name: 'Modern Sofa',
-      description: 'A comfortable modern sofa',
-      price: 999.99,
-      category: 'Living Room',
-      brand: 'IKEA',
-      image: '/images/sofa.jpg', // Correct property name
-      urlSlug: 'modern-sofa',
-      stock: 5
+      name: 'Test Chair',
+      category: 'mobler',
+      price: 1000,
+      description: 'Test description',
+      image: 'test.jpg',
+      urlSlug: 'test-chair',
+      brand: 'Test Brand',
+      sku: 'TST001',
+      categoryId: 1,
+      publishing_date: new Date().toISOString()
     };
 
-    authServiceSpy.getToken.and.returnValue('mock-token');
-
-    service.getProductById(1).subscribe(product => {
+    service.getProductById(1).subscribe((product: Product | null) => {
       expect(product).toEqual(mockProduct);
     });
 
-    const req = httpMock.expectOne('http://localhost:5186/api/products/1');
+    const req = httpMock.expectOne('https://localhost:7001/api/products/1');
     expect(req.request.method).toBe('GET');
     req.flush(mockProduct);
   });
 
-  it('should add a product', () => {
-    const newProduct = {
+  it('should add new product', () => {
+    const newProduct: CreateProductRequest = {
       name: 'New Chair',
-      description: 'A new chair',
-      price: 199.99,
-      category: 'Office',
-      brand: 'IKEA'
+      description: 'New description',
+      image: 'new.jpg',
+      brand: 'New Brand',
+      price: 1500,
+      urlSlug: 'new-chair',
+      sku: 'NEW001',
+      categoryId: 1
     };
 
-    const mockResponse = { id: 3, ...newProduct };
+    const mockResponse: ApiResponse<Product> = {
+      success: true,
+      data: {
+        id: 2,
+        name: 'New Chair',
+        category: 'mobler',
+        price: 1500,
+        description: 'New description',
+        image: 'new.jpg',
+        urlSlug: 'new-chair',
+        brand: 'New Brand',
+        sku: 'NEW001',
+        categoryId: 1,
+        publishing_date: new Date().toISOString()
+      }
+    };
 
-    authServiceSpy.getToken.and.returnValue('mock-token');
-
-    service.addProduct(newProduct).subscribe(response => {
-      expect(response).toEqual(mockResponse);
+    service.addProduct(newProduct).subscribe((response: ApiResponse<Product>) => {
+      expect(response.success).toBe(true);
+      expect(response.data.name).toBe('New Chair');
     });
 
-    const req = httpMock.expectOne('http://localhost:5186/api/products');
+    const req = httpMock.expectOne('https://localhost:7001/api/products');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(newProduct);
     req.flush(mockResponse);
+  });
+
+  it('should generate dynamic products when API fails', () => {
+    service.getFurnitureItems().subscribe((products: Product[]) => {
+      expect(products.length).toBeGreaterThan(0);
+      expect(products.length).toBe(100); // 25 products × 4 categories
+
+      const categories = [...new Set(products.map(p => p.category))];
+      expect(categories).toContain('mobler');
+      expect(categories).toContain('forvaring');
+      expect(categories).toContain('detaljer');
+      expect(categories).toContain('textil');
+
+      products.forEach(product => {
+        expect(product.id).toBeTruthy();
+        expect(product.name).toBeTruthy();
+        expect(product.category).toBeTruthy();
+        expect(product.price).toBeGreaterThan(0);
+        expect(product.image).toContain('freaky-furniture-ai-cs-');
+        expect(product.urlSlug).toBeTruthy();
+        expect(product.sku).toMatch(/^FREAKY-[A-Z]+-\d{3}$/);
+      });
+    });
+
+    const req = httpMock.expectOne('https://localhost:7001/api/products');
+    req.error(new ErrorEvent('Network error'));
   });
 });

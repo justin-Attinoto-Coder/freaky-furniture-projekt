@@ -45,11 +45,11 @@ builder.Services.AddAuthorization();
 // Add CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", policy =>
+    options.AddDefaultPolicy(builder =>
     {
-        policy.WithOrigins("http://localhost:4200")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
     });
 });
 
@@ -64,11 +64,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAngularApp");
+// IMPORTANT: Add this to serve static files from wwwroot
+app.UseStaticFiles();
 
-app.UseAuthentication();
+app.UseCors();
 app.UseAuthorization();
-
 app.MapControllers();
 
 // Create database and seed users

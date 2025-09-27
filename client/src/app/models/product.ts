@@ -2,18 +2,13 @@
 export interface Product {
   id: number;
   name: string;
-  brand?: string;
+  category: string;
   price: number;
-  description?: string;
-  sku?: string;
-  publishing_date?: string; // Ensure backend returns ISO 8601 format (e.g., "2023-10-01T00:00:00Z")
+  description: string;
+  image: string;
   urlSlug: string;
-  category: string; // Made required for HomeComponent and SimilarProductsComponent
-  image: string; // Matches backend field (verify if it's image or imageURL)
-  size?: string;
-  dimensions?: string;
-  weight?: string;
-  material?: string;
-  specifications?: string | { [key: string]: string }; // Allow string or key-value pairs
-  stock?: number; // Optional for inventory management
+  brand?: string;
+  sku?: string;
+  categoryId?: number; // Add this if it's missing
+  publishing_date?: string; // Ensure backend returns ISO 8601 format (e.g., "2023-10-01T00:00:00Z")
 }
