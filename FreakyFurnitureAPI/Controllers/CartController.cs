@@ -17,25 +17,25 @@ namespace FreakyFurnitureAPI.Controllers
             _context = context;
         }
 
-        // GET /api/cart
-        [HttpGet]
-        public async Task<ActionResult<List<CartItemDto>>> GetCartItems()
+        // GET /api/cart/{userId}
+        [HttpGet("{userId}")]
+        public IActionResult GetCartItems(int userId)
         {
-            // For now, return empty array until cart functionality is implemented
-            return Ok(new List<CartItemDto>());
+            // If no database calls, remove async/Task
+            return Ok(new { message = "Cart items retrieved" });
         }
 
         // POST /api/cart
         [HttpPost]
-        public async Task<ActionResult<object>> AddCartItem(AddCartItemDto addCartItemDto)
+        public IActionResult AddToCart([FromBody] object cartItem)
         {
-            // For now, return success response until cart functionality is implemented
-            return Ok(new { id = 1, message = "Cart item added (placeholder)" });
+            // If no database calls, remove async/Task
+            return Ok(new { message = "Item added to cart" });
         }
 
         // PUT /api/cart/{productId}
         [HttpPut("{productId}")]
-        public async Task<IActionResult> UpdateCartItem(int productId, UpdateCartItemDto updateCartItemDto)
+        public IActionResult UpdateCartItem(int productId, UpdateCartItemDto updateCartItemDto)
         {
             // For now, return success response until cart functionality is implemented
             return NoContent();
@@ -43,7 +43,7 @@ namespace FreakyFurnitureAPI.Controllers
 
         // DELETE /api/cart/{productId}
         [HttpDelete("{productId}")]
-        public async Task<IActionResult> DeleteCartItem(int productId)
+        public IActionResult DeleteCartItem(int productId)
         {
             // For now, return success response until cart functionality is implemented
             return NoContent();

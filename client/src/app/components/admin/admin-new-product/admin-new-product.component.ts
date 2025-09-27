@@ -85,6 +85,7 @@ export class AdminNewProductComponent {
       newErrors.bild = 'Bild är obligatoriskt';
     }
 
+    // Make SKU required with strict validation
     const skuRegex = /^[A-Z]{3}[0-9]{3}$/;
     if (!this.formData.sku) {
       newErrors.sku = 'SKU är obligatoriskt';
@@ -97,44 +98,39 @@ export class AdminNewProductComponent {
   }
 
   handleSubmit(event: Event): void {
+    console.log('handleSubmit called!');
     event.preventDefault();
+
+    console.log('Form data:', this.formData);
+    console.log('Validation result:', this.validateForm());
+
     if (this.validateForm()) {
-      // Map Swedish form data to English API format that matches ASP.NET Core
       const productData = {
         name: this.formData.namn,
-        description: this.formData.beskrivning || '', // Default to empty string if empty
+        description: this.formData.beskrivning || '',
         image: this.formData.bild,
-        brand: this.formData.marke || 'FreakyFurniture', // Default brand if empty
-        price: parseFloat(this.formData.pris) || 0, // Ensure it's a number
-        urlSlug: this.generateUrlSlug(this.formData.namn), // Generate URL slug
-        categoryId: this.getCategoryId(this.formData.kategori) // Map to category ID
+        brand: this.formData.marke || 'FreakyFurniture',
+        price: parseFloat(this.formData.pris) || 0,
+        urlSlug: this.generateUrlSlug(this.formData.namn),
+        sku: this.formData.sku, // Required field
+        categoryId: this.getCategoryId(this.formData.kategori)
       };
 
-      console.log('Submitting product data:', productData); // Debug log
+      console.log('Submitting product data:', productData);
 
       this.productService.addProduct(productData).subscribe({
         next: (response) => {
           console.log('Product created successfully:', response);
-          alert('Produkt skapad framgångsrikt!'); // Success message
+          alert('Produkt skapad framgångsrikt!');
           this.router.navigate(['/admin/table']);
         },
         error: (error) => {
           console.error('Error submitting form:', error);
-
-          // More detailed error handling
-          let errorMessage = 'Ett fel uppstod när produkten skulle sparas.';
-
-          if (error.status === 400) {
-            errorMessage = 'Ogiltiga produktdata. Kontrollera alla fält.';
-          } else if (error.status === 401) {
-            errorMessage = 'Du saknar behörighet för att skapa produkter.';
-          } else if (error.status === 500) {
-            errorMessage = 'Serverfel. Försök igen senare.';
-          }
-
-          alert(errorMessage);
+          alert('Ett fel uppstod när produkten skulle sparas.');
         }
       });
+    } else {
+      console.log('Form validation failed:', this.errors);
     }
   }
 }

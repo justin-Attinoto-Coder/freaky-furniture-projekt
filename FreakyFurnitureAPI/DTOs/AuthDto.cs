@@ -11,6 +11,17 @@ namespace FreakyFurnitureAPI.DTOs
         public string Password { get; set; } = string.Empty;
     }
 
+    public class RegisterDto
+    {
+        [Required]
+        [StringLength(50, MinimumLength = 3)]
+        public string Username { get; set; } = string.Empty;
+        
+        [Required]
+        [StringLength(100, MinimumLength = 6)]
+        public string Password { get; set; } = string.Empty;
+    }
+
     public class AuthResponseDto
     {
         public string AccessToken { get; set; } = string.Empty;

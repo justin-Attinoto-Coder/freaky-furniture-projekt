@@ -57,19 +57,20 @@
       <p class="text-gray-500 text-xs mt-1">Lämna tomt för standardmärke "FreakyFurniture"</p>
     </div>
 
-    <!-- Temporarily hide SKU field since it's not in API -->
-    <div class="mb-4" style="display: none;">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="sku">SKU</label>
+    <!-- Make SKU field visible and required -->
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="sku">SKU *</label>
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="sku"
         type="text"
-        placeholder="XXXYYY"
+        placeholder="ABC123"
         [(ngModel)]="formData.sku"
         name="sku"
         (input)="handleChange($event)"
       />
       <p *ngIf="errors.sku" class="text-red-500 text-xs italic">{{ errors.sku }}</p>
+      <p class="text-gray-500 text-xs mt-1">Format: 3 bokstäver + 3 siffror (t.ex. ABC123)</p>
     </div>
 
     <div class="mb-4">

@@ -46,6 +46,42 @@ namespace FreakyFurnitureAPI.Controllers
             });
         }
 
+        [HttpPost("register")]
+        public async Task<ActionResult<AuthResponseDto>> Register(RegisterDto registerDto)
+        {
+            // Check if user already exists
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == registerDto.Username);
+
+            if (existingUser != null)
+            {
+                return BadRequest(new ErrorResponseDto { Error = "Username already exists." });
+            }
+
+            // Create new user
+            var user = new User
+            {
+                Username = registerDto.Username,
+                Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password, 10),
+                Role = "user", // Default role
+                CreatedAt = DateTime.UtcNow,
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            var token = GenerateJwtToken(user);
+            var expirationHours = _configuration["JwtSettings:ExpirationInHours"] ?? "24";
+            var expiresIn = int.Parse(expirationHours) * 3600;
+
+            return Ok(new AuthResponseDto
+            {
+                AccessToken = token,
+                TokenType = "Bearer",
+                ExpiresIn = expiresIn
+            });
+        }
+
         private string GenerateJwtToken(User user)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
