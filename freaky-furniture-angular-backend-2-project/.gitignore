@@ -14,8 +14,6 @@ yarn-error.log
 *.sqlite
 *.db
 .DS_Store
-npm-debug.log
-yarn-error.log
 
 # IDEs and editors
 .idea/
@@ -46,6 +44,8 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# env
 
 # Angular
 node_modules/
