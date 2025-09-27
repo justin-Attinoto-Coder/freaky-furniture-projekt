@@ -17,6 +17,7 @@ export class LoginPageComponent {
   isLoginMode = true;
   username = '';
   password = '';
+  confirmPassword = '';
   error = '';
   success = '';
   faUser = faUser;
@@ -36,6 +37,7 @@ export class LoginPageComponent {
     this.success = '';
     this.username = '';
     this.password = '';
+    this.confirmPassword = '';
   }
 
   handleLogin(event: Event): void {
@@ -43,10 +45,18 @@ export class LoginPageComponent {
     this.error = '';
     this.success = '';
 
+    // Validation
+    if (!this.username || !this.password) {
+      this.error = 'Please enter username and password.';
+      return;
+    }
+
     this.authService.login(this.username, this.password).subscribe({
       next: response => {
         const from = this.route.snapshot.queryParams['from'] || '/';
-        if (response.role.toLowerCase().includes('admin')) {
+
+        // Fixed: Add null check and use response.role directly
+        if (response && response.role && response.role.toLowerCase() === 'admin') {
           this.router.navigate(['/admin/table']);
         } else {
           this.router.navigate([from]);
@@ -63,12 +73,35 @@ export class LoginPageComponent {
     this.error = '';
     this.success = '';
 
-    this.authService.register(this.username, this.password).subscribe({
+    // Validation
+    if (!this.username || !this.password || !this.confirmPassword) {
+      this.error = 'Please fill in all fields.';
+      return;
+    }
+
+    if (this.password !== this.confirmPassword) {
+      this.error = 'Passwords do not match.';
+      return;
+    }
+
+    if (this.password.length < 6) {
+      this.error = 'Password must be at least 6 characters long.';
+      return;
+    }
+
+    this.authService.register(this.username, this.password, this.confirmPassword).subscribe({
       next: response => {
-        this.success = response.message || 'Registration successful! Please log in.';
-        this.isLoginMode = true;
-        this.username = '';
-        this.password = '';
+        // Updated: Register now returns token, auto-login user
+        this.success = 'Registration successful! Redirecting...';
+
+        const from = this.route.snapshot.queryParams['from'] || '/';
+        setTimeout(() => {
+          if (response && response.role && response.role.toLowerCase() === 'admin') {
+            this.router.navigate(['/admin/table']);
+          } else {
+            this.router.navigate([from]);
+          }
+        }, 1500);
       },
       error: error => {
         this.error = error.message || 'An error occurred. Please try again.';

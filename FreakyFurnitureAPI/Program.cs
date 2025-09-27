@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using FreakyFurnitureAPI.Data;
+using FreakyFurnitureAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,11 +71,52 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Create database if it doesn't exist
+// Create database and seed users
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<FurnitureDbContext>();
-    context.Database.EnsureCreated();
+    
+    try
+    {
+        // Ensure database is created
+        context.Database.EnsureCreated();
+        
+        // Seed admin user if none exists
+        if (!context.Users.Any())
+        {
+            var adminUser = new User
+            {
+                Username = "admin",
+                Password = BCrypt.Net.BCrypt.HashPassword("admin", 10),
+                Role = "admin",
+                CreatedAt = DateTime.UtcNow
+            };
+            
+            var testUser = new User
+            {
+                Username = "user",
+                Password = BCrypt.Net.BCrypt.HashPassword("password", 10),
+                Role = "user",
+                CreatedAt = DateTime.UtcNow
+            };
+            
+            context.Users.AddRange(adminUser, testUser);
+            context.SaveChanges();
+            
+            Console.WriteLine("✅ Seed users created successfully:");
+            Console.WriteLine("   Admin: admin/admin");
+            Console.WriteLine("   User: user/password");
+        }
+        else
+        {
+            Console.WriteLine("ℹ️  Users already exist in database");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Error seeding database: {ex.Message}");
+    }
 }
 
+Console.WriteLine("🚀 API Server starting...");
 app.Run();

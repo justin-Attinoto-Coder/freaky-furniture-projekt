@@ -11,8 +11,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = authService.getToken();
   let authReq = req;
 
-  // Skip token check for public routes
-  const publicRoutes = ['/api/users/login', '/api/users/register', '/api/customers', '/api/shipping-details', '/api/payment-details'];
+  // Updated public routes to match your ASP.NET Core API
+  const publicRoutes = ['/api/auth/login', '/api/auth/register', '/api/products', '/api/furniture'];
   if (publicRoutes.some(route => req.url.includes(route))) {
     console.log('AuthInterceptor: Public route, skipping token check:', req.url);
     return next(req);
@@ -25,8 +25,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       headers: req.headers.set('Authorization', `Bearer ${token}`)
     });
   } else {
-    // Only redirect for protected routes
-    if (req.url.includes('/api/users/me') || req.url.includes('/api/furniture') || req.url.includes('/api/cart')) {
+    // Only redirect for protected routes (cart, admin, user profile)
+    if (req.url.includes('/api/cart') || req.url.includes('/api/admin') || req.url.includes('/api/user')) {
       console.log('AuthInterceptor: No token for protected route, redirecting to login:', req.url);
       router.navigate(['/login']);
       return throwError(() => new Error('No token'));

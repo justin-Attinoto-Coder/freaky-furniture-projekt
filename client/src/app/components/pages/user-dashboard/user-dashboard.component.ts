@@ -21,12 +21,27 @@ export class UserDashboardComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.authService.getUserData().subscribe({
-      next: data => {
-        this.userData = data;
-      },
-      error: () => {
-        this.error = 'Failed to fetch user data';
+    // Get user data from JWT token stored locally
+    const username = this.authService.getUsername();
+    const role = this.authService.getRole();
+
+    if (username && role) {
+      this.userData = {
+        username: username,
+        role: role
+      };
+    } else {
+      this.error = 'User not authenticated';
+    }
+
+    // Optional: Subscribe to changes in user data
+    this.authService.username$.subscribe(username => {
+      if (username && this.authService.getRole()) {
+        this.userData = {
+          username: username,
+          role: this.authService.getRole()!
+        };
+        this.error = '';
       }
     });
   }
