@@ -48,5 +48,31 @@ namespace FreakyFurnitureAPI.Controllers
             // For now, return success response until cart functionality is implemented
             return NoContent();
         }
+
+        // DELETE /api/cart/clear
+        [HttpDelete("clear")]
+        public async Task<IActionResult> ClearCart()
+        {
+            try
+            {
+                var cartItems = await _context.Cart.ToListAsync();
+                if (cartItems.Any())
+                {
+                    _context.Cart.RemoveRange(cartItems);
+                    await _context.SaveChangesAsync();
+                    //_logger.LogInformation($"Cleared {cartItems.Count} items from cart");
+                }
+
+                return Ok(new { 
+                    message = "Cart cleared successfully", 
+                    itemsRemoved = cartItems.Count 
+                });
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex, "Error clearing cart");
+                return StatusCode(500, new { error = "Failed to clear cart" });
+            }
+        }
     }
 }

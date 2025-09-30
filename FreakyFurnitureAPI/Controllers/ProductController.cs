@@ -21,17 +21,19 @@ namespace FreakyFurnitureAPI.Controllers
 
         // GET /api/products?page=1&pageSize=10
         [HttpGet]
-        public async Task<ActionResult<PaginatedProductsDto>> GetProducts(
+        public async Task<ActionResult<object>> GetProducts(
             [FromQuery] int page = 1, 
             [FromQuery] int pageSize = 10,
-            [FromQuery] string? slug = null)
+            [FromQuery] string? slug = null,
+            [FromQuery] string? query = null,      // Add this line
+            [FromQuery] string? category = null)   // Add this line
         {
-            var query = _context.Products.Include(p => p.Category).AsQueryable();
+            var productsQuery = _context.Products.Include(p => p.Category).AsQueryable();
 
-            // Handle slug query
+            // Handle slug query (returns array with single item)
             if (!string.IsNullOrEmpty(slug))
             {
-                var products = await query
+                var products = await productsQuery
                     .Where(p => p.UrlSlug == slug)
                     .Select(p => new ProductDto
                     {
@@ -42,20 +44,37 @@ namespace FreakyFurnitureAPI.Controllers
                         Image = p.Image,
                         Brand = p.Brand,
                         UrlSlug = p.UrlSlug,
-                        Sku = p.Sku ?? "", // Add this line
+                        Sku = p.Sku ?? "",
                         CategoryId = p.CategoryId,
                         CategoryName = p.Category != null ? p.Category.Name : null
                     })
                     .ToListAsync();
 
-                return Ok(products);
+                return Ok(products); // Return as array for slug search
+            }
+
+            // **Add search functionality here**
+            if (!string.IsNullOrEmpty(query))
+            {
+                var searchTerm = query.ToLower();
+                productsQuery = productsQuery.Where(p =>
+                    p.Name.ToLower().Contains(searchTerm) ||
+                    (p.Description != null && p.Description.ToLower().Contains(searchTerm)) ||
+                    (p.Brand != null && p.Brand.ToLower().Contains(searchTerm)));
+            }
+
+            // **Add category filter**
+            if (!string.IsNullOrEmpty(category))
+            {
+                productsQuery = productsQuery.Where(p => 
+                    p.Category != null && p.Category.UrlSlug == category);
             }
 
             // Handle pagination
-            var totalCount = await query.CountAsync();
+            var totalCount = await productsQuery.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
-            var paginatedProducts = await query
+            var paginatedProducts = await productsQuery
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(p => new ProductDto
@@ -67,7 +86,7 @@ namespace FreakyFurnitureAPI.Controllers
                     Image = p.Image,
                     Brand = p.Brand,
                     UrlSlug = p.UrlSlug,
-                    Sku = p.Sku ?? "", // Add this line
+                    Sku = p.Sku ?? "",
                     CategoryId = p.CategoryId,
                     CategoryName = p.Category != null ? p.Category.Name : null
                 })

@@ -4,11 +4,19 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Product } from '../models/product';
 import { AuthService } from './auth.service';
 
+interface ProductResponse {
+  products: Product[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService {
-  private apiUrl = 'http://localhost:5186/api/products'; // Updated to ASP.NET Core API
+  private apiUrl = 'http://localhost:5186/api/products';
   private searchResults = new BehaviorSubject<Product[]>([]);
   private searchPerformed = new BehaviorSubject<boolean>(false);
   private searchQuery = new BehaviorSubject<string>('');
@@ -28,17 +36,23 @@ export class SearchService {
 
   search(query: string): void {
     console.log('SearchService: Searching for:', query);
-    const normalizedQuery = query.toLowerCase().trim(); // Normalize query to lowercase
-    this.searchQuery.next(query); // Keep original query for display
+    const normalizedQuery = query.toLowerCase().trim();
+    this.searchQuery.next(query);
+
     if (!normalizedQuery) {
       this.searchResults.next([]);
       this.searchPerformed.next(false);
       return;
     }
-    this.http.get<Product[]>(`${this.apiUrl}?query=${encodeURIComponent(normalizedQuery)}`, { headers: this.getHeaders() }).subscribe({
-      next: (results) => {
-        console.log('SearchService: Search results:', results);
-        this.searchResults.next(results || []);
+
+    this.http.get<ProductResponse>(`${this.apiUrl}?query=${encodeURIComponent(normalizedQuery)}`, {
+      headers: this.getHeaders()
+    }).subscribe({
+      next: (response) => {
+        console.log('SearchService: Search results:', response);
+        // Extract products array from response
+        const products = response.products || [];
+        this.searchResults.next(products);
         this.searchPerformed.next(true);
       },
       error: (error) => {

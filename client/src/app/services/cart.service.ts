@@ -102,4 +102,17 @@ export class CartService {
       })
     );
   }
+
+  clearCart(): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/cart/clear`).pipe(
+      tap(() => {
+        console.log('Cart cleared');
+        this.loadCartItems(); // Reload cart items after clearing
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error clearing cart:', error);
+        return throwError(() => new Error('Failed to clear cart'));
+      })
+    );
+  }
 }

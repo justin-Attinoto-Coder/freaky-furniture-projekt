@@ -1,120 +1,82 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { MyBasketComponent } from './my-basket/my-basket.component';
-import { MaybeYouAlsoLikeComponent } from './maybe-you-also-like/maybe-you-also-like.component';
+import { Router, RouterModule } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { CartService, CartItem } from '../../services/cart.service';
-import { ProductService, Product } from '../../services/product.service';
 
 @Component({
   selector: 'app-cart',
-  templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css'],
   standalone: true,
-  imports: [CommonModule, MyBasketComponent, MaybeYouAlsoLikeComponent]
+  imports: [CommonModule, RouterModule],
+  templateUrl: './cart.component.html',
+  styleUrls: ['./cart.component.css']
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
-  recommendedItems: Product[] = [];
-  error: string | null = null;
+  totalPrice: number = 0;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private cartService: CartService,
-    private productService: ProductService,
     private router: Router
   ) {}
 
-  ngOnInit() {
-    console.log('Cart: Initializing component');
-    this.cartService.cartItems$.subscribe((items: CartItem[]) => {
-      console.log('Cart: Cart items updated:', items);
-      this.cartItems = items;
-    });
-    this.productService.getProducts().subscribe({
-      next: (items: Product[]) => {
-        this.recommendedItems = items
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 4)
-          .map(item => ({
-            ...item,
-            imageURL: `${item.image}`
-          }));
-        console.log('Cart: Recommended items:', this.recommendedItems);
-      },
-      error: (error: any) => console.error('Cart: Error fetching recommended items:', error)
-    });
+  ngOnInit(): void {
+    this.cartService.cartItems$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(items => {
+        this.cartItems = items;
+        this.calculateTotal();
+      });
   }
 
-  updateCartItem(event: { productId: number; quantity: number }): void {
-    const quantity = Math.max(1, event.quantity); // Ensure quantity is at least 1
-    console.log('Cart: Updating cart item:', { productId: event.productId, quantity });
-    this.cartService.updateCartItem(event.productId, quantity).subscribe({
-      next: () => {
-        console.log('Cart: Cart item update successful for productId:', event.productId);
-      },
-      error: (error: any) => {
-        console.error('Cart: Error updating cart item:', error);
-        this.error = 'Failed to update cart item quantity. Please try again.';
-      }
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  deleteCartItem(productId: number): void {
-    console.log('Cart: Attempting to delete cart item with productId:', productId);
-    this.cartService.deleteCartItem(productId).subscribe({
-      next: () => {
-        console.log('Cart: Cart item deletion successful for productId:', productId);
-      },
-      error: (error: any) => {
-        console.error('Cart: Error deleting cart item:', error);
-        this.error = 'Failed to delete cart item. Please try again.';
-      }
-    });
+  calculateTotal(): void {
+    // Fix: Use item.price instead of item.product.price
+    this.totalPrice = this.cartItems.reduce((total, item) => {
+      return total + (item.price * item.quantity);
+    }, 0);
   }
 
-  getTotalPrice(): number {
-    const total = this.cartItems.reduce((total: number, item: CartItem) => total + (item.price || 0) * item.quantity, 0);
-    console.log('Cart: Calculated total price:', total);
-    return total;
-  }
-
-  handleCheckout(event: Event): void {
-    console.log('Cart: handleCheckout triggered via form submission');
-    event.preventDefault();
-    this.navigateToCheckoutShipping();
-  }
-
-  onPurchaseClick(): void {
-    console.log('Cart: Purchase button clicked');
-    this.navigateToCheckoutShipping();
-  }
-
-  private navigateToCheckoutShipping(): void {
-    console.log('Cart: Navigating to checkout-shipping, cartItems:', this.cartItems);
-    if (this.cartItems.length === 0) {
-      this.error = 'Your cart is empty. Add items before checking out.';
-      console.log('Cart: Checkout failed: Empty cart');
-      return;
+  updateQuantity(productId: number, newQuantity: number): void {
+    if (newQuantity <= 0) {
+      this.removeFromCart(productId);
+    } else {
+      // Fix: Use updateCartItem method that exists
+      this.cartService.updateCartItem(productId, newQuantity).subscribe({
+        next: () => console.log('Cart updated'),
+        error: (error) => console.error('Error updating cart:', error)
+      });
     }
-    this.error = null;
+  }
 
-    const totalPrice = this.getTotalPrice();
-    console.log('Cart: Navigating to /checkout-shipping with state:', { cartItems: this.cartItems, totalPrice });
-    this.router.navigate(['/checkout-shipping'], {
-      state: {
-        cartItems: this.cartItems,
-        totalPrice
-      }
-    }).then(success => {
-      console.log('Cart: Navigation to /checkout-shipping successful:', success);
-    }).catch(error => {
-      console.error('Cart: Navigation to /checkout-shipping failed:', error);
-      this.error = 'Failed to navigate to checkout. Please try again.';
+  removeFromCart(productId: number): void {
+    // Fix: Use deleteCartItem method that exists
+    this.cartService.deleteCartItem(productId).subscribe({
+      next: () => console.log('Item removed from cart'),
+      error: (error) => console.error('Error removing item:', error)
     });
   }
 
-  navigateToHome(): void {
-    console.log('Cart: Navigating to home');
+  clearCart(): void {
+    // Add this method to CartService if missing
+    this.cartService.clearCart().subscribe({
+      next: () => console.log('Cart cleared'),
+      error: (error) => console.error('Error clearing cart:', error)
+    });
+  }
+
+  proceedToCheckout(): void {
+    if (this.cartItems.length > 0) {
+      this.router.navigate(['/checkout']);
+    }
+  }
+
+  continueShopping(): void {
     this.router.navigate(['/']);
   }
 }
