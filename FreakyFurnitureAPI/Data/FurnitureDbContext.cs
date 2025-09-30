@@ -25,6 +25,15 @@ namespace FreakyFurnitureAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Fix decimal precision for Price fields
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Price)
+                .HasPrecision(18, 2); // 18 digits total, 2 decimal places
+
+            modelBuilder.Entity<Cart>()
+                .Property(c => c.Price)
+                .HasPrecision(18, 2);
+
             // Configure relationships
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)

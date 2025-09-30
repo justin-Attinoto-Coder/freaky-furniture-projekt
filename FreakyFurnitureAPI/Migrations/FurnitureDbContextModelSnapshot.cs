@@ -43,6 +43,7 @@ namespace FreakyFurnitureAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductId")
@@ -193,6 +194,7 @@ namespace FreakyFurnitureAPI.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("PublishingDate")

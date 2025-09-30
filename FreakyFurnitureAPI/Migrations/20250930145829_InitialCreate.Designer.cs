@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FreakyFurnitureAPI.Migrations
 {
     [DbContext(typeof(FurnitureDbContext))]
-    [Migration("20250930145436_AddProductDetails")]
-    partial class AddProductDetails
+    [Migration("20250930145829_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,7 @@ namespace FreakyFurnitureAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductId")
@@ -196,6 +197,7 @@ namespace FreakyFurnitureAPI.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("PublishingDate")
