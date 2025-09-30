@@ -11,10 +11,12 @@ namespace FreakyFurnitureAPI.Controllers
     public class CartController : ControllerBase
     {
         private readonly FurnitureDbContext _context;
+        private readonly ILogger<CartController> _logger; // Add this line
 
-        public CartController(FurnitureDbContext context)
+        public CartController(FurnitureDbContext context, ILogger<CartController> logger) // Add logger parameter
         {
             _context = context;
+            _logger = logger; // Add this line
         }
 
         // GET /api/cart/{userId}
@@ -60,7 +62,7 @@ namespace FreakyFurnitureAPI.Controllers
                 {
                     _context.Cart.RemoveRange(cartItems);
                     await _context.SaveChangesAsync();
-                    //_logger.LogInformation($"Cleared {cartItems.Count} items from cart");
+                    _logger.LogInformation($"Cleared {cartItems.Count} items from cart"); // Now this will work
                 }
 
                 return Ok(new { 
@@ -70,7 +72,7 @@ namespace FreakyFurnitureAPI.Controllers
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex, "Error clearing cart");
+                _logger.LogError(ex, "Error clearing cart"); // Now this will work
                 return StatusCode(500, new { error = "Failed to clear cart" });
             }
         }

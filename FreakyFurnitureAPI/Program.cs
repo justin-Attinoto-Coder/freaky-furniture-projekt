@@ -75,6 +75,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<FurnitureDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     
     try
     {
@@ -220,6 +221,21 @@ using (var scope = app.Services.CreateScope())
         else
         {
             Console.WriteLine("ℹ️  Products already exist in database");
+        }
+
+        // Seed recommended products if they don't exist
+        if (!await context.Recommended.AnyAsync() && await context.Products.AnyAsync())
+        {
+            var allProducts = await context.Products.Take(4).ToListAsync();
+            var recommendedItems = allProducts.Select(p => new Recommended 
+            { 
+                ProductId = p.Id 
+            }).ToList();
+            
+            await context.Recommended.AddRangeAsync(recommendedItems);
+            await context.SaveChangesAsync();
+            
+            logger.LogInformation($"✅ Created {recommendedItems.Count} recommended products");
         }
     }
     catch (Exception ex)
