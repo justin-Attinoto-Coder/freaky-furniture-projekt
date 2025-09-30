@@ -1,34 +1,57 @@
 <div class="p-4 sm:p-8">
   <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Shopping Cart</h1>
-  <div class="sm:flex sm:space-x-8">
+
+  <div *ngIf="cartItems.length === 0" class="text-center py-12">
+    <p class="text-xl text-gray-600 mb-4">Your cart is empty</p>
+    <button
+      (click)="navigateToHome()"
+      class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600">
+      Continue Shopping
+    </button>
+  </div>
+
+  <div *ngIf="cartItems.length > 0" class="sm:flex sm:space-x-8">
+    <!-- Left side - Cart Items and Actions -->
     <div class="sm:w-1/2 flex flex-col justify-between">
       <form (ngSubmit)="handleCheckout($event)" novalidate>
+
+        <!-- Cart Items -->
         <app-my-basket
           [cartItems]="cartItems"
           (updateCartItem)="updateCartItem($event)"
-          (deleteCartItem)="deleteCartItem($event)"
-        ></app-my-basket>
+          (deleteCartItem)="deleteCartItem($event)">
+        </app-my-basket>
+
+        <!-- Customer Form -->
+        <app-cart-customer-form
+          [formData]="customerData"
+          [total]="totalPrice"
+          (change)="onCustomerDataChange($event)">
+        </app-cart-customer-form>
+
+        <!-- Action Buttons -->
         <div class="flex justify-between items-center mt-4 sm:mt-0">
           <button
             class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-2 sm:mt-0"
             type="button"
-            (click)="navigateToHome()"
-          >
+            (click)="navigateToHome()">
             Continue Shopping
           </button>
           <button
             class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mt-2 sm:mt-0"
-            type="submit"
-            (click)="onPurchaseClick()"
-          >
-            Purchase
+            type="submit">
+            Complete Purchase
           </button>
         </div>
       </form>
     </div>
+
+    <!-- Right side - Recommendations -->
     <div class="sm:w-1/2">
       <app-maybe-you-also-like [items]="recommendedItems"></app-maybe-you-also-like>
     </div>
   </div>
-  <p *ngIf="error" class="text-red-500 mt-4">{{ error }}</p>
+
+  <!-- Error Messages -->
+  <p *ngIf="error" class="text-red-500 mt-4 text-center">{{ error }}</p>
 </div>

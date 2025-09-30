@@ -21,113 +21,131 @@ namespace FreakyFurnitureAPI.Controllers
 
         // GET /api/products?page=1&pageSize=10
         [HttpGet]
-        public async Task<ActionResult<object>> GetProducts(
-            [FromQuery] int page = 1, 
-            [FromQuery] int pageSize = 10,
-            [FromQuery] string? slug = null,
-            [FromQuery] string? query = null,      // Add this line
-            [FromQuery] string? category = null)   // Add this line
+        public async Task<IActionResult> GetProducts(
+            [FromQuery] string? query = null,
+            [FromQuery] string? category = null,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var productsQuery = _context.Products.Include(p => p.Category).AsQueryable();
-
-            // Handle slug query (returns array with single item)
-            if (!string.IsNullOrEmpty(slug))
+            try
             {
+                var productsQuery = _context.Products
+                    .Include(p => p.Category)
+                    .AsQueryable();
+
+                // Enhanced search - include all the detailed fields
+                if (!string.IsNullOrEmpty(query))
+                {
+                    var searchTerm = query.ToLower();
+                    productsQuery = productsQuery.Where(p =>
+                        p.Name.ToLower().Contains(searchTerm) ||
+                        (p.Description != null && p.Description.ToLower().Contains(searchTerm)) ||
+                        (p.Brand != null && p.Brand.ToLower().Contains(searchTerm)) ||
+                        (p.Material != null && p.Material.ToLower().Contains(searchTerm)) ||          // Add this
+                        (p.Specifications != null && p.Specifications.ToLower().Contains(searchTerm)) || // Add this
+                        (p.Sku != null && p.Sku.ToLower().Contains(searchTerm))
+                    );
+                }
+
+                // Category filtering
+                if (!string.IsNullOrEmpty(category))
+                {
+                    productsQuery = productsQuery.Where(p => 
+                        p.Category != null && 
+                        (p.Category.UrlSlug.ToLower() == category.ToLower() || 
+                         p.Category.Name.ToLower() == category.ToLower())
+                    );
+                }
+
+                var totalCount = await productsQuery.CountAsync();
+                var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
                 var products = await productsQuery
-                    .Where(p => p.UrlSlug == slug)
-                    .Select(p => new ProductDto
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(p => new
                     {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Description = p.Description,
-                        Price = p.Price,
-                        Image = p.Image,
-                        Brand = p.Brand,
-                        UrlSlug = p.UrlSlug,
-                        Sku = p.Sku ?? "",
-                        CategoryId = p.CategoryId,
-                        CategoryName = p.Category != null ? p.Category.Name : null
+                        p.Id,
+                        p.Name,
+                        p.Description,
+                        p.Price,
+                        p.Image,
+                        p.Brand,
+                        p.UrlSlug,
+                        p.Sku,
+                        p.CategoryId,
+                        CategoryName = p.Category != null ? p.Category.Name : null,
+                        // Include the detailed fields in response
+                        p.Size,
+                        p.Dimensions,
+                        p.Weight,
+                        p.Material,
+                        p.Specifications,
+                        p.PublishingDate
                     })
                     .ToListAsync();
 
-                return Ok(products); // Return as array for slug search
-            }
-
-            // **Add search functionality here**
-            if (!string.IsNullOrEmpty(query))
-            {
-                var searchTerm = query.ToLower();
-                productsQuery = productsQuery.Where(p =>
-                    p.Name.ToLower().Contains(searchTerm) ||
-                    (p.Description != null && p.Description.ToLower().Contains(searchTerm)) ||
-                    (p.Brand != null && p.Brand.ToLower().Contains(searchTerm)));
-            }
-
-            // **Add category filter**
-            if (!string.IsNullOrEmpty(category))
-            {
-                productsQuery = productsQuery.Where(p => 
-                    p.Category != null && p.Category.UrlSlug == category);
-            }
-
-            // Handle pagination
-            var totalCount = await productsQuery.CountAsync();
-            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-
-            var paginatedProducts = await productsQuery
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .Select(p => new ProductDto
+                return Ok(new
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    Image = p.Image,
-                    Brand = p.Brand,
-                    UrlSlug = p.UrlSlug,
-                    Sku = p.Sku ?? "",
-                    CategoryId = p.CategoryId,
-                    CategoryName = p.Category != null ? p.Category.Name : null
-                })
-                .ToListAsync();
-
-            return Ok(new PaginatedProductsDto
+                    products,
+                    page,
+                    pageSize,
+                    totalCount,
+                    totalPages
+                });
+            }
+            catch (Exception ex)
             {
-                Products = paginatedProducts,
-                Page = page,
-                PageSize = pageSize,
-                TotalCount = totalCount,
-                TotalPages = totalPages
-            });
+                _logger.LogError(ex, "Error retrieving products");
+                return StatusCode(500, new { error = "Failed to retrieve products" });
+            }
         }
 
         // GET /api/products/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductDto>> GetProduct(int id)
+        public async Task<IActionResult> GetProduct(int id)
         {
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (product == null)
+            try
             {
-                return NotFound();
+                var product = await _context.Products
+                    .Include(p => p.Category)
+                    .Where(p => p.Id == id)
+                    .Select(p => new
+                    {
+                        p.Id,
+                        p.Name,
+                        p.Description,
+                        p.Price,
+                        p.Image,
+                        p.Brand,
+                        p.UrlSlug,
+                        p.Sku,
+                        p.CategoryId,
+                        CategoryName = p.Category != null ? p.Category.Name : null,
+                        // Add all the detailed fields
+                        p.Size,
+                        p.Dimensions,
+                        p.Weight,
+                        p.Material,
+                        p.Specifications,
+                        p.PublishingDate,
+                        p.CreatedAt,
+                        p.UpdatedAt
+                    })
+                    .FirstOrDefaultAsync();
+
+                if (product == null)
+                {
+                    return NotFound(new { error = "Product not found" });
+                }
+
+                return Ok(product);
             }
-
-            return Ok(new ProductDto
+            catch (Exception ex)
             {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                Image = product.Image,
-                Brand = product.Brand,
-                UrlSlug = product.UrlSlug,
-                Sku = product.Sku ?? "", // Add this line
-                CategoryId = product.CategoryId,
-                CategoryName = product.Category?.Name
-            });
+                _logger.LogError(ex, "Error retrieving product with ID {ProductId}", id);
+                return StatusCode(500, new { error = "Failed to retrieve product" });
+            }
         }
 
         // POST /api/products
