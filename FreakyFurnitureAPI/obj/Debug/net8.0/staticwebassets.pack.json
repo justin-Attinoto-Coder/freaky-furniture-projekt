@@ -1,0 +1,197 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\detaljer\\freaky-furniture-ai-cs-1.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\detaljer\\freaky-furniture-ai-cs-1.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\detaljer\\freaky-furniture-ai-cs-10.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\detaljer\\freaky-furniture-ai-cs-10.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\detaljer\\freaky-furniture-ai-cs-11.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\detaljer\\freaky-furniture-ai-cs-11.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\detaljer\\freaky-furniture-ai-cs-2.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\detaljer\\freaky-furniture-ai-cs-2.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\detaljer\\freaky-furniture-ai-cs-3.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\detaljer\\freaky-furniture-ai-cs-3.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\detaljer\\freaky-furniture-ai-cs-4.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\detaljer\\freaky-furniture-ai-cs-4.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\detaljer\\freaky-furniture-ai-cs-5.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\detaljer\\freaky-furniture-ai-cs-5.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\detaljer\\freaky-furniture-ai-cs-6.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\detaljer\\freaky-furniture-ai-cs-6.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\detaljer\\freaky-furniture-ai-cs-7.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\detaljer\\freaky-furniture-ai-cs-7.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\detaljer\\freaky-furniture-ai-cs-8.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\detaljer\\freaky-furniture-ai-cs-8.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\detaljer\\freaky-furniture-ai-cs-9.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\detaljer\\freaky-furniture-ai-cs-9.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\forvaring\\freaky-furniture-ai-cs-1.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\forvaring\\freaky-furniture-ai-cs-1.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\forvaring\\freaky-furniture-ai-cs-10.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\forvaring\\freaky-furniture-ai-cs-10.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\forvaring\\freaky-furniture-ai-cs-11.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\forvaring\\freaky-furniture-ai-cs-11.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\forvaring\\freaky-furniture-ai-cs-2.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\forvaring\\freaky-furniture-ai-cs-2.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\forvaring\\freaky-furniture-ai-cs-3.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\forvaring\\freaky-furniture-ai-cs-3.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\forvaring\\freaky-furniture-ai-cs-4.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\forvaring\\freaky-furniture-ai-cs-4.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\forvaring\\freaky-furniture-ai-cs-5.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\forvaring\\freaky-furniture-ai-cs-5.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\forvaring\\freaky-furniture-ai-cs-6.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\forvaring\\freaky-furniture-ai-cs-6.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\forvaring\\freaky-furniture-ai-cs-7.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\forvaring\\freaky-furniture-ai-cs-7.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\forvaring\\freaky-furniture-ai-cs-8.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\forvaring\\freaky-furniture-ai-cs-8.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\forvaring\\freaky-furniture-ai-cs-9.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\forvaring\\freaky-furniture-ai-cs-9.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\mobler\\freaky-furniture-ai-cs-1.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\mobler\\freaky-furniture-ai-cs-1.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\mobler\\freaky-furniture-ai-cs-10.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\mobler\\freaky-furniture-ai-cs-10.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\mobler\\freaky-furniture-ai-cs-11.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\mobler\\freaky-furniture-ai-cs-11.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\mobler\\freaky-furniture-ai-cs-2.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\mobler\\freaky-furniture-ai-cs-2.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\mobler\\freaky-furniture-ai-cs-3.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\mobler\\freaky-furniture-ai-cs-3.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\mobler\\freaky-furniture-ai-cs-4.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\mobler\\freaky-furniture-ai-cs-4.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\mobler\\freaky-furniture-ai-cs-5.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\mobler\\freaky-furniture-ai-cs-5.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\mobler\\freaky-furniture-ai-cs-6.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\mobler\\freaky-furniture-ai-cs-6.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\mobler\\freaky-furniture-ai-cs-7.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\mobler\\freaky-furniture-ai-cs-7.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\mobler\\freaky-furniture-ai-cs-8.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\mobler\\freaky-furniture-ai-cs-8.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\mobler\\freaky-furniture-ai-cs-9.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\mobler\\freaky-furniture-ai-cs-9.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-1.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-1.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-10.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-10.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-11.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-11.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-2.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-2.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-3.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-3.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-4.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-4.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-5.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-5.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-6.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-6.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-7.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-7.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-8.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-8.jpg"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-9.jpg",
+      "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-9.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.FreakyFurnitureAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.FreakyFurnitureAPI.props",
+      "PackagePath": "build\\FreakyFurnitureAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.FreakyFurnitureAPI.props",
+      "PackagePath": "buildMultiTargeting\\FreakyFurnitureAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.FreakyFurnitureAPI.props",
+      "PackagePath": "buildTransitive\\FreakyFurnitureAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
