@@ -2,13 +2,22 @@
 export interface Product {
   id: number;
   name: string;
-  category: string;
-  price: number;
   description: string;
+  price: number;
   image: string;
+  brand: string;
   urlSlug: string;
-  brand?: string;
-  sku?: string;
-  categoryId?: number; // Add this if it's missing
-  publishing_date?: string; // Ensure backend returns ISO 8601 format (e.g., "2023-10-01T00:00:00Z")
+  sku: string;
+  categoryId: number;
+  categoryName?: string;
+  categorySlug?: string;
+  // Add these fields to match your C# Product model
+  size?: string;
+  dimensions?: string;
+  weight?: string;
+  material?: string;
+  specifications?: string;
+  publishingDate?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

@@ -4,25 +4,29 @@ import { SearchService } from './search.service';
 import { AuthService } from './auth.service';
 import { Product } from '../models/product';
 
+// Mock AuthService
+class MockAuthService {
+  getToken(): string | null {
+    return 'mock-token';
+  }
+}
+
 describe('SearchService', () => {
   let service: SearchService;
   let httpMock: HttpTestingController;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let authService: AuthService;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('AuthService', ['getToken']);
-
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         SearchService,
-        { provide: AuthService, useValue: spy }
+        { provide: AuthService, useClass: MockAuthService }
       ]
     });
-
     service = TestBed.inject(SearchService);
     httpMock = TestBed.inject(HttpTestingController);
-    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    authService = TestBed.inject(AuthService);
   });
 
   afterEach(() => {
@@ -33,47 +37,27 @@ describe('SearchService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should search for products', () => {
-    const mockSearchResults: Product[] = [
-      {
-        id: 1,
-        name: 'Modern Sofa',
-        description: 'A comfortable modern sofa',
-        price: 999.99,
-        category: 'Living Room',
-        brand: 'IKEA',
-        image: '/images/sofa.jpg',
-        urlSlug: 'modern-sofa',
-      }
-    ];
+  it('should have searchResults$ observable', () => {
+    expect(service.searchResults$).toBeDefined();
+  });
 
-    authServiceSpy.getToken.and.returnValue('mock-token');
+  it('should have searchPerformed$ observable', () => {
+    expect(service.searchPerformed$).toBeDefined();
+  });
 
-    service.search('sofa');
-
-    service.searchResults$.subscribe(results => {
-      expect(results).toEqual(mockSearchResults);
-    });
-
-    service.searchPerformed$.subscribe(performed => {
-      expect(performed).toBe(true);
-    });
-
-    const req = httpMock.expectOne('http://localhost:5186/api/products?query=sofa');
-    expect(req.request.method).toBe('GET');
-    expect(req.request.headers.get('Authorization')).toBe('Bearer mock-token');
-    req.flush(mockSearchResults);
+  it('should have searchQuery$ observable', () => {
+    expect(service.searchQuery$).toBeDefined();
   });
 
   it('should clear search results', () => {
     service.clearSearch();
 
     service.searchResults$.subscribe(results => {
-      expect(results).toEqual([]);
+      expect(results.length).toBe(0);
     });
 
     service.searchPerformed$.subscribe(performed => {
-      expect(performed).toBe(false);
+      expect(performed).toBeFalse();
     });
 
     service.searchQuery$.subscribe(query => {
@@ -81,35 +65,103 @@ describe('SearchService', () => {
     });
   });
 
-  it('should handle empty search query', () => {
-    service.search('');
+  it('should perform search and update observables', () => {
+    const mockProducts: Product[] = [
+      {
+        id: 1,
+        name: 'Test Chair',
+        description: 'A comfortable test chair',
+        price: 999.99,
+        image: '/test-chair.jpg',
+        brand: 'Test Brand',
+        urlSlug: 'test-chair',
+        sku: 'TST001',
+        categoryId: 1,
+        categoryName: 'Möbler',
+        publishingDate: new Date()
+      }
+    ];
 
+    const searchQuery = 'chair';
+
+    // Call the search method (it only takes 1 argument: query)
+    service.search(searchQuery);
+
+    // Expect HTTP request to be made
+    const req = httpMock.expectOne(
+      `https://freaky-angular-furniture-backend.onrender.com/api/furniture?query=${encodeURIComponent(searchQuery)}`
+    );
+    expect(req.request.method).toBe('GET');
+    expect(req.request.headers.get('Authorization')).toBe('Bearer mock-token');
+
+    // Respond with mock data
+    req.flush(mockProducts);
+
+    // Verify observables are updated
     service.searchResults$.subscribe(results => {
-      expect(results).toEqual([]);
+      expect(results).toEqual(mockProducts);
     });
 
     service.searchPerformed$.subscribe(performed => {
-      expect(performed).toBe(false);
+      expect(performed).toBeTrue();
     });
 
-    // No HTTP request should be made for empty query
-    httpMock.expectNone('http://localhost:5186/api/products');
+    service.searchQuery$.subscribe(query => {
+      expect(query).toBe(searchQuery);
+    });
   });
 
-  it('should handle search errors', () => {
-    authServiceSpy.getToken.and.returnValue('mock-token');
+  it('should handle search error', () => {
+    const searchQuery = 'nonexistent';
 
-    service.search('test');
+    service.search(searchQuery);
 
+    const req = httpMock.expectOne(
+      `https://freaky-angular-furniture-backend.onrender.com/api/furniture?query=${encodeURIComponent(searchQuery)}`
+    );
+
+    // Simulate HTTP error
+    req.error(new ErrorEvent('Network error'));
+
+    // Verify error handling
     service.searchResults$.subscribe(results => {
       expect(results).toEqual([]);
     });
 
     service.searchPerformed$.subscribe(performed => {
-      expect(performed).toBe(true);
+      expect(performed).toBeTrue();
+    });
+  });
+
+  it('should handle empty query', () => {
+    service.search('');
+
+    // No HTTP request should be made for empty query
+    httpMock.expectNone(() => true);
+
+    // Verify empty results
+    service.searchResults$.subscribe(results => {
+      expect(results).toEqual([]);
     });
 
-    const req = httpMock.expectOne('http://localhost:5186/api/products?query=test');
-    req.error(new ProgressEvent('Network error'));
+    service.searchPerformed$.subscribe(performed => {
+      expect(performed).toBeFalse();
+    });
+  });
+
+  it('should handle whitespace-only query', () => {
+    service.search('   ');
+
+    // No HTTP request should be made for whitespace-only query
+    httpMock.expectNone(() => true);
+
+    // Verify empty results
+    service.searchResults$.subscribe(results => {
+      expect(results).toEqual([]);
+    });
+
+    service.searchPerformed$.subscribe(performed => {
+      expect(performed).toBeFalse();
+    });
   });
 });

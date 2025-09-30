@@ -102,21 +102,21 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.filterRecentProducts(this.furnitureItems, 30), 4
     );
 
-    // Categorize products
+    // Categorize products - Updated to use proper category matching
     this.moblerProducts = this.getRandomProducts(
-      this.filterByCategory(this.furnitureItems, 'mobler'), 4
+      this.filterByCategory(this.furnitureItems, 'Möbler'), 4
     );
 
     this.forvaringProducts = this.getRandomProducts(
-      this.filterByCategory(this.furnitureItems, 'forvaring'), 4
+      this.filterByCategory(this.furnitureItems, 'Förvaring'), 4
     );
 
     this.detaljerProducts = this.getRandomProducts(
-      this.filterByCategory(this.furnitureItems, 'detaljer'), 4
+      this.filterByCategory(this.furnitureItems, 'Dekoration'), 4
     );
 
     this.textilProducts = this.getRandomProducts(
-      this.filterByCategory(this.furnitureItems, 'textil'), 4
+      this.filterByCategory(this.furnitureItems, 'Textilier'), 4
     );
 
     // Log category results
@@ -166,8 +166,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     daysAgo.setDate(daysAgo.getDate() - days);
 
     const recentProducts = products.filter(product => {
-      if (!product.publishing_date) return false;
-      const publishDate = new Date(product.publishing_date);
+      if (!product.publishingDate) return false;
+      const publishDate = new Date(product.publishingDate);
       return publishDate >= daysAgo;
     });
 
@@ -183,8 +183,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private filterByCategory(products: Product[], category: string): Product[] {
+    // FIXED: Changed from product.category to product.categoryName
     const filtered = products.filter(product =>
-      product.category?.toLowerCase().includes(category.toLowerCase()) ||
+      product.categoryName?.toLowerCase().includes(category.toLowerCase()) ||
       product.name?.toLowerCase().includes(category.toLowerCase())
     );
 

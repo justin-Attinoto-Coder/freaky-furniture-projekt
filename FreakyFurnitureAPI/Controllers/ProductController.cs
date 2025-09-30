@@ -13,10 +13,12 @@ namespace FreakyFurnitureAPI.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly FurnitureDbContext _context;
+        private readonly ILogger<ProductsController> _logger;
 
-        public ProductsController(FurnitureDbContext context)
+        public ProductsController(FurnitureDbContext context, ILogger<ProductsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET /api/products?page=1&pageSize=10
@@ -41,18 +43,18 @@ namespace FreakyFurnitureAPI.Controllers
                         p.Name.ToLower().Contains(searchTerm) ||
                         (p.Description != null && p.Description.ToLower().Contains(searchTerm)) ||
                         (p.Brand != null && p.Brand.ToLower().Contains(searchTerm)) ||
-                        (p.Material != null && p.Material.ToLower().Contains(searchTerm)) ||          // Add this
-                        (p.Specifications != null && p.Specifications.ToLower().Contains(searchTerm)) || // Add this
+                        (p.Material != null && p.Material.ToLower().Contains(searchTerm)) ||
+                        (p.Specifications != null && p.Specifications.ToLower().Contains(searchTerm)) ||
                         (p.Sku != null && p.Sku.ToLower().Contains(searchTerm))
                     );
                 }
 
-                // Category filtering
+                // Category filtering - fix null reference
                 if (!string.IsNullOrEmpty(category))
                 {
                     productsQuery = productsQuery.Where(p => 
                         p.Category != null && 
-                        (p.Category.UrlSlug.ToLower() == category.ToLower() || 
+                        (p.Category.UrlSlug != null && p.Category.UrlSlug.ToLower() == category.ToLower() || 
                          p.Category.Name.ToLower() == category.ToLower())
                     );
                 }
@@ -75,6 +77,7 @@ namespace FreakyFurnitureAPI.Controllers
                         p.Sku,
                         p.CategoryId,
                         CategoryName = p.Category != null ? p.Category.Name : null,
+                        CategorySlug = p.Category != null ? p.Category.UrlSlug : null,
                         // Include the detailed fields in response
                         p.Size,
                         p.Dimensions,
@@ -122,6 +125,7 @@ namespace FreakyFurnitureAPI.Controllers
                         p.Sku,
                         p.CategoryId,
                         CategoryName = p.Category != null ? p.Category.Name : null,
+                        CategorySlug = p.Category != null ? p.Category.UrlSlug : null,
                         // Add all the detailed fields
                         p.Size,
                         p.Dimensions,

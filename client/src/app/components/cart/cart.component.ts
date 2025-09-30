@@ -50,7 +50,6 @@ export class CartComponent implements OnInit, OnDestroy {
         this.calculateTotal();
       });
 
-    // Load recommended items (mock for now)
     this.loadRecommendedItems();
   }
 
@@ -65,7 +64,6 @@ export class CartComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  // Method that template expects
   deleteCartItem(productId: number): void {
     console.log('CartComponent: Deleting cart item with productId:', productId);
     this.cartService.deleteCartItem(productId).subscribe({
@@ -80,22 +78,22 @@ export class CartComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Method that template expects
   navigateToHome(): void {
     this.router.navigate(['/']);
   }
 
-  // Method that template expects
   onPurchaseClick(): void {
     if (this.cartItems.length > 0) {
-      // You can add form validation here if needed
+      if (!this.isFormValid()) {
+        this.error = 'Please fill in all required customer information';
+        return;
+      }
       this.router.navigate(['/checkout']);
     } else {
       this.error = 'Your cart is empty';
     }
   }
 
-  // Method for updating cart item quantities
   updateCartItem(event: { productId: number; quantity: number }): void {
     console.log('CartComponent: Updating cart item:', event);
     if (event.quantity <= 0) {
@@ -114,12 +112,10 @@ export class CartComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Handle checkout form submission
   handleCheckout(event: Event): void {
     event.preventDefault();
     console.log('Checkout initiated with data:', this.customerData);
 
-    // Validate form data
     if (!this.isFormValid()) {
       this.error = 'Please fill in all required fields';
       return;
@@ -130,94 +126,91 @@ export class CartComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Process checkout
     this.processCheckout();
   }
 
-  // Handle customer form changes
   onCustomerDataChange(event: Event): void {
-    const target = event.target as HTMLInputElement | HTMLSelectElement;
-    const fieldName = target.name as keyof CustomerData;
-    this.customerData[fieldName] = target.value;
-    console.log('Customer data updated:', fieldName, target.value);
+    console.log('Customer form changed:', event);
   }
 
-  clearCart(): void {
-    this.cartService.clearCart().subscribe({
-      next: () => {
-        console.log('Cart cleared');
-        this.error = '';
-      },
-      error: (error) => {
-        console.error('Error clearing cart:', error);
-        this.error = 'Failed to clear cart';
-      }
-    });
-  }
-
-  // Private helper methods
   private isFormValid(): boolean {
     return !!(
-      this.customerData.fullName &&
-      this.customerData.phoneNumber &&
-      this.customerData.province &&
-      this.customerData.city &&
-      this.customerData.streetAddress &&
-      this.customerData.postalCode
+      this.customerData.fullName?.trim() &&
+      this.customerData.phoneNumber?.trim() &&
+      this.customerData.province?.trim() &&
+      this.customerData.city?.trim() &&
+      this.customerData.streetAddress?.trim() &&
+      this.customerData.postalCode?.trim()
     );
   }
 
   private processCheckout(): void {
-    // Here you would typically call a checkout service
     console.log('Processing checkout...', {
       items: this.cartItems,
       customer: this.customerData,
       total: this.totalPrice
     });
 
-    // For now, just navigate to a success page or show success message
     this.router.navigate(['/checkout-success']);
   }
 
-  // Load recommended items (temporary mock - replace with actual service later)
   private loadRecommendedItems(): void {
-    // Mock recommended items for now - using Product interface
+    // Load recommended items with proper Product interface
     this.recommendedItems = [
       {
-        id: 1,
+        id: 2,
         name: 'Cosmic Dining Table',
         price: 899.99,
         image: '/images/products/mobler/freaky-furniture-ai-cs-2.jpg',
         brand: 'Freaky Furniture',
-        description: 'Stunning dining table with otherworldly design elements',
+        description: 'Stunning dining table with otherworldly design elements that seats 6 people comfortably',
         urlSlug: 'cosmic-dining-table',
         sku: 'MOB002',
         categoryId: 1,
         size: '180x90x75 cm',
-        dimensions: 'Length: 180cm, Width: 90cm, Height: 75cm',
+        dimensions: 'Length: 180cm, Width: 90cm, Height: 75cm, Leg clearance: 65cm',
         weight: '45.2 kg',
         material: 'Teak',
-        specifications: 'Material: Mahogany, Color: Beige, Assembly required: Yes',
-        publishingDate: new Date(),
+        specifications: 'Material: Mahogany, Color: Beige, Assembly required: Yes, Warranty: 5 years',
+        publishingDate: new Date('2024-11-20'),
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        id: 2,
+        id: 4,
         name: 'Abstract Coffee Table',
         price: 699.99,
         image: '/images/products/mobler/freaky-furniture-ai-cs-4.jpg',
         brand: 'Freaky Furniture',
-        description: 'Unique coffee table that doubles as a conversation piece',
+        description: 'Unique coffee table that doubles as a conversation piece with artistic glass top',
         urlSlug: 'abstract-coffee-table',
         sku: 'MOB004',
         categoryId: 1,
         size: '120x70x40 cm',
-        dimensions: 'Length: 120cm, Width: 70cm, Height: 40cm',
+        dimensions: 'Length: 120cm, Width: 70cm, Height: 40cm, Glass thickness: 12mm',
         weight: '35.8 kg',
         material: 'Pine',
-        specifications: 'Material: Metal Frame, Color: White, Assembly required: Minimal',
-        publishingDate: new Date(),
+        specifications: 'Material: Metal Frame, Color: White, Assembly required: Minimal, Warranty: 3 years',
+        publishingDate: new Date('2025-04-03'),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: 6,
+        name: 'Whimsical Armchair',
+        price: 799.99,
+        image: '/images/products/mobler/freaky-furniture-ai-cs-6.jpg',
+        brand: 'Freaky Furniture',
+        description: 'Comfortable armchair with playful, artistic design and premium upholstery',
+        urlSlug: 'whimsical-armchair',
+        sku: 'MOB006',
+        categoryId: 1,
+        size: '78x85x92 cm',
+        dimensions: 'Width: 78cm, Depth: 85cm, Height: 92cm, Seat Height: 43cm, Arm Height: 65cm',
+        weight: '24.1 kg',
+        material: 'Metal Frame',
+        specifications: 'Material: Premium Leather, Color: Black, Assembly required: Minimal, Warranty: 3 years',
+        publishingDate: new Date('2025-10-04'),
         createdAt: new Date(),
         updatedAt: new Date()
       }

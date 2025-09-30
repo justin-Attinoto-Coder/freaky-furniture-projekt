@@ -29,15 +29,15 @@ describe('ProductService', () => {
       {
         id: 1,
         name: 'Test Chair',
-        category: 'mobler',
+        categoryId: 1,                              // FIXED: category -> categoryId
+        categoryName: 'Möbler',                     // ADDED: categoryName
         price: 1000,
         description: 'Test description',
         image: 'test.jpg',
         urlSlug: 'test-chair',
         brand: 'Test Brand',
         sku: 'TST001',
-        categoryId: 1,
-        publishing_date: new Date().toISOString()
+        publishingDate: new Date()                  // FIXED: publishing_date -> publishingDate (Date object)
       }
     ];
 
@@ -55,15 +55,15 @@ describe('ProductService', () => {
     const mockProduct: Product = {
       id: 1,
       name: 'Test Chair',
-      category: 'mobler',
+      categoryId: 1,                              // FIXED: category -> categoryId
+      categoryName: 'Möbler',                     // ADDED: categoryName
       price: 1000,
       description: 'Test description',
       image: 'test.jpg',
       urlSlug: 'test-chair',
       brand: 'Test Brand',
       sku: 'TST001',
-      categoryId: 1,
-      publishing_date: new Date().toISOString()
+      publishingDate: new Date()                  // FIXED: publishing_date -> publishingDate (Date object)
     };
 
     service.getProductById(1).subscribe((product: Product | null) => {
@@ -92,15 +92,15 @@ describe('ProductService', () => {
       data: {
         id: 2,
         name: 'New Chair',
-        category: 'mobler',
+        categoryId: 1,                            // FIXED: category -> categoryId
+        categoryName: 'Möbler',                   // ADDED: categoryName
         price: 1500,
         description: 'New description',
         image: 'new.jpg',
         urlSlug: 'new-chair',
         brand: 'New Brand',
         sku: 'NEW001',
-        categoryId: 1,
-        publishing_date: new Date().toISOString()
+        publishingDate: new Date()                // FIXED: publishing_date -> publishingDate (Date object)
       }
     };
 
@@ -120,16 +120,18 @@ describe('ProductService', () => {
       expect(products.length).toBeGreaterThan(0);
       expect(products.length).toBe(100); // 25 products × 4 categories
 
-      const categories = [...new Set(products.map(p => p.category))];
-      expect(categories).toContain('mobler');
-      expect(categories).toContain('forvaring');
-      expect(categories).toContain('detaljer');
-      expect(categories).toContain('textil');
+      // FIXED: Check categoryName instead of category
+      const categories = [...new Set(products.map(p => p.categoryName))];
+      expect(categories).toContain('Möbler');
+      expect(categories).toContain('Förvaring');
+      expect(categories).toContain('Dekoration');
+      expect(categories).toContain('Textilier');
 
       products.forEach(product => {
         expect(product.id).toBeTruthy();
         expect(product.name).toBeTruthy();
-        expect(product.category).toBeTruthy();
+        expect(product.categoryName).toBeTruthy();        // FIXED: category -> categoryName
+        expect(product.categoryId).toBeGreaterThan(0);    // ADDED: Check categoryId
         expect(product.price).toBeGreaterThan(0);
         expect(product.image).toContain('freaky-furniture-ai-cs-');
         expect(product.urlSlug).toBeTruthy();

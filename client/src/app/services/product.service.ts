@@ -80,7 +80,7 @@ export class ProductService {
         const mockProduct: Product = {
           id: Date.now(),
           name: productData.name,
-          category: this.getCategoryStringFromId(productData.categoryId),
+          categoryName: this.getCategoryStringFromId(productData.categoryId), // FIXED: category -> categoryName
           price: productData.price,
           description: productData.description,
           image: productData.image,
@@ -88,7 +88,7 @@ export class ProductService {
           brand: productData.brand,
           sku: productData.sku,
           categoryId: productData.categoryId,
-          publishing_date: new Date().toISOString()
+          publishingDate: new Date() // FIXED: publishing_date -> publishingDate (and Date object instead of string)
         };
 
         const mockResponse: ApiResponse<Product> = {
@@ -128,7 +128,7 @@ export class ProductService {
 
   getProductsByCategory(category: string): Observable<Product[]> {
     return this.getFurnitureItems().pipe(
-      map(products => products.filter(p => p.category === category))
+      map(products => products.filter(p => p.categoryName === category)) // FIXED: category -> categoryName
     );
   }
 
@@ -145,18 +145,19 @@ export class ProductService {
 
   private getCategoryStringFromId(categoryId: number): string {
     const categoryMap: { [key: number]: string } = {
-      1: 'mobler',
-      2: 'forvaring',
-      3: 'detaljer',
-      4: 'textil'
+      1: 'Möbler',      // Changed to proper category names
+      2: 'Förvaring',
+      3: 'Dekoration',
+      4: 'Textilier'
     };
-    return categoryMap[categoryId] || 'mobler';
+    return categoryMap[categoryId] || 'Möbler';
   }
 
   private generateLargeProductCatalog(): Product[] {
     console.log('🎨 Generating large freaky furniture catalog...');
 
-    const categories = ['mobler', 'forvaring', 'detaljer', 'textil'];
+    const categories = ['mobler', 'forvaring', 'dekoration', 'textilier']; // Updated category slugs
+    const categoryNames = ['Möbler', 'Förvaring', 'Dekoration', 'Textilier']; // Proper Swedish names
 
     const productData = {
       mobler: {
@@ -180,7 +181,7 @@ export class ProductService {
         basePrice: 600,
         priceRange: 2800
       },
-      detaljer: {
+      dekoration: { // Changed from 'detaljer'
         types: [
           'Lamp', 'Mirror', 'Clock', 'Vase', 'Art Piece', 'Sculpture', 'Candle Holder',
           'Plant Pot', 'Frame', 'Wall Art', 'Table Lamp', 'Floor Lamp', 'Pendant Light',
@@ -191,7 +192,7 @@ export class ProductService {
         basePrice: 150,
         priceRange: 1500
       },
-      textil: {
+      textilier: { // Changed from 'textil'
         types: [
           'Cushion', 'Throw', 'Blanket', 'Pillow', 'Rug', 'Curtain', 'Tapestry', 'Cover',
           'Bedding', 'Sheet Set', 'Duvet Cover', 'Pillowcase', 'Throw Pillow', 'Floor Pillow',
@@ -227,7 +228,7 @@ export class ProductService {
     const products: Product[] = [];
     let productId = 1;
 
-    categories.forEach(category => {
+    categories.forEach((category, catIndex) => {
       const categoryData = productData[category as keyof typeof productData];
       const productsPerCategory = 25;
 
@@ -258,15 +259,15 @@ export class ProductService {
         products.push({
           id: productId,
           name,
-          category,
+          categoryName: categoryNames[catIndex], // FIXED: category -> categoryName with proper Swedish name
           price,
           description: this.generateRichDescription(name, brand, category, productType),
           image: imageUrl,
           urlSlug,
           brand, // Always set brand - it's not optional in our generated data
           sku: `FREAKY-${category.toUpperCase()}-${String(productId).padStart(3, '0')}`,
-          categoryId: categories.indexOf(category) + 1,
-          publishing_date: publishingDate.toISOString()
+          categoryId: catIndex + 1,
+          publishingDate: publishingDate // FIXED: publishing_date -> publishingDate (Date object)
         });
 
         productId++;
