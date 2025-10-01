@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Product } from '../../../models/product';
@@ -13,7 +13,7 @@ import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
   standalone: true,
   imports: [CommonModule, RouterLink, FaIconComponent]
 })
-export class ProductCardComponent {
+export class ProductCardComponent implements OnInit {
   @Input({ required: true }) item!: Product;
   isFavorite = false;
   faHeart = faSolidHeart;
@@ -21,11 +21,23 @@ export class ProductCardComponent {
   readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
   isImageLoaded = false;
 
-  // Compute image URL or fallback
+  // Cache the computed image URL to avoid recalculating on every change detection
+  private _cachedImageUrl: string | null = null;
+
+  ngOnInit() {
+    // Compute the image URL once during initialization
+    this._cachedImageUrl = this.computeImageUrl();
+  }
+
+  // Public getter that returns the cached URL
   getImageUrl(): string {
+    return this._cachedImageUrl || this.computeImageUrl();
+  }
+
+  // Private method to compute the image URL (called only once)
+  private computeImageUrl(): string {
     const imagePath = this.item.image?.trim();
-    console.log(`ProductCard: Item for ${this.item.name}:`, JSON.stringify(this.item));
-    console.log(`ProductCard: Raw image path for ${this.item.name}: ${imagePath || 'null/undefined'}`);
+
     if (imagePath) {
       let normalizedPath = imagePath;
       if (imagePath.startsWith('http://localhost:8000')) {
@@ -37,23 +49,23 @@ export class ProductCardComponent {
         normalizedPath = normalizedPath.replace(/^\/+images\//, '/images/');
       }
       const url = normalizedPath.startsWith('http') ? normalizedPath : `${this.imageBaseUrl}${normalizedPath}`;
-      console.log(`ProductCard: Normalized path for ${this.item.name}: ${normalizedPath}`);
-      console.log(`ProductCard: Computed URL for ${this.item.name}: ${url}`);
       return url;
     }
-    console.log(`ProductCard: No image for ${this.item.name}, using fallback`);
+
     return 'https://via.placeholder.com/150?text=No+Image';
   }
 
   // Handle image load success
   handleImageLoad(): void {
     this.isImageLoaded = true;
-    console.log(`ProductCard: Image loaded for ${this.item.name}`);
+    // Only log if needed for debugging
+    // console.log(`ProductCard: Image loaded for ${this.item.name}`);
   }
 
   // Handle image load error
   handleImageError(event: Event): void {
-    console.log(`ProductCard: Image failed to load for ${this.item.name}`);
+    // Only log if needed for debugging
+    // console.log(`ProductCard: Image failed to load for ${this.item.name}`);
     const imgElement = event.target as HTMLImageElement;
     imgElement.src = 'https://via.placeholder.com/150?text=No+Image';
     imgElement.onerror = null; // Prevent infinite error loop
