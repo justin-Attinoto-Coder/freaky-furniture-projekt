@@ -20,6 +20,7 @@ export class ProductCardComponent implements OnInit {
   faRegHeart = faRegularHeart;
   readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
   isImageLoaded = false;
+  hasImageError = false; // Track if we've already had an error
 
   // Cache the computed image URL to avoid recalculating on every change detection
   private _cachedImageUrl: string | null = null;
@@ -31,6 +32,10 @@ export class ProductCardComponent implements OnInit {
 
   // Public getter that returns the cached URL
   getImageUrl(): string {
+    if (this.hasImageError) {
+      // Return a data URL for a simple gray placeholder
+      return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+    }
     return this._cachedImageUrl || this.computeImageUrl();
   }
 
@@ -52,24 +57,32 @@ export class ProductCardComponent implements OnInit {
       return url;
     }
 
-    return 'https://via.placeholder.com/150?text=No+Image';
+    // Return inline SVG placeholder instead of external service
+    return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
   }
 
   // Handle image load success
   handleImageLoad(): void {
     this.isImageLoaded = true;
-    // Only log if needed for debugging
-    // console.log(`ProductCard: Image loaded for ${this.item.name}`);
+    this.hasImageError = false;
   }
 
-  // Handle image load error
+  // Handle image load error - prevent infinite loops
   handleImageError(event: Event): void {
-    // Only log if needed for debugging
-    // console.log(`ProductCard: Image failed to load for ${this.item.name}`);
+    if (this.hasImageError) {
+      // Already handled an error, don't do anything more
+      return;
+    }
+
+    this.hasImageError = true;
+    this.isImageLoaded = true; // Treat as loaded to show the fallback
+
+    // Remove the error handler to prevent further errors
     const imgElement = event.target as HTMLImageElement;
-    imgElement.src = 'https://via.placeholder.com/150?text=No+Image';
-    imgElement.onerror = null; // Prevent infinite error loop
-    this.isImageLoaded = true; // Treat fallback as loaded to hide placeholder
+    imgElement.onerror = null;
+
+    // Force re-render with the fallback image
+    this._cachedImageUrl = null;
   }
 
   toggleFavorite(event: Event): void {
