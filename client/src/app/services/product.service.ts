@@ -41,8 +41,33 @@ export class ProductService {
 
   getFurnitureItems(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl).pipe(
-      tap(products => {
-        console.log('✅ Products loaded from API:', products.length);
+      tap(response => {
+        console.log('🔍 Raw API response:', response);
+        console.log('🔍 Response type:', typeof response);
+        console.log('🔍 Is array:', Array.isArray(response));
+
+        if (Array.isArray(response)) {
+          console.log('✅ Products loaded from API:', response.length);
+        } else {
+          console.log('⚠️ API response is not an array, structure:', response);
+        }
+      }),
+      map(response => {
+        // Handle different API response formats
+        if (Array.isArray(response)) {
+          return response;
+        }
+        // If the API returns an object with a data property containing the array
+        if (response && typeof response === 'object' && 'data' in response) {
+          const data = (response as any).data;
+          if (Array.isArray(data)) {
+            console.log('✅ Extracted products from response.data:', data.length);
+            return data;
+          }
+        }
+        // If response has other structure, log and fallback
+        console.warn('⚠️ Unexpected API response format, using mock data');
+        return this.generateLargeProductCatalog();
       }),
       catchError(error => {
         console.warn('⚠️ API not available, using generated mock data:', error.message);
@@ -58,7 +83,7 @@ export class ProductService {
   getProductById(id: number): Observable<Product | null> {
     return this.http.get<Product>(`${this.apiUrl}/${id}`).pipe(
       tap(product => {
-        console.log('✅ Product loaded:', product.name);
+        console.log('✅ Product loaded:', product?.name || 'Unknown');
       }),
       catchError(error => {
         console.warn(`⚠️ Product ${id} not found, using mock data:`, error.message);
@@ -129,17 +154,29 @@ export class ProductService {
 
   getProductsByCategory(category: string): Observable<Product[]> {
     return this.getFurnitureItems().pipe(
-      map(products => products.filter(p => p.categoryName === category))
+      map(products => {
+        if (!Array.isArray(products)) {
+          console.error('❌ Products is not an array:', products);
+          return [];
+        }
+        return products.filter(p => p.categoryName === category);
+      })
     );
   }
 
   searchProducts(query: string): Observable<Product[]> {
     return this.getFurnitureItems().pipe(
-      map(products => products.filter(p =>
-        p.name.toLowerCase().includes(query.toLowerCase()) ||
-        p.description.toLowerCase().includes(query.toLowerCase()) ||
-        (p.brand && p.brand.toLowerCase().includes(query.toLowerCase()))
-      ))
+      map(products => {
+        if (!Array.isArray(products)) {
+          console.error('❌ Products is not an array:', products);
+          return [];
+        }
+        return products.filter(p =>
+          p.name.toLowerCase().includes(query.toLowerCase()) ||
+          p.description.toLowerCase().includes(query.toLowerCase()) ||
+          (p.brand && p.brand.toLowerCase().includes(query.toLowerCase()))
+        );
+      })
     );
   }
 
