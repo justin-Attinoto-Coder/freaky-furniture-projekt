@@ -1,16 +1,29 @@
 <!-- src/app/components/common/common-accordion-item/common-accordion-item.component.html -->
-<div [ngClass]="['border-b', customClass]" [id]="id">
+<div [ngClass]="['border-b border-gray-200', customClass]" [id]="id">
   <button
-    class="w-full text-left p-4 focus:outline-none"
+    class="w-full text-left p-4 focus:outline-none hover:bg-gray-50 transition-colors duration-200"
     [ngClass]="customClass"
     (click)="toggleAccordion()"
+    [attr.aria-expanded]="isOpen"
+    [attr.aria-controls]="id + '-content'"
   >
     <div class="flex justify-between items-center">
-      <span>{{ title }}</span>
-      <span>{{ isOpen ? '-' : '+' }}</span>
+      <span class="font-medium text-gray-800">{{ title }}</span>
+      <span
+        class="text-xl font-bold transition-transform duration-200"
+        [ngClass]="{'rotate-45': isOpen}"
+      >
+        +
+      </span>
     </div>
   </button>
-  <div *ngIf="isOpen" class="p-4 bg-white">
+  <div
+    *ngIf="isOpen"
+    class="p-4 bg-white border-t border-gray-100 animate-fadeIn"
+    [id]="id + '-content'"
+    role="region"
+    [attr.aria-labelledby]="id + '-button'"
+  >
     <ng-content></ng-content>
   </div>
 </div>
