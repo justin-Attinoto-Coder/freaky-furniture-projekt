@@ -49,6 +49,22 @@ export class ProductService {
         if (response && response.products) {
           console.log('✅ Products loaded from API:', response.products.length);
           console.log('📊 Total count:', response.totalCount);
+
+          // DEBUG: Log the first few products to see category names
+          console.log('🔍 First 3 products with categories:',
+            response.products.slice(0, 3).map((p: any) => ({
+              name: p.name || p.Name,
+              categoryName: p.categoryName || p.CategoryName,
+              categoryId: p.categoryId || p.CategoryId
+            }))
+          );
+
+          // DEBUG: Get unique category names from all products
+          const uniqueCategories = [...new Set(response.products.map((p: any) =>
+            p.categoryName || p.CategoryName
+          ))];
+          console.log('🏷️ Unique categories in database:', uniqueCategories);
+
         } else if (Array.isArray(response)) {
           console.log('✅ Products loaded from API (direct array):', response.length);
         } else {
@@ -177,15 +193,44 @@ export class ProductService {
           console.error('❌ Products is not an array:', products);
           return [];
         }
-        // Map category names to match your database
-        const categoryMap: { [key: string]: string } = {
-          'mobler': 'Mobler',
-          'forvaring': 'Forvaring',
-          'textil': 'Textil',
-          'detaljer': 'Detaljer'
+
+        console.log(`🔍 HOME COMPONENT is searching for category: "${category}"`);
+        console.log('🔍 Available products with categories:',
+          products.slice(0, 5).map(p => ({ name: p.name, category: p.categoryName }))
+        );
+
+        // FIXED: Updated category mapping based on actual database categories
+        const categoryMap: { [key: string]: string[] } = {
+          // Map frontend search terms to actual database categories
+          'mobler': ['Mobler'],
+          'möbler': ['Mobler'],
+          'forvaring': ['Forvaring'],
+          'förvaring': ['Forvaring'],
+          'textil': ['Textil'],
+          'textilier': ['Textil'], // Map "Textilier" search to "Textil" database category
+          'detaljer': ['Detaljer'],
+          'dekoration': ['Detaljer'], // Map "Dekoration" search to "Detaljer" database category
+          'decoration': ['Detaljer'] // Also handle English variant
         };
-        const mappedCategory = categoryMap[category.toLowerCase()] || category;
-        return products.filter(p => p.categoryName === mappedCategory);
+
+        const searchCategory = category.toLowerCase();
+        const possibleMatches = categoryMap[searchCategory] || [category];
+
+        console.log(`🔍 Searching for category "${category}" with possible matches:`, possibleMatches);
+
+        const filtered = products.filter(p => {
+          const productCategory = p.categoryName;
+          const matches = possibleMatches.some(match =>
+            productCategory && productCategory.toLowerCase() === match.toLowerCase()
+          );
+          if (matches) {
+            console.log(`✅ Found product "${p.name}" in category "${productCategory}"`);
+          }
+          return matches;
+        });
+
+        console.log(`📊 Found ${filtered.length} products for category "${category}"`);
+        return filtered;
       })
     );
   }
@@ -206,12 +251,13 @@ export class ProductService {
     );
   }
 
+  // Also update the category mapping in getCategoryStringFromId
   private getCategoryStringFromId(categoryId: number): string {
     const categoryMap: { [key: number]: string } = {
-      1: 'Mobler',     // Updated to match your database
-      2: 'Forvaring',  // Updated to match your database
-      3: 'Textil',     // Updated to match your database
-      4: 'Detaljer'    // Updated to match your database
+      1: 'Mobler',     // This matches your database exactly
+      2: 'Forvaring',  // This matches your database exactly
+      3: 'Textil',     // This matches your database exactly
+      4: 'Detaljer'    // This matches your database exactly
     };
     return categoryMap[categoryId] || 'Mobler';
   }
@@ -223,9 +269,9 @@ export class ProductService {
   private generateLargeProductCatalog(): Product[] {
     console.log('🎨 Generating large freaky furniture catalog...');
 
-    // Updated to match your actual database categories
-    const categories = ['mobler', 'forvaring', 'textil', 'detaljer']; // Fixed 'textilier' to 'textil'
-    const categoryNames = ['Mobler', 'Forvaring', 'Textil', 'Detaljer']; // Updated to match database
+    // Use the exact same names as in your database
+    const categories = ['mobler', 'forvaring', 'textil', 'detaljer'];
+    const categoryNames = ['Mobler', 'Forvaring', 'Textil', 'Detaljer']; // Exact database names
 
     const productData = {
       mobler: {
@@ -238,7 +284,7 @@ export class ProductService {
         brands: ['IKEA', 'Elfa', 'String', 'Nomess', 'Hay'],
         adjectives: ['Praktisk', 'Snygg', 'Funktionell', 'Diskret', 'Flexibel']
       },
-      textil: { // Fixed from 'textilier' to 'textil'
+      textil: {
         types: ['Kudde', 'Pläd', 'Matta', 'Gardin', 'Överkast', 'Handduk'],
         brands: ['H&M Home', 'Zara Home', 'Linum', 'Lexington', 'Gant Home'],
         adjectives: ['Mjuk', 'Varm', 'Lyxig', 'Bekväm', 'Stilfull']

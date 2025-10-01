@@ -102,21 +102,21 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.filterRecentProducts(this.furnitureItems, 30), 4
     );
 
-    // Categorize products - Updated to use proper category matching
+    // FIXED: Updated to use exact database category names
     this.moblerProducts = this.getRandomProducts(
-      this.filterByCategory(this.furnitureItems, 'Möbler'), 4
+      this.filterByCategory(this.furnitureItems, 'Mobler'), 4  // Changed from 'Möbler'
     );
 
     this.forvaringProducts = this.getRandomProducts(
-      this.filterByCategory(this.furnitureItems, 'Förvaring'), 4
+      this.filterByCategory(this.furnitureItems, 'Forvaring'), 4  // Changed from 'Förvaring'
     );
 
     this.detaljerProducts = this.getRandomProducts(
-      this.filterByCategory(this.furnitureItems, 'Dekoration'), 4
+      this.filterByCategory(this.furnitureItems, 'Detaljer'), 4  // Changed from 'Dekoration'
     );
 
     this.textilProducts = this.getRandomProducts(
-      this.filterByCategory(this.furnitureItems, 'Textilier'), 4
+      this.filterByCategory(this.furnitureItems, 'Textil'), 4  // Changed from 'Textilier'
     );
 
     // Log category results
@@ -183,14 +183,22 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private filterByCategory(products: Product[], category: string): Product[] {
-    // FIXED: Changed from product.category to product.categoryName
-    const filtered = products.filter(product =>
-      product.categoryName?.toLowerCase().includes(category.toLowerCase()) ||
-      product.name?.toLowerCase().includes(category.toLowerCase())
-    );
+    console.log(`🔍 HOME COMPONENT filtering for category: "${category}"`);
+
+    // Use exact match instead of includes for better accuracy
+    const filtered = products.filter(product => {
+      const match = product.categoryName?.toLowerCase() === category.toLowerCase();
+      if (match) {
+        console.log(`✅ Found "${product.name}" in category "${product.categoryName}"`);
+      }
+      return match;
+    });
 
     if (filtered.length === 0) {
       console.warn(`⚠️ No products found for category: ${category}`);
+      console.log('Available categories:', [...new Set(products.map(p => p.categoryName))]);
+    } else {
+      console.log(`📊 Found ${filtered.length} products for category "${category}"`);
     }
 
     return filtered;
