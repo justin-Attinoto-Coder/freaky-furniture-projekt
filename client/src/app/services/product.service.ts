@@ -67,11 +67,11 @@ export class ProductService {
         }
         // If response has other structure, log and fallback
         console.warn('⚠️ Unexpected API response format, using mock data');
-        return this.generateLargeProductCatalog();
+        return this.getCachedMockProducts();
       }),
       catchError(error => {
         console.warn('⚠️ API not available, using generated mock data:', error.message);
-        return of(this.generateLargeProductCatalog());
+        return of(this.getCachedMockProducts());
       })
     );
   }
@@ -87,7 +87,7 @@ export class ProductService {
       }),
       catchError(error => {
         console.warn(`⚠️ Product ${id} not found, using mock data:`, error.message);
-        const mockProduct = this.generateLargeProductCatalog().find(p => p.id === id);
+        const mockProduct = this.getCachedMockProducts().find(p => p.id === id);
         return of(mockProduct || null);
       })
     );
@@ -184,8 +184,8 @@ export class ProductService {
     const categoryMap: { [key: number]: string } = {
       1: 'Möbler',
       2: 'Förvaring',
-      3: 'Dekoration',
-      4: 'Textilier'
+      3: 'Textilier',
+      4: 'Detaljer'  // Added the missing category
     };
     return categoryMap[categoryId] || 'Möbler';
   }
@@ -193,73 +193,34 @@ export class ProductService {
   private generateLargeProductCatalog(): Product[] {
     console.log('🎨 Generating large freaky furniture catalog...');
 
-    const categories = ['mobler', 'forvaring', 'dekoration', 'textilier'];
-    const categoryNames = ['Möbler', 'Förvaring', 'Dekoration', 'Textilier'];
+    // Updated to match your actual categories
+    const categories = ['mobler', 'forvaring', 'textilier', 'detaljer'];
+    const categoryNames = ['Möbler', 'Förvaring', 'Textilier', 'Detaljer'];
 
     const productData = {
       mobler: {
-        types: [
-          'Chair', 'Sofa', 'Armchair', 'Bench', 'Loveseat', 'Sectional', 'Stool', 'Recliner',
-          'Ottoman', 'Chaise', 'Dining Chair', 'Accent Chair', 'Bar Stool', 'Lounge Chair',
-          'Rocking Chair', 'Swivel Chair', 'Bean Bag', 'Floor Cushion', 'Pouf', 'Daybed',
-          'Futon', 'Sleeper Sofa', 'Modular Sofa', 'Corner Sofa', 'Chesterfield'
-        ],
-        basePrice: 1200,
-        priceRange: 4000
+        types: ['Soffa', 'Stol', 'Bord', 'Säng', 'Byrå', 'Garderob', 'Bokhylla', 'Fåtölj'],
+        brands: ['IKEA', 'Mio', 'Ellos', 'Jysk', 'Designtorget', 'Svenskt Tenn'],
+        adjectives: ['Bekväm', 'Stilren', 'Modern', 'Klassisk', 'Robust', 'Elegant']
       },
       forvaring: {
-        types: [
-          'Storage Box', 'Cabinet', 'Wardrobe', 'Chest', 'Dresser', 'Shelf', 'Organizer',
-          'Bookcase', 'Sideboard', 'Credenza', 'Armoire', 'Hutch', 'Storage Bench',
-          'TV Stand', 'Media Console', 'Display Cabinet', 'Curio Cabinet', 'Wine Rack',
-          'Storage Ottoman', 'Storage Trunk', 'File Cabinet', 'Shoe Rack', 'Coat Rack',
-          'Storage Cart', 'Pantry Cabinet'
-        ],
-        basePrice: 600,
-        priceRange: 2800
-      },
-      dekoration: {
-        types: [
-          'Lamp', 'Mirror', 'Clock', 'Vase', 'Art Piece', 'Sculpture', 'Candle Holder',
-          'Plant Pot', 'Frame', 'Wall Art', 'Table Lamp', 'Floor Lamp', 'Pendant Light',
-          'Chandelier', 'Sconce', 'Decorative Bowl', 'Figurine', 'Wind Chime',
-          'Wall Clock', 'Desk Clock', 'Photo Frame', 'Jewelry Box', 'Bookend',
-          'Decorative Tray', 'Ornament'
-        ],
-        basePrice: 150,
-        priceRange: 1500
+        types: ['Låda', 'Korg', 'Hylla', 'Skåp', 'Organizer', 'Box'],
+        brands: ['IKEA', 'Elfa', 'String', 'Nomess', 'Hay'],
+        adjectives: ['Praktisk', 'Snygg', 'Funktionell', 'Diskret', 'Flexibel']
       },
       textilier: {
-        types: [
-          'Cushion', 'Throw', 'Blanket', 'Pillow', 'Rug', 'Curtain', 'Tapestry', 'Cover',
-          'Bedding', 'Sheet Set', 'Duvet Cover', 'Pillowcase', 'Throw Pillow', 'Floor Pillow',
-          'Table Runner', 'Placemat', 'Napkin', 'Tablecloth', 'Window Treatment', 'Valance',
-          'Room Divider', 'Wall Hanging', 'Bath Towel', 'Hand Towel', 'Bath Mat'
-        ],
-        basePrice: 80,
-        priceRange: 800
+        types: ['Kudde', 'Pläd', 'Matta', 'Gardin', 'Överkast', 'Handduk'],
+        brands: ['H&M Home', 'Zara Home', 'Linum', 'Lexington', 'Gant Home'],
+        adjectives: ['Mjuk', 'Varm', 'Lyxig', 'Bekväm', 'Stilfull']
+      },
+      detaljer: {
+        types: ['Vas', 'Ljusstake', 'Spegel', 'Tavla', 'Skulptur', 'Prydnad'],
+        brands: ['Designtorget', 'Svenskt Tenn', 'Hay', 'Muuto', 'Normann Copenhagen'],
+        adjectives: ['Elegant', 'Unik', 'Konstnärlig', 'Påfallande', 'Vacker', 'Stilfull']
       }
     };
 
-    const brands = [
-      'Freaky Furniture', 'Avant-Garde Design', 'Wild Creations', 'Eccentric Home',
-      'Psychedelic Living', 'Bold Interiors', 'Artistic Spaces', 'Unique Designs',
-      'Kaleidoscope Home', 'Neon Dreams', 'Electric Aesthetics', 'Cosmic Comfort',
-      'Rainbow Living', 'Prismatic Design', 'Abstract Spaces', 'Surreal Style'
-    ];
-
-    const adjectives = [
-      'Psychedelic', 'Vibrant', 'Rainbow', 'Colorful', 'Bold', 'Artistic', 'Unique', 'Funky',
-      'Wild', 'Eccentric', 'Avant-Garde', 'Electric', 'Neon', 'Surreal', 'Abstract',
-      'Kaleidoscope', 'Prismatic', 'Cosmic', 'Holographic', 'Iridescent', 'Fluorescent',
-      'Glowing', 'Shimmering', 'Sparkling', 'Dazzling', 'Radiant', 'Luminous', 'Brilliant'
-    ];
-
-    const qualityDescriptors = [
-      'Premium', 'Luxury', 'Deluxe', 'Professional', 'Designer', 'Custom', 'Handcrafted',
-      'Artisan', 'Limited Edition', 'Signature', 'Exclusive', 'Masterpiece', 'Collector\'s'
-    ];
-
+    // Use the actual image files you have (1-11)
     const imageFiles = Array.from({ length: 11 }, (_, i) => `freaky-furniture-ai-cs-${i + 1}.jpg`);
 
     const products: Product[] = [];
@@ -267,44 +228,36 @@ export class ProductService {
 
     categories.forEach((category, catIndex) => {
       const categoryData = productData[category as keyof typeof productData];
-      const productsPerCategory = 25;
+      const productsPerCategory = 25; // Distribute 100 products across 4 categories
 
       for (let i = 0; i < productsPerCategory; i++) {
-        const productType = categoryData.types[i % categoryData.types.length];
-        const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-        const quality = qualityDescriptors[Math.floor(Math.random() * qualityDescriptors.length)];
-        const brand = brands[Math.floor(Math.random() * brands.length)];
+        const type = categoryData.types[Math.floor(Math.random() * categoryData.types.length)];
+        const brand = categoryData.brands[Math.floor(Math.random() * categoryData.brands.length)];
+        const adjective = categoryData.adjectives[Math.floor(Math.random() * categoryData.adjectives.length)];
 
-        const name = Math.random() > 0.7 ?
-          `${quality} ${adjective} ${productType}` :
-          `${adjective} ${productType}`;
+        const name = `${adjective} ${type}`;
+        const price = Math.floor(Math.random() * 5000) + 200;
+        const urlSlug = name.toLowerCase().replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o').replace(/\s+/g, '-');
+        const publishingDate = new Date(Date.now() - Math.floor(Math.random() * 365 * 24 * 60 * 60 * 1000)).toISOString();
 
-        const urlSlug = name.toLowerCase()
-          .replace(/'/g, '')
-          .replace(/\s+/g, '-') + `-${productId}`;
-
-        const daysAgo = Math.floor(Math.random() * 120);
-        const publishingDate = new Date();
-        publishingDate.setDate(publishingDate.getDate() - daysAgo);
-
+        // Use actual product images, cycling through available images
         const imageFile = imageFiles[(productId - 1) % imageFiles.length];
         const imageUrl = `${this.baseImageUrl}/${category}/${imageFile}`;
 
-        const basePriceMultiplier = name.includes('Premium') || name.includes('Luxury') ? 1.5 : 1;
-        const price = Math.floor((categoryData.basePrice + Math.floor(Math.random() * categoryData.priceRange)) * basePriceMultiplier);
+        console.log(`🖼️ Generated image URL for ${name}: ${imageUrl}`);
 
         products.push({
           id: productId,
           name,
           categoryName: categoryNames[catIndex],
           price,
-          description: this.generateRichDescription(name, brand, category, productType),
+          description: this.generateRichDescription(name, brand, category, type),
           image: imageUrl,
           urlSlug,
           brand,
           sku: `FREAKY-${category.toUpperCase()}-${String(productId).padStart(3, '0')}`,
-          categoryId: catIndex + 1,
-          publishingDate: publishingDate
+          categoryId: catIndex + 1, // Maps to 1, 2, 3, 4
+          publishingDate: new Date(publishingDate)
         });
 
         productId++;
@@ -312,8 +265,8 @@ export class ProductService {
     });
 
     const shuffledProducts = this.shuffleArray(products);
-
     console.log(`✅ Generated ${shuffledProducts.length} dynamic products across ${categories.length} categories`);
+
     return shuffledProducts;
   }
 
@@ -350,5 +303,15 @@ export class ProductService {
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     return shuffled;
+  }
+
+  // Add cache to prevent infinite loops
+  private cachedMockProducts: Product[] | null = null;
+
+  private getCachedMockProducts(): Product[] {
+    if (this.cachedMockProducts === null) {
+      this.cachedMockProducts = this.generateLargeProductCatalog();
+    }
+    return this.cachedMockProducts;
   }
 }

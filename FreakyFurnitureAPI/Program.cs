@@ -122,11 +122,11 @@ using (var scope = app.Services.CreateScope())
         {
             var categories = new List<Category>
             {
-                new Category { Name = "Möbler", UrlSlug = "mobler", Image = "/images/categories/mobler.jpg" },
-                new Category { Name = "Förvaring", UrlSlug = "forvaring", Image = "/images/categories/forvaring.jpg" },
-                new Category { Name = "Belysning", UrlSlug = "belysning", Image = "/images/categories/belysning.jpg" },
-                new Category { Name = "Textilier", UrlSlug = "textilier", Image = "/images/categories/textilier.jpg" },
-                new Category { Name = "Dekoration", UrlSlug = "dekoration", Image = "/images/categories/dekoration.jpg" }
+                new Category { Name = "Möbler", UrlSlug = "mobler", Image = "/images/products/mobler/freaky-furniture-ai-cs-1.jpg" },
+                new Category { Name = "Förvaring", UrlSlug = "forvaring", Image = "/images/products/forvaring/freaky-furniture-ai-cs-3.jpg" },
+                new Category { Name = "Textilier", UrlSlug = "textilier", Image = "/images/products/textilier/freaky-furniture-ai-cs-5.jpg" },
+                new Category { Name = "Detaljer", UrlSlug = "detaljer", Image = "/images/products/detaljer/freaky-furniture-ai-cs-7.jpg" }
+                // Now using actual product images that exist
             };
             
             context.Categories.AddRange(categories);
