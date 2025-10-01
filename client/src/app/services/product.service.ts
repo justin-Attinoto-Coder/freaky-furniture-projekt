@@ -27,8 +27,9 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'https://localhost:7001/api/products';
-  private baseImageUrl = 'https://localhost:7001/images/products';
+  // Updated to match your running backend
+  private apiUrl = 'http://localhost:5186/api/products';
+  private baseImageUrl = 'http://localhost:5186/images/products';
 
   private httpOptions = {
     headers: new HttpHeaders({
@@ -80,7 +81,7 @@ export class ProductService {
         const mockProduct: Product = {
           id: Date.now(),
           name: productData.name,
-          categoryName: this.getCategoryStringFromId(productData.categoryId), // FIXED: category -> categoryName
+          categoryName: this.getCategoryStringFromId(productData.categoryId),
           price: productData.price,
           description: productData.description,
           image: productData.image,
@@ -88,7 +89,7 @@ export class ProductService {
           brand: productData.brand,
           sku: productData.sku,
           categoryId: productData.categoryId,
-          publishingDate: new Date() // FIXED: publishing_date -> publishingDate (and Date object instead of string)
+          publishingDate: new Date()
         };
 
         const mockResponse: ApiResponse<Product> = {
@@ -128,24 +129,23 @@ export class ProductService {
 
   getProductsByCategory(category: string): Observable<Product[]> {
     return this.getFurnitureItems().pipe(
-      map(products => products.filter(p => p.categoryName === category)) // FIXED: category -> categoryName
+      map(products => products.filter(p => p.categoryName === category))
     );
   }
 
-  // Fix: Handle optional brand property safely
   searchProducts(query: string): Observable<Product[]> {
     return this.getFurnitureItems().pipe(
       map(products => products.filter(p =>
         p.name.toLowerCase().includes(query.toLowerCase()) ||
         p.description.toLowerCase().includes(query.toLowerCase()) ||
-        (p.brand && p.brand.toLowerCase().includes(query.toLowerCase())) // Fixed: Check if brand exists
+        (p.brand && p.brand.toLowerCase().includes(query.toLowerCase()))
       ))
     );
   }
 
   private getCategoryStringFromId(categoryId: number): string {
     const categoryMap: { [key: number]: string } = {
-      1: 'Möbler',      // Changed to proper category names
+      1: 'Möbler',
       2: 'Förvaring',
       3: 'Dekoration',
       4: 'Textilier'
@@ -156,8 +156,8 @@ export class ProductService {
   private generateLargeProductCatalog(): Product[] {
     console.log('🎨 Generating large freaky furniture catalog...');
 
-    const categories = ['mobler', 'forvaring', 'dekoration', 'textilier']; // Updated category slugs
-    const categoryNames = ['Möbler', 'Förvaring', 'Dekoration', 'Textilier']; // Proper Swedish names
+    const categories = ['mobler', 'forvaring', 'dekoration', 'textilier'];
+    const categoryNames = ['Möbler', 'Förvaring', 'Dekoration', 'Textilier'];
 
     const productData = {
       mobler: {
@@ -181,7 +181,7 @@ export class ProductService {
         basePrice: 600,
         priceRange: 2800
       },
-      dekoration: { // Changed from 'detaljer'
+      dekoration: {
         types: [
           'Lamp', 'Mirror', 'Clock', 'Vase', 'Art Piece', 'Sculpture', 'Candle Holder',
           'Plant Pot', 'Frame', 'Wall Art', 'Table Lamp', 'Floor Lamp', 'Pendant Light',
@@ -192,7 +192,7 @@ export class ProductService {
         basePrice: 150,
         priceRange: 1500
       },
-      textilier: { // Changed from 'textil'
+      textilier: {
         types: [
           'Cushion', 'Throw', 'Blanket', 'Pillow', 'Rug', 'Curtain', 'Tapestry', 'Cover',
           'Bedding', 'Sheet Set', 'Duvet Cover', 'Pillowcase', 'Throw Pillow', 'Floor Pillow',
@@ -259,15 +259,15 @@ export class ProductService {
         products.push({
           id: productId,
           name,
-          categoryName: categoryNames[catIndex], // FIXED: category -> categoryName with proper Swedish name
+          categoryName: categoryNames[catIndex],
           price,
           description: this.generateRichDescription(name, brand, category, productType),
           image: imageUrl,
           urlSlug,
-          brand, // Always set brand - it's not optional in our generated data
+          brand,
           sku: `FREAKY-${category.toUpperCase()}-${String(productId).padStart(3, '0')}`,
           categoryId: catIndex + 1,
-          publishingDate: publishingDate // FIXED: publishing_date -> publishingDate (Date object)
+          publishingDate: publishingDate
         });
 
         productId++;
