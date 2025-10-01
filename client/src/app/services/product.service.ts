@@ -50,12 +50,14 @@ export class ProductService {
           console.log('✅ Products loaded from API:', response.products.length);
           console.log('📊 Total count:', response.totalCount);
 
-          // DEBUG: Log the first few products to see category names
-          console.log('🔍 First 3 products with categories:',
+          // DEBUG: Log the first few products to see category names AND image URLs
+          console.log('🔍 First 3 products with categories and images:',
             response.products.slice(0, 3).map((p: any) => ({
               name: p.name || p.Name,
               categoryName: p.categoryName || p.CategoryName,
-              categoryId: p.categoryId || p.CategoryId
+              categoryId: p.categoryId || p.CategoryId,
+              imageUrl: p.imageUrl || p.ImageUrl,  // Add image URL debugging
+              images: p.images || p.Images        // Check if images array exists
             }))
           );
 
@@ -64,6 +66,10 @@ export class ProductService {
             p.categoryName || p.CategoryName
           ))];
           console.log('🏷️ Unique categories in database:', uniqueCategories);
+
+          // DEBUG: Check image URLs
+          const imageUrls = response.products.slice(0, 3).map((p: any) => p.imageUrl || p.ImageUrl || 'NO_IMAGE');
+          console.log('🖼️ Sample image URLs:', imageUrls);
 
         } else if (Array.isArray(response)) {
           console.log('✅ Products loaded from API (direct array):', response.length);
@@ -93,18 +99,25 @@ export class ProductService {
 
   // Map API product to client product format
   private mapApiProductToClientProduct = (apiProduct: any): Product => {
+    console.log('🔄 Mapping API product:', {
+      name: apiProduct.name || apiProduct.Name,
+      imageUrl: apiProduct.imageUrl || apiProduct.ImageUrl,
+      images: apiProduct.images || apiProduct.Images
+    });
+
     return {
       id: apiProduct.id || apiProduct.Id,
       name: apiProduct.name || apiProduct.Name,
-      categoryName: apiProduct.categoryName || apiProduct.CategoryName || this.getCategoryNameFromId(apiProduct.categoryId || apiProduct.CategoryId),
-      price: apiProduct.price || apiProduct.Price,
       description: apiProduct.description || apiProduct.Description,
-      image: apiProduct.image || apiProduct.Image,
-      urlSlug: apiProduct.urlSlug || apiProduct.UrlSlug,
-      brand: apiProduct.brand || apiProduct.Brand,
-      sku: apiProduct.sku || apiProduct.Sku,
+      price: apiProduct.price || apiProduct.Price,
+      imageUrl: apiProduct.imageUrl || apiProduct.ImageUrl || this.getPlaceholderImage(),
       categoryId: apiProduct.categoryId || apiProduct.CategoryId,
-      publishingDate: new Date(apiProduct.publishingDate || apiProduct.PublishingDate)
+      categoryName: apiProduct.categoryName || apiProduct.CategoryName,
+      publishingDate: apiProduct.publishingDate || apiProduct.PublishingDate || new Date().toISOString(),
+      brand: apiProduct.brand || apiProduct.Brand || 'Freaky Furniture',
+      sku: apiProduct.sku || apiProduct.Sku || 'N/A',
+      urlSlug: apiProduct.urlSlug || apiProduct.UrlSlug || 'no-slug',
+      image: apiProduct.images || apiProduct.Images || []
     };
   }
 
@@ -411,5 +424,25 @@ export class ProductService {
 
   getProducts(): Observable<Product[]> {
     return this.getFurnitureItems(); // Use the updated method
+  }
+
+  // Add a method to generate better placeholder images
+  private getPlaceholderImage(): string {
+    // Instead of "No Image" SVG, use a furniture-themed placeholder
+    const furnitureIcons = ['🪑', '🛏️', '🛋️', '🪞', '🕯️', '🧸', '🖼️', '🌿'];
+    const randomIcon = furnitureIcons[Math.floor(Math.random() * furnitureIcons.length)];
+
+    // Create a more attractive placeholder
+    const svg = `
+      <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="#f8f9fa"/>
+        <rect x="10" y="10" width="280" height="180" fill="none" stroke="#dee2e6" stroke-width="2" stroke-dasharray="5,5"/>
+        <text x="50%" y="45%" font-family="Arial, sans-serif" font-size="48" text-anchor="middle" dy=".3em">${randomIcon}</text>
+        <text x="50%" y="65%" font-family="Arial, sans-serif" font-size="14" fill="#6c757d" text-anchor="middle" dy=".3em">Freaky Furniture</text>
+        <text x="50%" y="75%" font-family="Arial, sans-serif" font-size="12" fill="#adb5bd" text-anchor="middle" dy=".3em">Image Coming Soon</text>
+      </svg>
+    `;
+
+    return `data:image/svg+xml;base64,${btoa(svg)}`;
   }
 }
