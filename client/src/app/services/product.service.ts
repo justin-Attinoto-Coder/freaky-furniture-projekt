@@ -27,9 +27,9 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class ProductService {
-  // Updated to use your FreakyFurnitureAPI (check your backend port - might be different)
-  private apiUrl = 'https://localhost:5186/api/products'; // Update this to match your actual HTTPS port
-  private baseImageUrl = 'https://localhost:5186/images/products'; // Update this too
+  // Fix: Use HTTP instead of HTTPS for localhost development
+  private apiUrl = 'http://localhost:5186/api/products'; // Changed from https to http
+  private baseImageUrl = 'http://localhost:5186/images/products'; // Changed from https to http
 
   private httpOptions = {
     headers: new HttpHeaders({
@@ -48,12 +48,14 @@ export class ProductService {
         if (response && response.products) {
           console.log('✅ Products loaded from API:', response.products.length);
           console.log('📊 Total count:', response.totalCount);
+        } else if (Array.isArray(response)) {
+          console.log('✅ Products loaded from API (direct array):', response.length);
         } else {
           console.log('⚠️ API response structure:', response);
         }
       }),
       map(response => {
-        // Handle paginated API response format
+        // Handle paginated API response format (your ProductsController returns this format)
         if (response && response.products && Array.isArray(response.products)) {
           return response.products.map(this.mapApiProductToClientProduct);
         }
