@@ -61,6 +61,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loadProducts();
     this.setupFragmentScrolling();
     this.setupSearchResultsVisibility();
+
+    // DEBUG: Log all product urlSlugs
+    this.productService.getFurnitureItems().subscribe(products => {
+      console.log('🐛 DEBUG: All product urlSlugs:', products.map(p => p.urlSlug));
+      console.log('🐛 DEBUG: First few products:', products.slice(0, 5));
+    });
   }
 
   ngOnDestroy(): void {

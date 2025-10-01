@@ -27,72 +27,51 @@ export class ProductDetailsComponent implements OnInit {
       if (urlSlug) {
         console.log('🔍 Looking for product with urlSlug:', urlSlug);
 
-        // FIXED: Use your working local API instead of the remote one
-        this.http.get<any>(`http://localhost:5186/api/products/${urlSlug}`).subscribe({
-          next: (product) => {
-            this.product = product;
-            console.log('✅ Product loaded from local API:', product);
+        // FIXED: Skip individual product lookup since backend doesn't support it
+        // Get full catalog and search for the product
+        this.loadProductFromCatalog(urlSlug);
+      }
+    });
+  }
 
-            // FIXED: Also get similar products from local API
-            this.http.get<any>(`http://localhost:5186/api/products?categoryName=${product.categoryName}&pageSize=20`).subscribe({
-              next: (response) => {
-                console.log('📦 Similar products response:', response);
-                // Handle both paginated and direct array responses
-                const products = response.products || response;
-                this.similarItems = products
-                  .filter((item: any) => item.urlSlug !== urlSlug)
-                  .sort(() => 0.5 - Math.random())
-                  .slice(0, 8);
-                console.log('✅ Similar items loaded:', this.similarItems.length, this.similarItems);
-              },
-              error: (error: HttpErrorResponse) => {
-                console.error('❌ Error fetching similar items:', error);
-                this.similarItems = [];
-              }
-            });
+  private loadProductFromCatalog(urlSlug: string) {
+    this.http.get<any>(`http://localhost:5186/api/products?pageSize=1000`).subscribe({
+      next: (response) => {
+        console.log('📋 Full catalog response:', response);
+        const allProducts = response.products || response;
 
-            // FIXED: Get average rating from local API (if you have this endpoint)
-            // For now, let's use a mock rating since your backend might not have this endpoint
-            this.averageRating = Math.floor(Math.random() * 5) + 1; // Mock rating 1-5
-            console.log('⭐ Mock average rating:', this.averageRating);
-          },
-          error: (error: HttpErrorResponse) => {
-            console.error('❌ Error fetching product from local API:', error);
-            console.log('🔄 Trying to find product in ProductService catalog...');
-
-            // Fallback: Try to get all products and find the one with matching urlSlug
-            this.http.get<any>(`http://localhost:5186/api/products?pageSize=1000`).subscribe({
-              next: (response) => {
-                console.log('📋 Full catalog response:', response);
-                const allProducts = response.products || response;
-                this.product = allProducts.find((p: any) => p.urlSlug === urlSlug);
-
-                if (this.product) {
-                  console.log('✅ Product found in catalog:', this.product);
-
-                  // Get similar products from same category
-                  this.similarItems = allProducts
-                    .filter((item: any) =>
-                      item.categoryName === this.product.categoryName &&
-                      item.urlSlug !== urlSlug
-                    )
-                    .sort(() => 0.5 - Math.random())
-                    .slice(0, 8);
-
-                  this.averageRating = Math.floor(Math.random() * 5) + 1; // Mock rating
-                  console.log('✅ Similar items from catalog:', this.similarItems.length);
-                } else {
-                  console.error('❌ Product not found in catalog either');
-                  this.product = null;
-                }
-              },
-              error: (catalogError: HttpErrorResponse) => {
-                console.error('❌ Error loading full catalog:', catalogError);
-                this.product = null;
-              }
-            });
-          }
+        // FIXED: Search for product with matching urlSlug
+        this.product = allProducts.find((p: any) => {
+          console.log(`🔍 Checking product: "${p.urlSlug}" vs "${urlSlug}"`);
+          return p.urlSlug === urlSlug;
         });
+
+        if (this.product) {
+          console.log('✅ Product found in catalog:', this.product);
+
+          // Get similar products from same category
+          this.similarItems = allProducts
+            .filter((item: any) =>
+              item.categoryName === this.product.categoryName &&
+              item.urlSlug !== urlSlug
+            )
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 8);
+
+          // Mock rating for now
+          this.averageRating = Math.floor(Math.random() * 5) + 1;
+
+          console.log('✅ Similar items found:', this.similarItems.length);
+          console.log('⭐ Mock average rating:', this.averageRating);
+        } else {
+          console.error('❌ Product not found in catalog');
+          console.log('📝 Available urlSlugs in catalog:', allProducts.map((p: any) => p.urlSlug));
+          this.product = null;
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('❌ Error loading catalog:', error);
+        this.product = null;
       }
     });
   }
