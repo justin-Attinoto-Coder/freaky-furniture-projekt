@@ -122,11 +122,11 @@ using (var scope = app.Services.CreateScope())
         {
             var categories = new List<Category>
             {
-                new Category { Name = "Möbler", UrlSlug = "mobler", Image = "/images/products/mobler/freaky-furniture-ai-cs-1.jpg" },
-                new Category { Name = "Förvaring", UrlSlug = "forvaring", Image = "/images/products/forvaring/freaky-furniture-ai-cs-3.jpg" },
-                new Category { Name = "Textilier", UrlSlug = "textilier", Image = "/images/products/textilier/freaky-furniture-ai-cs-5.jpg" },
+                new Category { Name = "Mobler", UrlSlug = "mobler", Image = "/images/products/mobler/freaky-furniture-ai-cs-1.jpg" },
+                new Category { Name = "Forvaring", UrlSlug = "forvaring", Image = "/images/products/forvaring/freaky-furniture-ai-cs-3.jpg" },
+                new Category { Name = "Textil", UrlSlug = "textil", Image = "/images/products/textil/freaky-furniture-ai-cs-5.jpg" },
                 new Category { Name = "Detaljer", UrlSlug = "detaljer", Image = "/images/products/detaljer/freaky-furniture-ai-cs-7.jpg" }
-                // Now using actual product images that exist
+                // Updated category names without Swedish characters
             };
             
             context.Categories.AddRange(categories);
@@ -537,7 +537,7 @@ using (var scope = app.Services.CreateScope())
                     Specifications = $"Material: {materials[10]}, Color: {colors[random.Next(colors.Length)]}, Assembly required: Yes, Warranty: 3 years, Made in: {countries[random.Next(countries.Length)]}, Features: 6 drawers, Soft-close mechanism, Anti-tip kit included"
                 },
 
-                // Textilier (Textiles) - Category ID 4
+                // Textilier (Textiles) - Category ID 3
                 new Product
                 {
                     Name = "Psychedelic Throw Pillows",
@@ -546,7 +546,7 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/textil/freaky-furniture-ai-cs-1.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "psychedelic-throw-pillows",
-                    CategoryId = 4,
+                    CategoryId = 3, // Changed from 4 to 3
                     Sku = "TEX001",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "45x45 cm each",
@@ -563,7 +563,7 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/textil/freaky-furniture-ai-cs-2.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "cosmic-area-rug",
-                    CategoryId = 4,
+                    CategoryId = 3,
                     Sku = "TEX002",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "200x300 cm",
@@ -580,7 +580,7 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/textil/freaky-furniture-ai-cs-3.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "surreal-curtain-set",
-                    CategoryId = 4,
+                    CategoryId = 3,
                     Sku = "TEX003",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "140x250 cm each",
@@ -597,7 +597,7 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/textil/freaky-furniture-ai-cs-4.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "abstract-tapestry",
-                    CategoryId = 4,
+                    CategoryId = 3,
                     Sku = "TEX004",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "150x200 cm",
@@ -614,7 +614,7 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/textil/freaky-furniture-ai-cs-5.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "whimsical-bed-sheets",
-                    CategoryId = 4,
+                    CategoryId = 3,
                     Sku = "TEX005",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "160x200 cm",
@@ -631,7 +631,7 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/textil/freaky-furniture-ai-cs-6.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "trippy-table-runner",
-                    CategoryId = 4,
+                    CategoryId = 3,
                     Sku = "TEX006",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "35x150 cm",
@@ -648,7 +648,7 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/textil/freaky-furniture-ai-cs-7.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "fantasy-blanket-throw",
-                    CategoryId = 4,
+                    CategoryId = 3,
                     Sku = "TEX007",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "130x170 cm",
@@ -665,7 +665,7 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/textil/freaky-furniture-ai-cs-8.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "artistic-floor-cushions",
-                    CategoryId = 4,
+                    CategoryId = 3,
                     Sku = "TEX008",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "40x40x10 cm each",
@@ -682,7 +682,7 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/textil/freaky-furniture-ai-cs-9.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "mystical-window-valance",
-                    CategoryId = 4,
+                    CategoryId = 3,
                     Sku = "TEX009",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "140x30 cm",
@@ -699,7 +699,7 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/textil/freaky-furniture-ai-cs-10.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "dreamscape-duvet-cover",
-                    CategoryId = 4,
+                    CategoryId = 3,
                     Sku = "TEX010",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "220x240 cm",
@@ -716,7 +716,7 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/textil/freaky-furniture-ai-cs-11.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "surreal-bath-towel-set",
-                    CategoryId = 4,
+                    CategoryId = 3,
                     Sku = "TEX011",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "70x140 cm each",
@@ -726,7 +726,7 @@ using (var scope = app.Services.CreateScope())
                     Specifications = $"Material: Cotton, Color: {colors[random.Next(colors.Length)]}, Set includes: 2 towels, Care: Machine washable, Features: High absorbency, Quick drying"
                 },
 
-                // Dekoration (Decoration) - Category ID 5 - Using detaljer folder
+                // Dekoration (Decoration) - Category ID 4 - Using detaljer folder
                 new Product
                 {
                     Name = "Psychedelic Wall Art",
@@ -735,8 +735,8 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/detaljer/freaky-furniture-ai-cs-1.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "psychedelic-wall-art",
-                    CategoryId = 5,
-                    Sku = "DEK001",
+                    CategoryId = 4, // Changed from 5 to 4
+                    Sku = "DET001", // Changed from DEK001 to DET001
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "80x60 cm",
                     Dimensions = "Width: 80cm, Height: 60cm, Depth: 3cm, Frame thickness: 2cm",
@@ -752,8 +752,8 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/detaljer/freaky-furniture-ai-cs-2.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "cosmic-mirror-set",
-                    CategoryId = 5,
-                    Sku = "DEK002",
+                    CategoryId = 4, // Changed from 5 to 4
+                    Sku = "DET002", // Changed from DEK002 to DET002
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "30x30 cm each",
                     Dimensions = "Width: 30cm, Height: 30cm, Depth: 2cm",
@@ -769,8 +769,8 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/detaljer/freaky-furniture-ai-cs-3.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "abstract-sculpture",
-                    CategoryId = 5,
-                    Sku = "DEK003",
+                    CategoryId = 4,
+                    Sku = "DET003",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "25x25x50 cm",
                     Dimensions = "Width: 25cm, Depth: 25cm, Height: 50cm",
@@ -786,8 +786,8 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/detaljer/freaky-furniture-ai-cs-4.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "whimsical-vase-collection",
-                    CategoryId = 5,
-                    Sku = "DEK004",
+                    CategoryId = 4,
+                    Sku = "DET004",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "15-30 cm height",
                     Dimensions = "Width: 15-30cm, Height: 15-30cm",
@@ -803,8 +803,8 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/detaljer/freaky-furniture-ai-cs-5.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "surreal-clock-art",
-                    CategoryId = 5,
-                    Sku = "DEK005",
+                    CategoryId = 4,
+                    Sku = "DET005",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "40x40 cm",
                     Dimensions = "Width: 40cm, Height: 40cm, Depth: 5cm",
@@ -820,8 +820,8 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/detaljer/freaky-furniture-ai-cs-6.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "fantasy-candle-holders",
-                    CategoryId = 5,
-                    Sku = "DEK006",
+                    CategoryId = 4,
+                    Sku = "DET006",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "10-20 cm height",
                     Dimensions = "Width: 10-20cm, Height: 10-20cm",
@@ -837,8 +837,8 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/detaljer/freaky-furniture-ai-cs-7.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "trippy-photo-frames",
-                    CategoryId = 5,
-                    Sku = "DEK007",
+                    CategoryId = 4,
+                    Sku = "DET007",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "10x15 cm each",
                     Dimensions = "Width: 10cm, Height: 15cm, Depth: 2cm",
@@ -854,8 +854,8 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/detaljer/freaky-furniture-ai-cs-8.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "artistic-plant-stands",
-                    CategoryId = 5,
-                    Sku = "DEK008",
+                    CategoryId = 4,
+                    Sku = "DET008",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "30-50 cm height",
                     Dimensions = "Width: 30-50cm, Height: 30-50cm",
@@ -871,8 +871,8 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/detaljer/freaky-furniture-ai-cs-9.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "mystical-wind-chimes",
-                    CategoryId = 5,
-                    Sku = "DEK009",
+                    CategoryId = 4,
+                    Sku = "DET009",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "60 cm length",
                     Dimensions = "Width: 10cm, Height: 60cm",
@@ -888,8 +888,8 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/detaljer/freaky-furniture-ai-cs-10.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "dreamlike-bookends",
-                    CategoryId = 5,
-                    Sku = "DEK010",
+                    CategoryId = 4,
+                    Sku = "DET010",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "15x20 cm each",
                     Dimensions = "Width: 15cm, Height: 20cm, Depth: 10cm",
@@ -905,8 +905,8 @@ using (var scope = app.Services.CreateScope())
                     Image = "/images/products/detaljer/freaky-furniture-ai-cs-11.jpg",
                     Brand = "Freaky Furniture",
                     UrlSlug = "psychedelic-lamp-base",
-                    CategoryId = 5,
-                    Sku = "DEK011",
+                    CategoryId = 4,
+                    Sku = "DET011",
                     PublishingDate = GetRandomPublishingDate(),
                     Size = "20x20x30 cm",
                     Dimensions = "Width: 20cm, Height: 30cm, Base diameter: 15cm",
