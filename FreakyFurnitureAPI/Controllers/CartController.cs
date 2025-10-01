@@ -23,7 +23,7 @@ namespace FreakyFurnitureAPI.Controllers
         // ADD THIS: GET /api/cart (what your Angular service is calling)
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetCartItems()
+        public IActionResult GetCartItems()
         {
             try
             {
