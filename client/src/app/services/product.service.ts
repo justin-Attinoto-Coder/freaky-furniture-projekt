@@ -27,9 +27,9 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class ProductService {
-  // Updated to match your running backend
-  private apiUrl = 'http://localhost:5186/api/products';
-  private baseImageUrl = 'http://localhost:5186/images/products';
+  // Updated to use your FreakyFurnitureAPI (check your backend port - might be different)
+  private apiUrl = 'https://localhost:7186/api/products'; // Update this to match your actual HTTPS port
+  private baseImageUrl = 'https://localhost:7186/images/products'; // Update this too
 
   private httpOptions = {
     headers: new HttpHeaders({
@@ -55,14 +55,14 @@ export class ProductService {
       map(response => {
         // Handle different API response formats
         if (Array.isArray(response)) {
-          return response;
+          return response.map(this.mapApiProductToClientProduct);
         }
         // If the API returns an object with a data property containing the array
         if (response && typeof response === 'object' && 'data' in response) {
           const data = (response as any).data;
           if (Array.isArray(data)) {
             console.log('✅ Extracted products from response.data:', data.length);
-            return data;
+            return data.map(this.mapApiProductToClientProduct);
           }
         }
         // If response has other structure, log and fallback
@@ -76,12 +76,30 @@ export class ProductService {
     );
   }
 
+  // Map API product to client product format
+  private mapApiProductToClientProduct = (apiProduct: any): Product => {
+    return {
+      id: apiProduct.id,
+      name: apiProduct.name,
+      categoryName: this.getCategoryNameFromId(apiProduct.categoryId),
+      price: apiProduct.price,
+      description: apiProduct.description,
+      image: apiProduct.image,
+      urlSlug: apiProduct.urlSlug,
+      brand: apiProduct.brand,
+      sku: apiProduct.sku,
+      categoryId: apiProduct.categoryId,
+      publishingDate: new Date(apiProduct.publishingDate)
+    };
+  }
+
   getProducts(): Observable<Product[]> {
     return this.getFurnitureItems();
   }
 
   getProductById(id: number): Observable<Product | null> {
     return this.http.get<Product>(`${this.apiUrl}/${id}`).pipe(
+      map(apiProduct => this.mapApiProductToClientProduct(apiProduct)),
       tap(product => {
         console.log('✅ Product loaded:', product?.name || 'Unknown');
       }),
@@ -159,7 +177,15 @@ export class ProductService {
           console.error('❌ Products is not an array:', products);
           return [];
         }
-        return products.filter(p => p.categoryName === category);
+        // Map category names to match your database
+        const categoryMap: { [key: string]: string } = {
+          'mobler': 'Mobler',
+          'forvaring': 'Forvaring',
+          'textil': 'Textil',
+          'detaljer': 'Detaljer'
+        };
+        const mappedCategory = categoryMap[category.toLowerCase()] || category;
+        return products.filter(p => p.categoryName === mappedCategory);
       })
     );
   }
@@ -182,20 +208,24 @@ export class ProductService {
 
   private getCategoryStringFromId(categoryId: number): string {
     const categoryMap: { [key: number]: string } = {
-      1: 'Möbler',
-      2: 'Förvaring',
-      3: 'Textilier',
-      4: 'Detaljer'  // Added the missing category
+      1: 'Mobler',     // Updated to match your database
+      2: 'Forvaring',  // Updated to match your database
+      3: 'Textil',     // Updated to match your database
+      4: 'Detaljer'    // Updated to match your database
     };
-    return categoryMap[categoryId] || 'Möbler';
+    return categoryMap[categoryId] || 'Mobler';
+  }
+
+  private getCategoryNameFromId(categoryId: number): string {
+    return this.getCategoryStringFromId(categoryId);
   }
 
   private generateLargeProductCatalog(): Product[] {
     console.log('🎨 Generating large freaky furniture catalog...');
 
-    // Updated to match your actual categories
-    const categories = ['mobler', 'forvaring', 'textilier', 'detaljer'];
-    const categoryNames = ['Möbler', 'Förvaring', 'Textilier', 'Detaljer'];
+    // Updated to match your actual database categories
+    const categories = ['mobler', 'forvaring', 'textil', 'detaljer']; // Fixed 'textilier' to 'textil'
+    const categoryNames = ['Mobler', 'Forvaring', 'Textil', 'Detaljer']; // Updated to match database
 
     const productData = {
       mobler: {
@@ -208,7 +238,7 @@ export class ProductService {
         brands: ['IKEA', 'Elfa', 'String', 'Nomess', 'Hay'],
         adjectives: ['Praktisk', 'Snygg', 'Funktionell', 'Diskret', 'Flexibel']
       },
-      textilier: {
+      textil: { // Fixed from 'textilier' to 'textil'
         types: ['Kudde', 'Pläd', 'Matta', 'Gardin', 'Överkast', 'Handduk'],
         brands: ['H&M Home', 'Zara Home', 'Linum', 'Lexington', 'Gant Home'],
         adjectives: ['Mjuk', 'Varm', 'Lyxig', 'Bekväm', 'Stilfull']

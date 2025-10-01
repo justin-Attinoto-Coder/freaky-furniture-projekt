@@ -537,7 +537,7 @@ using (var scope = app.Services.CreateScope())
                     Specifications = $"Material: {materials[10]}, Color: {colors[random.Next(colors.Length)]}, Assembly required: Yes, Warranty: 3 years, Made in: {countries[random.Next(countries.Length)]}, Features: 6 drawers, Soft-close mechanism, Anti-tip kit included"
                 },
 
-                // Textilier (Textiles) - Category ID 3
+                // Textil (Textiles) - Category ID 3
                 new Product
                 {
                     Name = "Psychedelic Throw Pillows",
