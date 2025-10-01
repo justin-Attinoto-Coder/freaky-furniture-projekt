@@ -40,7 +40,8 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getFurnitureItems(): Observable<Product[]> {
-    return this.http.get<any>(this.apiUrl).pipe(
+    // Request ALL products by setting a large pageSize
+    return this.http.get<any>(`${this.apiUrl}?pageSize=1000`).pipe(
       tap(response => {
         console.log('🔍 Raw API response:', response);
         console.log('🔍 Response type:', typeof response);
@@ -55,7 +56,7 @@ export class ProductService {
         }
       }),
       map(response => {
-        // Handle paginated API response format (your ProductsController returns this format)
+        // Handle paginated API response format
         if (response && response.products && Array.isArray(response.products)) {
           return response.products.map(this.mapApiProductToClientProduct);
         }
@@ -350,6 +351,7 @@ export class ProductService {
     return this.http.get<any>(`${this.apiUrl}?pageSize=1000`).pipe(
       map(response => {
         if (response && response.products && Array.isArray(response.products)) {
+          console.log(`✅ Loaded all ${response.products.length} products from API`);
           return response.products.map(this.mapApiProductToClientProduct);
         }
         return [];
@@ -362,6 +364,6 @@ export class ProductService {
   }
 
   getProducts(): Observable<Product[]> {
-    return this.getAllProducts(); // Use the new method that handles pagination
+    return this.getFurnitureItems(); // Use the updated method
   }
 }

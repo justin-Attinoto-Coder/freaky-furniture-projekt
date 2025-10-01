@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using FreakyFurnitureAPI.Data;
 using FreakyFurnitureAPI.DTOs;
@@ -11,19 +12,38 @@ namespace FreakyFurnitureAPI.Controllers
     public class CartController : ControllerBase
     {
         private readonly FurnitureDbContext _context;
-        private readonly ILogger<CartController> _logger; // Add this line
+        private readonly ILogger<CartController> _logger;
 
-        public CartController(FurnitureDbContext context, ILogger<CartController> logger) // Add logger parameter
+        public CartController(FurnitureDbContext context, ILogger<CartController> logger)
         {
             _context = context;
-            _logger = logger; // Add this line
+            _logger = logger;
         }
 
-        // GET /api/cart/{userId}
+        // ADD THIS: GET /api/cart (what your Angular service is calling)
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCartItems()
+        {
+            try
+            {
+                // For now, return empty cart - you can implement proper cart logic later
+                var cartItems = new List<object>();
+                
+                _logger.LogInformation("Cart items retrieved successfully");
+                return Ok(cartItems);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving cart items");
+                return StatusCode(500, new { error = "Failed to retrieve cart items" });
+            }
+        }
+
+        // KEEP THIS: GET /api/cart/{userId}
         [HttpGet("{userId}")]
         public IActionResult GetCartItems(int userId)
         {
-            // If no database calls, remove async/Task
             return Ok(new { message = "Cart items retrieved" });
         }
 
@@ -31,7 +51,6 @@ namespace FreakyFurnitureAPI.Controllers
         [HttpPost]
         public IActionResult AddToCart([FromBody] object cartItem)
         {
-            // If no database calls, remove async/Task
             return Ok(new { message = "Item added to cart" });
         }
 
@@ -39,7 +58,6 @@ namespace FreakyFurnitureAPI.Controllers
         [HttpPut("{productId}")]
         public IActionResult UpdateCartItem(int productId, UpdateCartItemDto updateCartItemDto)
         {
-            // For now, return success response until cart functionality is implemented
             return NoContent();
         }
 
@@ -47,7 +65,6 @@ namespace FreakyFurnitureAPI.Controllers
         [HttpDelete("{productId}")]
         public IActionResult DeleteCartItem(int productId)
         {
-            // For now, return success response until cart functionality is implemented
             return NoContent();
         }
 
@@ -62,7 +79,7 @@ namespace FreakyFurnitureAPI.Controllers
                 {
                     _context.Cart.RemoveRange(cartItems);
                     await _context.SaveChangesAsync();
-                    _logger.LogInformation($"Cleared {cartItems.Count} items from cart"); // Now this will work
+                    _logger.LogInformation($"Cleared {cartItems.Count} items from cart");
                 }
 
                 return Ok(new { 
@@ -72,7 +89,7 @@ namespace FreakyFurnitureAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error clearing cart"); // Now this will work
+                _logger.LogError(ex, "Error clearing cart");
                 return StatusCode(500, new { error = "Failed to clear cart" });
             }
         }
