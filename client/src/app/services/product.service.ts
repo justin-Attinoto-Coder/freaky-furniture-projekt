@@ -28,8 +28,8 @@ export interface ApiResponse<T> {
 })
 export class ProductService {
   // Updated to use your FreakyFurnitureAPI (check your backend port - might be different)
-  private apiUrl = 'https://localhost:7186/api/products'; // Update this to match your actual HTTPS port
-  private baseImageUrl = 'https://localhost:7186/images/products'; // Update this too
+  private apiUrl = 'https://localhost:5186/api/products'; // Update this to match your actual HTTPS port
+  private baseImageUrl = 'https://localhost:5186/images/products'; // Update this too
 
   private httpOptions = {
     headers: new HttpHeaders({
@@ -40,30 +40,26 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getFurnitureItems(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiUrl).pipe(
+    return this.http.get<any>(this.apiUrl).pipe(
       tap(response => {
         console.log('🔍 Raw API response:', response);
         console.log('🔍 Response type:', typeof response);
-        console.log('🔍 Is array:', Array.isArray(response));
 
-        if (Array.isArray(response)) {
-          console.log('✅ Products loaded from API:', response.length);
+        if (response && response.products) {
+          console.log('✅ Products loaded from API:', response.products.length);
+          console.log('📊 Total count:', response.totalCount);
         } else {
-          console.log('⚠️ API response is not an array, structure:', response);
+          console.log('⚠️ API response structure:', response);
         }
       }),
       map(response => {
-        // Handle different API response formats
+        // Handle paginated API response format
+        if (response && response.products && Array.isArray(response.products)) {
+          return response.products.map(this.mapApiProductToClientProduct);
+        }
+        // Handle direct array response (fallback)
         if (Array.isArray(response)) {
           return response.map(this.mapApiProductToClientProduct);
-        }
-        // If the API returns an object with a data property containing the array
-        if (response && typeof response === 'object' && 'data' in response) {
-          const data = (response as any).data;
-          if (Array.isArray(data)) {
-            console.log('✅ Extracted products from response.data:', data.length);
-            return data.map(this.mapApiProductToClientProduct);
-          }
         }
         // If response has other structure, log and fallback
         console.warn('⚠️ Unexpected API response format, using mock data');
@@ -79,27 +75,28 @@ export class ProductService {
   // Map API product to client product format
   private mapApiProductToClientProduct = (apiProduct: any): Product => {
     return {
-      id: apiProduct.id,
-      name: apiProduct.name,
-      categoryName: this.getCategoryNameFromId(apiProduct.categoryId),
-      price: apiProduct.price,
-      description: apiProduct.description,
-      image: apiProduct.image,
-      urlSlug: apiProduct.urlSlug,
-      brand: apiProduct.brand,
-      sku: apiProduct.sku,
-      categoryId: apiProduct.categoryId,
-      publishingDate: new Date(apiProduct.publishingDate)
+      id: apiProduct.id || apiProduct.Id,
+      name: apiProduct.name || apiProduct.Name,
+      categoryName: apiProduct.categoryName || apiProduct.CategoryName || this.getCategoryNameFromId(apiProduct.categoryId || apiProduct.CategoryId),
+      price: apiProduct.price || apiProduct.Price,
+      description: apiProduct.description || apiProduct.Description,
+      image: apiProduct.image || apiProduct.Image,
+      urlSlug: apiProduct.urlSlug || apiProduct.UrlSlug,
+      brand: apiProduct.brand || apiProduct.Brand,
+      sku: apiProduct.sku || apiProduct.Sku,
+      categoryId: apiProduct.categoryId || apiProduct.CategoryId,
+      publishingDate: new Date(apiProduct.publishingDate || apiProduct.PublishingDate)
     };
   }
 
-  getProducts(): Observable<Product[]> {
-    return this.getFurnitureItems();
-  }
-
   getProductById(id: number): Observable<Product | null> {
-    return this.http.get<Product>(`${this.apiUrl}/${id}`).pipe(
-      map(apiProduct => this.mapApiProductToClientProduct(apiProduct)),
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
+      map(apiProduct => {
+        if (apiProduct) {
+          return this.mapApiProductToClientProduct(apiProduct);
+        }
+        return null;
+      }),
       tap(product => {
         console.log('✅ Product loaded:', product?.name || 'Unknown');
       }),
@@ -343,5 +340,26 @@ export class ProductService {
       this.cachedMockProducts = this.generateLargeProductCatalog();
     }
     return this.cachedMockProducts;
+  }
+
+  // Add a method to get all products without pagination
+  getAllProducts(): Observable<Product[]> {
+    // Request a large page size to get all products
+    return this.http.get<any>(`${this.apiUrl}?pageSize=1000`).pipe(
+      map(response => {
+        if (response && response.products && Array.isArray(response.products)) {
+          return response.products.map(this.mapApiProductToClientProduct);
+        }
+        return [];
+      }),
+      catchError(error => {
+        console.warn('⚠️ API not available for getAllProducts:', error.message);
+        return of(this.getCachedMockProducts());
+      })
+    );
+  }
+
+  getProducts(): Observable<Product[]> {
+    return this.getAllProducts(); // Use the new method that handles pagination
   }
 }

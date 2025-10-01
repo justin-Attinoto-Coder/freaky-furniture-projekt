@@ -264,5 +264,73 @@ namespace FreakyFurnitureAPI.Controllers
 
             return NoContent();
         }
+
+        // Add this new endpoint for getting all products (useful for frontend)
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllProducts(
+            [FromQuery] string? query = null,
+            [FromQuery] string? category = null)
+        {
+            try
+            {
+                var productsQuery = _context.Products
+                    .Include(p => p.Category)
+                    .AsQueryable();
+
+                // Enhanced search - include all the detailed fields
+                if (!string.IsNullOrEmpty(query))
+                {
+                    var searchTerm = query.ToLower();
+                    productsQuery = productsQuery.Where(p =>
+                        p.Name.ToLower().Contains(searchTerm) ||
+                        (p.Description != null && p.Description.ToLower().Contains(searchTerm)) ||
+                        (p.Brand != null && p.Brand.ToLower().Contains(searchTerm)) ||
+                        (p.Material != null && p.Material.ToLower().Contains(searchTerm)) ||
+                        (p.Specifications != null && p.Specifications.ToLower().Contains(searchTerm)) ||
+                        (p.Sku != null && p.Sku.ToLower().Contains(searchTerm))
+                    );
+                }
+
+                // Category filtering
+                if (!string.IsNullOrEmpty(category))
+                {
+                    productsQuery = productsQuery.Where(p => 
+                        p.Category != null && 
+                        (p.Category.UrlSlug != null && p.Category.UrlSlug.ToLower() == category.ToLower() || 
+                         p.Category.Name.ToLower() == category.ToLower())
+                    );
+                }
+
+                var products = await productsQuery
+                    .Select(p => new
+                    {
+                        id = p.Id,
+                        name = p.Name,
+                        description = p.Description,
+                        price = p.Price,
+                        image = p.Image,
+                        brand = p.Brand,
+                        urlSlug = p.UrlSlug,
+                        sku = p.Sku,
+                        categoryId = p.CategoryId,
+                        categoryName = p.Category != null ? p.Category.Name : null,
+                        categorySlug = p.Category != null ? p.Category.UrlSlug : null,
+                        size = p.Size,
+                        dimensions = p.Dimensions,
+                        weight = p.Weight,
+                        material = p.Material,
+                        specifications = p.Specifications,
+                        publishingDate = p.PublishingDate
+                    })
+                    .ToListAsync();
+
+                return Ok(products); // Return direct array, not paginated response
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving all products");
+                return StatusCode(500, new { error = "Failed to retrieve products" });
+            }
+        }
     }
 }
