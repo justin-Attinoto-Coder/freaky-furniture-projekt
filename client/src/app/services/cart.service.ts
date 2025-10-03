@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Router } from '@angular/router'; // Add this import
 
 export interface CartItem {
   id?: number;
@@ -41,19 +40,22 @@ export class CartService {
       next: (items) => {
         const normalizedItems = items.map(item => ({
           ...item,
-          imageURL: item.imageURL.replace(/\\/g, '/').replace(/^\/+/, '/')
+          imageURL: item.imageURL?.replace(/\\/g, '/').replace(/^\/+/, '/') || '/images/placeholder.jpg'
         }));
         console.log('Loaded cart items:', normalizedItems);
         this.cartItemsSubject.next(normalizedItems);
       },
-      error: (error: HttpErrorResponse) => console.error('Error loading cart items:', error)
+      error: (error: HttpErrorResponse) => {
+        console.error('Error loading cart items:', error);
+        this.cartItemsSubject.next([]);
+      }
     });
   }
 
-  addCartItem(item: CartItem): Observable<{ id: number }> {
-    return this.http.post<{ id: number }>(`${this.apiUrl}/cart`, {
+  addCartItem(item: CartItem): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/cart`, {
       ...item,
-      imageURL: item.imageURL.replace(/\\/g, '/').replace(/^\/+/, '/')
+      imageURL: item.imageURL?.replace(/\\/g, '/').replace(/^\/+/, '/') || '/images/placeholder.jpg'
     }).pipe(
       tap((response) => {
         console.log('Added cart item:', item, 'Response:', response);
@@ -116,22 +118,4 @@ export class CartService {
       })
     );
   }
-}
-
-export class FocusProductInformationComponent implements OnInit, OnChanges {
-  // ...existing properties...
-
-  constructor(
-    private cartService: CartService,
-    private router: Router // Add this
-  ) { }
-
-  // ...existing methods...
-
-  goToCart(): void {
-    console.log('🛒 Navigating to cart page');
-    this.router.navigate(['/cart']);
-  }
-
-  // ...rest of existing code...
 }
