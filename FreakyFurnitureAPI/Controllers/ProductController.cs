@@ -332,5 +332,20 @@ namespace FreakyFurnitureAPI.Controllers
                 return StatusCode(500, new { error = "Failed to retrieve products" });
             }
         }
+
+        // GET /api/products/slug/{urlSlug}
+        [HttpGet("slug/{urlSlug}")]
+        public async Task<ActionResult<Product>> GetProductByUrlSlug(string urlSlug)
+        {
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.UrlSlug == urlSlug);
+            
+            if (product == null)
+            {
+                return NotFound($"Product with URL slug '{urlSlug}' not found");
+            }
+            
+            return Ok(product);
+        }
     }
 }

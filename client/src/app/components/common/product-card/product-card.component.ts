@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -10,7 +10,8 @@ import { Product } from '../../../models/product';
   standalone: true,
   imports: [CommonModule, RouterModule, FaIconComponent],
   templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.css']
+  styleUrls: ['./product-card.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush // Add this line
 })
 export class ProductCardComponent {
   @Input({ required: true }) item!: Product;
@@ -19,59 +20,60 @@ export class ProductCardComponent {
   isFavorite = false;
   faHeart = faSolidHeart;
   faRegHeart = faRegularHeart;
-  isImageLoaded = false; // Added this missing property
+  isImageLoaded = false;
 
-  // FIXED: Use the same working imageBaseUrl as focus-product-card
+  // Cache the computed URL to prevent re-computation
+  private _imageUrl: string | null = null;
+
   readonly imageBaseUrl = 'http://localhost:5186';
 
   getImageUrl(): string {
+    // Cache the result to prevent repeated calls
+    if (this._imageUrl) {
+      return this._imageUrl;
+    }
+
     const imagePath = this.item.image?.trim();
-    console.log(`ProductCard: Raw image path for ${this.item.name}: ${imagePath || 'null/undefined'}`);
+    console.log(`ProductCard: Computing image URL for ${this.item.name}`);
 
     if (imagePath) {
       let normalizedPath = imagePath;
 
-      // Handle remote URLs - convert to local (same logic as focus-product-card)
       if (imagePath.startsWith('http://localhost:8000') || imagePath.startsWith('https://freaky-angular-furniture-backend.onrender.com')) {
         const pathMatch = imagePath.match(/\/(images\/.+)/);
         normalizedPath = pathMatch ? pathMatch[1] : imagePath;
       }
 
-      // Handle relative paths
       if (!normalizedPath.startsWith('http') && !normalizedPath.startsWith('/')) {
         normalizedPath = `/images/${normalizedPath.replace(/^images\//, '')}`;
       } else if (!normalizedPath.startsWith('http') && normalizedPath.startsWith('/')) {
         normalizedPath = normalizedPath.replace(/^\/+images\//, '/images/');
       }
 
-      const url = normalizedPath.startsWith('http') ? normalizedPath : `${this.imageBaseUrl}${normalizedPath}`;
-      console.log(`ProductCard: Normalized path for ${this.item.name}: ${normalizedPath}`);
-      console.log(`ProductCard: Computed URL for ${this.item.name}: ${url}`);
-      return url;
+      this._imageUrl = normalizedPath.startsWith('http') ? normalizedPath : `${this.imageBaseUrl}${normalizedPath}`;
+      return this._imageUrl;
     }
 
-    console.log(`ProductCard: No image for ${this.item.name}, using fallback`);
-    return `${this.imageBaseUrl}/images/placeholder.jpg`;
+    this._imageUrl = `${this.imageBaseUrl}/images/placeholder.jpg`;
+    return this._imageUrl;
   }
 
-  // Added missing method for image load handling
   handleImageLoad(): void {
     this.isImageLoaded = true;
-    console.log(`ProductCard: Image loaded for ${this.item.name}, isImageLoaded: ${this.isImageLoaded}`);
+    console.log(`ProductCard: Image loaded for ${this.item.name}`);
   }
 
   handleImageError(event: Event): void {
-    console.log(`ProductCard: Image failed to load for ${this.item.name}`);
+    console.log(`ProductCard: Image failed for ${this.item.name}`);
     const imgElement = event.target as HTMLImageElement;
     imgElement.src = `${this.imageBaseUrl}/images/placeholder.jpg`;
     imgElement.onerror = null;
-    this.isImageLoaded = true; // Set to true so the placeholder shows
+    this.isImageLoaded = true;
   }
 
   toggleFavorite(event: Event): void {
     event.preventDefault();
-    event.stopPropagation(); // Prevent navigation when clicking heart
+    event.stopPropagation();
     this.isFavorite = !this.isFavorite;
-    console.log(`ProductCard: Toggled favorite for ${this.item.name}: ${this.isFavorite}`);
   }
 }
