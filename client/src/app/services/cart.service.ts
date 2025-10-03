@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { Router } from '@angular/router'; // Add this import
 
 export interface CartItem {
   id?: number;
@@ -115,4 +116,22 @@ export class CartService {
       })
     );
   }
+}
+
+export class FocusProductInformationComponent implements OnInit, OnChanges {
+  // ...existing properties...
+
+  constructor(
+    private cartService: CartService,
+    private router: Router // Add this
+  ) { }
+
+  // ...existing methods...
+
+  goToCart(): void {
+    console.log('🛒 Navigating to cart page');
+    this.router.navigate(['/cart']);
+  }
+
+  // ...rest of existing code...
 }
