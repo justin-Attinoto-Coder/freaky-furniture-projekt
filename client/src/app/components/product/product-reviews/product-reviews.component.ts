@@ -4,15 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faStar, faStar as faRegStar } from '@fortawesome/free-solid-svg-icons';
 import { ProductService } from '../../../services/product.service';
+import { ReviewService, Review } from '../../../services/review.service';
 import { Product } from '../../../models/product';
-
-interface Review {
-  id: number;
-  productId: number;
-  rating: number;
-  reviewText: string;
-  reviewerName: string;
-}
 
 @Component({
   selector: 'app-product-reviews',
@@ -27,10 +20,13 @@ export class ProductReviewsComponent implements OnInit {
   faStar = faStar;
   faRegStar = faRegStar;
   isLoading = true;
+  averageRating = 0;
+  totalReviews = 0;
 
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private reviewService: ReviewService
   ) {}
 
   ngOnInit() {
@@ -39,38 +35,80 @@ export class ProductReviewsComponent implements OnInit {
       console.log('🔍 ProductReviews: Route urlSlug parameter:', urlSlug);
 
       if (urlSlug) {
-        this.isLoading = true;
-
-        // ✅ Use ProductService instead of direct HTTP calls
-        this.productService.getAllProducts().subscribe({
-          next: (products) => {
-            console.log('✅ ProductReviews: All products loaded:', products.length);
-
-            // Find product by urlSlug
-            const foundProduct = products.find(p => p.urlSlug === urlSlug);
-
-            if (foundProduct) {
-              this.product = foundProduct;
-              console.log('✅ ProductReviews: Found product:', foundProduct);
-              this.generateMockReviews(foundProduct);
-            } else {
-              console.error('❌ ProductReviews: Product not found with urlSlug:', urlSlug);
-              this.generateMockReviewsFromSlug(urlSlug);
-            }
-
-            this.isLoading = false;
-          },
-          error: (error) => {
-            console.error('❌ ProductReviews: Error fetching products:', error);
-            this.generateMockReviewsFromSlug(urlSlug);
-            this.isLoading = false;
-          }
-        });
+        this.loadProductAndReviews(urlSlug);
       }
     });
   }
 
-  // Generate mock reviews based on actual product data
+  private loadProductAndReviews(urlSlug: string) {
+    this.isLoading = true;
+
+    this.productService.getAllProducts().subscribe({
+      next: (products) => {
+        console.log('✅ ProductReviews: All products loaded:', products.length);
+
+        const foundProduct = products.find(p => p.urlSlug === urlSlug);
+
+        if (foundProduct) {
+          this.product = foundProduct;
+          console.log('✅ ProductReviews: Found product:', foundProduct);
+
+          // Try to load real reviews first, fallback to mock if API not ready
+          this.tryLoadRealReviews(foundProduct);
+        } else {
+          console.error('❌ ProductReviews: Product not found with urlSlug:', urlSlug);
+          this.generateMockReviewsFromSlug(urlSlug);
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.error('❌ ProductReviews: Error fetching products:', error);
+        this.generateMockReviewsFromSlug(urlSlug);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  private tryLoadRealReviews(product: Product) {
+    this.reviewService.getReviewsByProductId(product.id).subscribe({
+      next: (reviews) => {
+        console.log('✅ Real reviews loaded from database:', reviews.length);
+        this.reviews = reviews;
+        this.loadAverageRating(product.id);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('❌ API not ready, using mock reviews:', error);
+        // Fallback to mock reviews if API endpoints don't exist yet
+        this.generateMockReviews(product);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  private loadAverageRating(productId: number) {
+    this.reviewService.getAverageRating(productId).subscribe({
+      next: (data) => {
+        this.averageRating = data.averageRating;
+        this.totalReviews = data.totalReviews;
+        console.log('✅ Average rating loaded:', data);
+      },
+      error: (error) => {
+        console.error('❌ Error fetching average rating:', error);
+        this.calculateAverageFromCurrentReviews();
+      }
+    });
+  }
+
+  private calculateAverageFromCurrentReviews() {
+    if (this.reviews.length > 0) {
+      const sum = this.reviews.reduce((acc, review) => acc + review.rating, 0);
+      this.averageRating = sum / this.reviews.length;
+      this.totalReviews = this.reviews.length;
+    }
+  }
+
+  // Generate mock reviews based on actual product data (FIXED LINE 110)
   private generateMockReviews(product: Product) {
     console.log('🎭 Generating mock reviews for product:', product.name);
 
@@ -107,10 +145,13 @@ export class ProductReviewsComponent implements OnInit {
         id: 5,
         productId: product.id,
         rating: 5,
-        reviewText: `Excellent craftsmanship! The ${product.category.toLowerCase()} category really delivers quality products.`,
+        // 🔧 FIXED: Use product.name and product.brand instead of product.category
+        reviewText: `Excellent craftsmanship! This ${product.name.toLowerCase()} really delivers quality. Great product from ${product.brand}!`,
         reviewerName: 'Lisa Chen'
       }
     ];
+
+    this.calculateAverageFromCurrentReviews();
   }
 
   // Fallback: Generate mock reviews from URL slug if product not found
@@ -121,7 +162,7 @@ export class ProductReviewsComponent implements OnInit {
     this.reviews = [
       {
         id: 1,
-        productId: 0, // Unknown since product not found
+        productId: 0,
         rating: 5,
         reviewText: `Amazing ${productName}! The quality exceeded my expectations. Very comfortable and stylish.`,
         reviewerName: 'Sarah Johnson'
@@ -148,5 +189,7 @@ export class ProductReviewsComponent implements OnInit {
         reviewerName: 'John Smith'
       }
     ];
+
+    this.calculateAverageFromCurrentReviews();
   }
 }

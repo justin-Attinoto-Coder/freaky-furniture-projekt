@@ -6,7 +6,7 @@
   <div *ngIf="!isLoading">
     <div *ngIf="product" class="mb-6">
       <h1 class="text-3xl font-bold text-gray-800 mb-2">Reviews for {{ product.name }}</h1>
-      <p class="text-gray-600">{{ product.price }} SEK | {{ product.category }}</p>
+      <p class="text-gray-600">{{ product.price }} SEK | {{ product.categoryId }}</p>
     </div>
 
     <h1 *ngIf="!product" class="text-3xl font-bold text-gray-800 mb-6">Product Reviews</h1>
