@@ -2,15 +2,15 @@
   <div *ngIf="isLoading" class="text-center py-8">
     <p class="text-gray-600">Loading reviews...</p>
   </div>
-  
+
   <div *ngIf="!isLoading">
     <div *ngIf="product" class="mb-6">
       <h1 class="text-3xl font-bold text-gray-800 mb-2">Reviews for {{ product.name }}</h1>
       <p class="text-gray-600">{{ product.price }} SEK | {{ product.category }}</p>
     </div>
-    
+
     <h1 *ngIf="!product" class="text-3xl font-bold text-gray-800 mb-6">Product Reviews</h1>
-    
+
     <div *ngIf="reviews.length > 0; else noReviews" class="space-y-4">
       <div *ngFor="let review of reviews" class="border border-gray-200 rounded-md p-4">
         <div class="flex items-center mb-2">
@@ -25,7 +25,7 @@
         <p class="text-gray-600">{{ review.reviewText }}</p>
       </div>
     </div>
-    
+
     <ng-template #noReviews>
       <p class="text-gray-600">No reviews available for this product.</p>
     </ng-template>
