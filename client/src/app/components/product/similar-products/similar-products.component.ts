@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../../common/product-card/product-card.component';
 import { Product } from '../../../models/product';
@@ -10,7 +10,7 @@ import { Product } from '../../../models/product';
   templateUrl: './similar-products.component.html',
   styleUrls: ['./similar-products.component.css']
 })
-export class SimilarProductsComponent {
+export class SimilarProductsComponent implements OnInit {
   @Input({ required: true }) similarItems: Product[] = [];
   currentIndex: number = 0;
 
@@ -27,6 +27,11 @@ export class SimilarProductsComponent {
     // Update slidesToShow based on window width
     this.updateSlidesToShow();
     window.addEventListener('resize', () => this.updateSlidesToShow());
+  }
+
+  // Add trackBy function to prevent unnecessary re-renders
+  trackByProductId(index: number, product: Product): number {
+    return product.id;
   }
 
   updateSlidesToShow() {

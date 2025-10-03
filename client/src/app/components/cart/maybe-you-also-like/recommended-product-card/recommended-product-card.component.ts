@@ -12,39 +12,47 @@ import { Product } from '../../../../models/product';
 })
 export class RecommendedProductCardComponent {
   @Input({ required: true }) item!: Product;
-  readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
+  // FIXED: Update to your local FreakyFurnitureAPI
+  readonly imageBaseUrl = 'http://localhost:5186';
 
   // Compute image URL or fallback
   getImageUrl(): string {
     const imagePath = this.item.image?.trim();
     console.log(`RecommendedProductCard: Item for ${this.item.name}:`, JSON.stringify(this.item));
     console.log(`RecommendedProductCard: Raw image path for ${this.item.name}: ${imagePath || 'null/undefined'}`);
+
     if (imagePath) {
       let normalizedPath = imagePath;
-      // Replace localhost URLs with production backend
+
+      // Handle localhost:8000 URLs (replace with your local API)
       if (imagePath.startsWith('http://localhost:8000')) {
         normalizedPath = imagePath.replace('http://localhost:8000', this.imageBaseUrl);
       }
-      // Handle relative paths or other non-http URLs
+
+      // Handle relative paths
       if (!normalizedPath.startsWith('http') && !normalizedPath.startsWith('/')) {
         normalizedPath = `/images/${normalizedPath.replace(/^images\//, '')}`;
       } else if (!normalizedPath.startsWith('http') && normalizedPath.startsWith('/')) {
         normalizedPath = normalizedPath.replace(/^\/+images\//, '/images/');
       }
+
       const url = normalizedPath.startsWith('http') ? normalizedPath : `${this.imageBaseUrl}${normalizedPath}`;
       console.log(`RecommendedProductCard: Normalized path for ${this.item.name}: ${normalizedPath}`);
       console.log(`RecommendedProductCard: Computed URL for ${this.item.name}: ${url}`);
       return url;
     }
+
     console.log(`RecommendedProductCard: No image for ${this.item.name}, using fallback`);
-    return 'https://via.placeholder.com/150?text=No+Image';
+    // FIXED: Use your local API for fallback image too
+    return `${this.imageBaseUrl}/images/placeholder.jpg`;
   }
 
   // Handle image load error
   handleImageError(event: Event): void {
     console.log(`RecommendedProductCard: Image failed to load for ${this.item.name}`);
     const imgElement = event.target as HTMLImageElement;
-    imgElement.src = 'https://via.placeholder.com/150?text=No+Image';
+    // FIXED: Use your local API for error fallback
+    imgElement.src = `${this.imageBaseUrl}/images/placeholder.jpg`;
     imgElement.onerror = null; // Prevent infinite error loop
   }
 }

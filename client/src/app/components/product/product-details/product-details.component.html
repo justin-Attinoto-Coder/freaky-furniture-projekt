@@ -1,20 +1,50 @@
 <!-- This is the HTML template for the Product Details component -->
-<section class="min-h-screen">
-  <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold mb-4">Product Details</h1>
-    <div class="mt-8">
-      <div class="breadcrumbs mb-4">
-        <a routerLink="/" class="text-blue-500 underline ml-5">Home</a> >
-        <a [routerLink]="['/category', product?.category]" class="text-blue-500 underline"> {{ product?.category }}</a> >
-        <span>{{ product?.name }}</span>
+<section class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Enhanced breadcrumb styling with Tailwind -->
+    <nav class="breadcrumbs mb-6 text-sm">
+      <div class="flex items-center space-x-2 text-gray-600">
+        <a routerLink="/" class="text-blue-600 hover:text-blue-800 transition-colors">Home</a>
+        <span class="text-gray-400">></span>
+        <a [routerLink]="['/category', product?.categorySlug || product?.CategorySlug]"
+           class="text-blue-600 hover:text-blue-800 transition-colors">
+          {{ product?.categoryName || product?.CategoryName }}
+        </a>
+        <span class="text-gray-400">></span>
+        <span class="text-gray-800 font-medium">{{ product?.name || product?.Name }}</span>
       </div>
-      <div *ngIf="product; else notFound">
-        <app-focus-product-card [product]="product" [averageRating]="averageRating" (addToCart)="onAddToCart()"></app-focus-product-card>
-        <app-similar-products [similarItems]="similarItems"></app-similar-products>
+    </nav>
+
+    <!-- Enhanced product details section -->
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div *ngIf="product; else notFound" class="p-6">
+        <app-focus-product-card
+          [product]="product"
+          [averageRating]="averageRating"
+          (addToCart)="onAddToCart()">
+        </app-focus-product-card>
+
+        <div class="mt-12">
+          <app-similar-products [similarItems]="similarItems"></app-similar-products>
+        </div>
       </div>
+
       <ng-template #notFound>
-        <div>Product not found</div>
+        <div class="p-12 text-center">
+          <div class="bg-red-50 border border-red-200 rounded-lg p-8">
+            <h2 class="text-2xl font-bold text-red-800 mb-4">Product Not Found</h2>
+            <p class="text-red-600 mb-6">The product you're looking for doesn't exist.</p>
+            <a routerLink="/"
+               class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+              Back to Home
+            </a>
+          </div>
+        </div>
       </ng-template>
-    </div>  </div>
-  <app-common-accordion></app-common-accordion>
+    </div>
+  </div>
+
+  <div class="bg-gray-100 mt-12">
+    <app-common-accordion></app-common-accordion>
+  </div>
 </section>

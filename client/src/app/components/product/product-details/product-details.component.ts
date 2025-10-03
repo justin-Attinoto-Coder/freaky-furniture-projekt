@@ -18,6 +18,7 @@ export class ProductDetailsComponent implements OnInit {
   product: any = null;
   similarItems: any[] = [];
   averageRating: number = 0;
+  isLoading = true;
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -25,53 +26,55 @@ export class ProductDetailsComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const urlSlug = params.get('urlSlug');
       if (urlSlug) {
-        console.log('🔍 Looking for product with urlSlug:', urlSlug);
-
-        // FIXED: Skip individual product lookup since backend doesn't support it
-        // Get full catalog and search for the product
+        console.log('🔍 Looking for English product with urlSlug:', urlSlug);
         this.loadProductFromCatalog(urlSlug);
       }
     });
   }
 
   private loadProductFromCatalog(urlSlug: string) {
-    this.http.get<any>(`http://localhost:5186/api/products?pageSize=1000`).subscribe({
-      next: (response) => {
-        console.log('📋 Full catalog response:', response);
-        const allProducts = response.products || response;
+    this.isLoading = true;
 
-        // FIXED: Search for product with matching urlSlug
-        this.product = allProducts.find((p: any) => {
-          console.log(`🔍 Checking product: "${p.urlSlug}" vs "${urlSlug}"`);
-          return p.urlSlug === urlSlug;
+    // Use the /all endpoint for better performance
+    this.http.get<any>(`http://localhost:5186/api/products/all`).subscribe({
+      next: (products) => {
+        console.log('📋 All English products loaded:', products.length);
+
+        // products is now a direct array from the /all endpoint
+        this.product = products.find((p: any) => {
+          return p.urlSlug === urlSlug || p.UrlSlug === urlSlug;
         });
 
         if (this.product) {
-          console.log('✅ Product found in catalog:', this.product);
+          console.log('✅ English product found:', this.product);
 
           // Get similar products from same category
-          this.similarItems = allProducts
+          this.similarItems = products
             .filter((item: any) =>
-              item.categoryName === this.product.categoryName &&
-              item.urlSlug !== urlSlug
+              (item.categoryName === this.product.categoryName ||
+               item.CategoryName === this.product.CategoryName) &&
+              (item.urlSlug !== urlSlug && item.UrlSlug !== urlSlug)
             )
             .sort(() => 0.5 - Math.random())
             .slice(0, 8);
 
-          // Mock rating for now
+          // Generate mock rating
           this.averageRating = Math.floor(Math.random() * 5) + 1;
 
           console.log('✅ Similar items found:', this.similarItems.length);
-          console.log('⭐ Mock average rating:', this.averageRating);
+          console.log('⭐ Average rating:', this.averageRating);
         } else {
-          console.error('❌ Product not found in catalog');
-          console.log('📝 Available urlSlugs in catalog:', allProducts.map((p: any) => p.urlSlug));
+          console.error('❌ English product not found');
+          console.log('📝 Available English urlSlugs:', products.map((p: any) => p.urlSlug || p.UrlSlug));
           this.product = null;
         }
+
+        this.isLoading = false;
       },
       error: (error: HttpErrorResponse) => {
-        console.error('❌ Error loading catalog:', error);
+        console.error('❌ Error loading English products:', error);
         this.product = null;
+        this.isLoading = false;
       }
     });
   }

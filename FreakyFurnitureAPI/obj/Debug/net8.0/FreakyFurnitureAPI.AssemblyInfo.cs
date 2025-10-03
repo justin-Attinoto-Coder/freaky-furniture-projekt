@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FreakyFurnitureAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6f79ac8f81faebf8bcab5981c67ac23f597c9b4a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5850518980e394559b4c1271cfeed1d42a1aebcc")]
 [assembly: System.Reflection.AssemblyProductAttribute("FreakyFurnitureAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FreakyFurnitureAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

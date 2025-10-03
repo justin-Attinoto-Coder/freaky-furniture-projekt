@@ -1,92 +1,77 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { Product } from '../../../models/product';
+import { RouterModule } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
-import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as faSolidHeart, faHeart as faRegularHeart } from '@fortawesome/free-solid-svg-icons';
+import { Product } from '../../../models/product';
 
 @Component({
   selector: 'app-product-card',
-  templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterLink, FaIconComponent]
+  imports: [CommonModule, RouterModule, FaIconComponent],
+  templateUrl: './product-card.component.html',
+  styleUrls: ['./product-card.component.css']
 })
-export class ProductCardComponent implements OnInit {
+export class ProductCardComponent {
   @Input({ required: true }) item!: Product;
+
+  // Add ALL missing properties for the template
   isFavorite = false;
   faHeart = faSolidHeart;
   faRegHeart = faRegularHeart;
-  readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
-  isImageLoaded = false;
-  hasImageError = false; // Track if we've already had an error
+  isImageLoaded = false; // Added this missing property
 
-  // Cache the computed image URL to avoid recalculating on every change detection
-  private _cachedImageUrl: string | null = null;
+  // FIXED: Use the same working imageBaseUrl as focus-product-card
+  readonly imageBaseUrl = 'http://localhost:5186';
 
-  ngOnInit() {
-    // Compute the image URL once during initialization
-    this._cachedImageUrl = this.computeImageUrl();
-  }
-
-  // Public getter that returns the cached URL
   getImageUrl(): string {
-    if (this.hasImageError) {
-      // Return a data URL for a simple gray placeholder
-      return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
-    }
-    return this._cachedImageUrl || this.computeImageUrl();
-  }
-
-  // Private method to compute the image URL (called only once)
-  private computeImageUrl(): string {
     const imagePath = this.item.image?.trim();
+    console.log(`ProductCard: Raw image path for ${this.item.name}: ${imagePath || 'null/undefined'}`);
 
     if (imagePath) {
       let normalizedPath = imagePath;
-      if (imagePath.startsWith('http://localhost:8000')) {
-        normalizedPath = imagePath.replace('http://localhost:8000', this.imageBaseUrl);
+
+      // Handle remote URLs - convert to local (same logic as focus-product-card)
+      if (imagePath.startsWith('http://localhost:8000') || imagePath.startsWith('https://freaky-angular-furniture-backend.onrender.com')) {
+        const pathMatch = imagePath.match(/\/(images\/.+)/);
+        normalizedPath = pathMatch ? pathMatch[1] : imagePath;
       }
+
+      // Handle relative paths
       if (!normalizedPath.startsWith('http') && !normalizedPath.startsWith('/')) {
         normalizedPath = `/images/${normalizedPath.replace(/^images\//, '')}`;
       } else if (!normalizedPath.startsWith('http') && normalizedPath.startsWith('/')) {
         normalizedPath = normalizedPath.replace(/^\/+images\//, '/images/');
       }
+
       const url = normalizedPath.startsWith('http') ? normalizedPath : `${this.imageBaseUrl}${normalizedPath}`;
+      console.log(`ProductCard: Normalized path for ${this.item.name}: ${normalizedPath}`);
+      console.log(`ProductCard: Computed URL for ${this.item.name}: ${url}`);
       return url;
     }
 
-    // Return inline SVG placeholder instead of external service
-    return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+    console.log(`ProductCard: No image for ${this.item.name}, using fallback`);
+    return `${this.imageBaseUrl}/images/placeholder.jpg`;
   }
 
-  // Handle image load success
+  // Added missing method for image load handling
   handleImageLoad(): void {
     this.isImageLoaded = true;
-    this.hasImageError = false;
+    console.log(`ProductCard: Image loaded for ${this.item.name}, isImageLoaded: ${this.isImageLoaded}`);
   }
 
-  // Handle image load error - prevent infinite loops
   handleImageError(event: Event): void {
-    if (this.hasImageError) {
-      // Already handled an error, don't do anything more
-      return;
-    }
-
-    this.hasImageError = true;
-    this.isImageLoaded = true; // Treat as loaded to show the fallback
-
-    // Remove the error handler to prevent further errors
+    console.log(`ProductCard: Image failed to load for ${this.item.name}`);
     const imgElement = event.target as HTMLImageElement;
+    imgElement.src = `${this.imageBaseUrl}/images/placeholder.jpg`;
     imgElement.onerror = null;
-
-    // Force re-render with the fallback image
-    this._cachedImageUrl = null;
+    this.isImageLoaded = true; // Set to true so the placeholder shows
   }
 
   toggleFavorite(event: Event): void {
     event.preventDefault();
+    event.stopPropagation(); // Prevent navigation when clicking heart
     this.isFavorite = !this.isFavorite;
+    console.log(`ProductCard: Toggled favorite for ${this.item.name}: ${this.isFavorite}`);
   }
 }
