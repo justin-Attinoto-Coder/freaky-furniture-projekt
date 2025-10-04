@@ -10,28 +10,43 @@ import { CartItem } from '../../../../services/cart.service';
   standalone: true,
   imports: [CommonModule, RouterLink]
 })
-export class BasketProductCardComponent {
+export class BasketProductCardComponent { // Make sure 'export' is here
   @Input({ required: true }) item!: CartItem;
   @Output() updateCartItem = new EventEmitter<{ productId: number; quantity: number }>();
   @Output() deleteCartItem = new EventEmitter<number>();
-  readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
+  
+  // Fix: Use local API URL instead of Render.com
+  readonly imageBaseUrl = 'http://localhost:5186';
 
   // Compute image URL or fallback
   getImageUrl(): string {
     const imagePath = this.item.imageURL?.trim();
     console.log(`BasketProductCard: Raw image path for ${this.item.name}: ${imagePath || 'null/undefined'}`);
+    
     if (imagePath) {
       let normalizedPath = imagePath;
-      if (!imagePath.startsWith('http') && !imagePath.startsWith('/')) {
-        normalizedPath = `/images/${imagePath.replace(/^images\//, '')}`;
-      } else if (!imagePath.startsWith('http') && imagePath.startsWith('/')) {
-        normalizedPath = imagePath.replace(/^\/+images\//, '/images/');
+      
+      // Handle different image path formats
+      if (imagePath.startsWith('http')) {
+        // Already a full URL
+        return imagePath;
+      } else if (imagePath.startsWith('/images/')) {
+        // Already properly formatted path
+        normalizedPath = imagePath;
+      } else if (imagePath.startsWith('images/')) {
+        // Add leading slash
+        normalizedPath = `/${imagePath}`;
+      } else if (!imagePath.startsWith('/')) {
+        // Add /images/ prefix
+        normalizedPath = `/images/${imagePath}`;
       }
-      const url = imagePath.startsWith('http') ? imagePath : `${this.imageBaseUrl}${normalizedPath}`;
+      
+      const url = `${this.imageBaseUrl}${normalizedPath}`;
       console.log(`BasketProductCard: Normalized path for ${this.item.name}: ${normalizedPath}`);
       console.log(`BasketProductCard: Computed URL for ${this.item.name}: ${url}`);
       return url;
     }
+    
     console.log(`BasketProductCard: No image for ${this.item.name}, using fallback`);
     return 'https://via.placeholder.com/64?text=No+Image';
   }
