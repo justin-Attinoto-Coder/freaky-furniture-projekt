@@ -1,13 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'; // Add this import
 import { RouterModule, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AddToCartButtonComponent } from '../add-to-cart-button/add-to-cart-button.component';
+import { GoToCartComponent } from '../go-to-cart-button/go-to-cart.component';
 import { FocusOverviewAccordionComponent } from '../focus-overview-accordion/focus-overview-accordion.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faStar, faStar as faRegStar } from '@fortawesome/free-solid-svg-icons';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CartService } from '../../../services/cart.service'; // Fix: Update path to go up 3 levels
+import { CartService } from '../../../services/cart.service';
 
 interface Review {
   rating: number;
@@ -18,7 +20,15 @@ interface Review {
 @Component({
   selector: 'app-focus-product-information',
   standalone: true,
-  imports: [CommonModule, RouterModule, AddToCartButtonComponent, FocusOverviewAccordionComponent, FontAwesomeModule],
+  imports: [
+    CommonModule, 
+    FormsModule, // Add this to imports array
+    RouterModule, 
+    AddToCartButtonComponent, 
+    GoToCartComponent,
+    FocusOverviewAccordionComponent, 
+    FontAwesomeModule
+  ],
   templateUrl: './focus-product-information.component.html',
   styleUrls: ['./focus-product-information.component.css']
 })

@@ -14,28 +14,37 @@
     <a [routerLink]="['/product', product.urlSlug, 'reviews']" class="text-blue-500 underline ml-4">See all reviews</a>
   </div>
   <p class="text-gray-600 mb-4">{{ product.description }}</p>
-  <div class="quantity-selector flex items-center mb-4 sm:mb-0">
-    <div class="flex items-center">
-      <button
-        class="w-8 h-8 flex items-center justify-center bg-gray-200 text-gray-700 rounded-full border border-gray-400"
-        (click)="handleQuantityChange(-1)"
-      >
-        -
-      </button>
-      <span class="mx-2">{{ quantity }}</span>
-      <button
-        class="w-8 h-8 flex items-center justify-center bg-gray-200 text-gray-700 rounded-full border border-gray-400"
-        (click)="handleQuantityChange(1)"
-      >
-        +
-      </button>
+  
+  <!-- Add to Cart Section -->
+  <div class="add-to-cart-section">
+    <div class="quantity-selector">
+      <label for="quantity">Antal:</label>
+      <select id="quantity" [(ngModel)]="quantity" class="quantity-select">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
     </div>
-    <div class="ml-4 w-full sm:hidden">
-      <app-add-to-cart-button [product]="product" [quantity]="quantity" (addToCart)="onAddToCart($event)"></app-add-to-cart-button>
+    
+    <!-- Button Container with both buttons -->
+    <div class="cart-buttons-container flex gap-3 items-center flex-wrap">
+      <app-add-to-cart-button 
+        [product]="product"
+        [quantity]="quantity"
+        class="flex-1 min-w-[200px]">
+      </app-add-to-cart-button>
+      
+      <!-- Go to Cart Button -->
+      <app-go-to-cart
+        variant="secondary"
+        size="md"
+        [showCartCount]="true"
+        buttonText="Se kundvagn">
+      </app-go-to-cart>
     </div>
   </div>
-  <div class="hidden sm:flex sm:items-center sm:mt-4 w-full">
-    <app-add-to-cart-button [product]="product" [quantity]="quantity" (addToCart)="onAddToCart($event)"></app-add-to-cart-button>
-  </div>
+
   <app-focus-overview-accordion [product]="product" [reviews]="reviews" class="mt-8 sm:mt-16"></app-focus-overview-accordion>
 </div>
