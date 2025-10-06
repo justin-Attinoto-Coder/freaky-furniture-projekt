@@ -98,9 +98,18 @@ export class CheckoutShippingComponent {
   handleSubmit(event: Event) {
     event.preventDefault();
     console.log('Checkout-Shipping: Submitting shipping details:', this.shippingDetails);
+    console.log('Checkout-Shipping: Checking field values:');
+    Object.entries(this.shippingDetails).forEach(([key, value]) => {
+      console.log(`  ${key}: "${value}" (length: ${value.length}, empty: ${!value.trim()})`);
+    });
+
     if (!Object.values(this.shippingDetails).every(field => field.trim())) {
       this.error = 'Please fill out all shipping fields.';
       console.error('Checkout-Shipping: Form validation failed:', this.shippingDetails);
+      const emptyFields = Object.entries(this.shippingDetails)
+        .filter(([_, value]) => !value.trim())
+        .map(([key, _]) => key);
+      console.error('Checkout-Shipping: Empty fields:', emptyFields);
       return;
     }
 
@@ -139,7 +148,18 @@ export class CheckoutShippingComponent {
       },
       error: (error) => {
         console.error('Checkout-Shipping: Error saving shipping details:', error);
-        this.error = 'Failed to save shipping details. Please try again.';
+        console.error('Checkout-Shipping: Error status:', error.status);
+        console.error('Checkout-Shipping: Error message:', error.message);
+        console.error('Checkout-Shipping: Error details:', error.error);
+        console.error('Checkout-Shipping: Full error object:', JSON.stringify(error, null, 2));
+
+        if (error.status === 401) {
+          this.error = 'Authentication required. Please log in first.';
+        } else if (error.status === 400) {
+          this.error = `Validation error: ${JSON.stringify(error.error)}`;
+        } else {
+          this.error = `Failed to save shipping details. Error: ${error.status} - ${error.message}`;
+        }
       }
     });
   }
