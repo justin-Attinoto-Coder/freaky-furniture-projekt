@@ -16,11 +16,12 @@ import { OrderSummaryComponent } from '../../common/order-summary/order-summary.
 })
 export class CheckoutReviewComponent implements OnInit {
   cartItems: any[] = [];
-  shippingMethod: string = 'home';
   customerDetails: any = {};
   shippingDetails: any = {};
   paymentDetails: any = {};
   totalPrice: number = 0;
+  subtotalFromState: number = 0;
+  shippingFeeFromState: number = 0;
   error: string | null = null;
 
   // FontAwesome icons for progress bar
@@ -36,8 +37,19 @@ export class CheckoutReviewComponent implements OnInit {
       this.paymentDetails = state.paymentDetails || {};
       this.cartItems = state.cartItems || [];
       this.totalPrice = state.totalPrice || 0;
+      this.subtotalFromState = state.subtotal || 0;
+      this.shippingFeeFromState = state.shippingFee || 0;
       this.error = state.error || null;
-      console.log('Checkout-Review: Received state:', { customerDetails: this.customerDetails, shippingDetails: this.shippingDetails, paymentDetails: this.paymentDetails, cartItems: this.cartItems, totalPrice: this.totalPrice, error: this.error });
+      console.log('Checkout-Review: Received state:', {
+        customerDetails: this.customerDetails,
+        shippingDetails: this.shippingDetails,
+        paymentDetails: this.paymentDetails,
+        cartItems: this.cartItems,
+        totalPrice: this.totalPrice,
+        subtotal: this.subtotalFromState,
+        shippingFee: this.shippingFeeFromState,
+        error: this.error
+      });
     });
   }
 
@@ -48,7 +60,7 @@ export class CheckoutReviewComponent implements OnInit {
   }
 
   fetchCartItems() {
-    this.http.get('https://freaky-angular-furniture-backend.onrender.com/api/cart').subscribe({
+    this.http.get('http://localhost:5186/api/cart').subscribe({
       next: (data: any) => {
         this.cartItems = data.map((item: any) => ({
           ...item,
@@ -61,11 +73,13 @@ export class CheckoutReviewComponent implements OnInit {
   }
 
   get subtotal() {
+    // Calculate from cart items for live updates when quantity changes
     return this.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   }
 
   get shippingFee() {
-    return this.shippingMethod === 'home' ? 10 : this.shippingMethod === 'servicePoint' ? 0 : 25;
+    // Use the shipping fee passed from payment page (based on selected carrier)
+    return this.shippingFeeFromState;
   }
 
   get grandTotal() {
@@ -81,7 +95,7 @@ export class CheckoutReviewComponent implements OnInit {
       return;
     }
     console.log('Checkout-Review: Updating quantity for productId:', productId, 'to:', quantity);
-    this.http.put(`https://freaky-angular-furniture-backend.onrender.com/api/cart/${productId}`, {
+    this.http.put(`http://localhost:5186/api/cart/${productId}`, {
       productId,
       quantity,
       name: item.name || 'Unknown Product',
@@ -95,6 +109,7 @@ export class CheckoutReviewComponent implements OnInit {
           item.productId === productId ? { ...item, quantity } : item
         );
         console.log('Checkout-Review: Updated cart items:', this.cartItems);
+        console.log('Checkout-Review: New totals - Subtotal:', this.subtotal, 'Shipping:', this.shippingFee, 'Grand Total:', this.grandTotal);
         this.error = null;
       },
       error: (error) => {
@@ -110,7 +125,7 @@ export class CheckoutReviewComponent implements OnInit {
 
   handleConfirmOrder() {
     console.log('Checkout-Review: Confirming order, clearing cart');
-    this.http.delete('https://freaky-angular-furniture-backend.onrender.com/api/cart/clear').subscribe({
+    this.http.delete('http://localhost:5186/api/cart/clear').subscribe({
       next: () => {
         console.log('Checkout-Review: Cart cleared in the backend');
         this.cartItems = [];
