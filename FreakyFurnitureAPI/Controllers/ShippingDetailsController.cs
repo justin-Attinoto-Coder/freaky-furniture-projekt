@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 using FreakyFurnitureAPI.Data;
 using FreakyFurnitureAPI.Models;
 using System.Security.Claims;
@@ -22,6 +21,7 @@ namespace FreakyFurnitureAPI.Controllers
 
         // POST /api/shipping-details
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddShippingDetails([FromBody] ShippingDetails shippingDetails)
         {
             try
