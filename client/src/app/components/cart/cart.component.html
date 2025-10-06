@@ -13,37 +13,35 @@
   <div *ngIf="cartItems.length > 0" class="sm:flex sm:space-x-8">
     <!-- Left side - Cart Items and Actions -->
     <div class="sm:w-1/2 flex flex-col justify-between">
-      <form (ngSubmit)="handleCheckout($event)" novalidate>
+      <!-- Cart Items -->
+      <app-my-basket
+        [cartItems]="cartItems"
+        (updateCartItem)="updateCartItem($event)"
+        (deleteCartItem)="deleteCartItem($event)">
+      </app-my-basket>
 
-        <!-- Cart Items -->
-        <app-my-basket
-          [cartItems]="cartItems"
-          (updateCartItem)="updateCartItem($event)"
-          (deleteCartItem)="deleteCartItem($event)">
-        </app-my-basket>
+      <!-- Customer Form -->
+      <app-cart-customer-form
+        [formData]="customerData"
+        [total]="totalPrice"
+        (change)="onCustomerDataChange($event)">
+      </app-cart-customer-form>
 
-        <!-- Customer Form -->
-        <app-cart-customer-form
-          [formData]="customerData"
-          [total]="totalPrice"
-          (change)="onCustomerDataChange($event)">
-        </app-cart-customer-form>
-
-        <!-- Action Buttons -->
-        <div class="flex justify-between items-center mt-4 sm:mt-0">
-          <button
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-2 sm:mt-0"
-            type="button"
-            (click)="navigateToHome()">
-            Continue Shopping
-          </button>
-          <button
-            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mt-2 sm:mt-0"
-            type="submit">
-            Complete Purchase
-          </button>
-        </div>
-      </form>
+      <!-- Action Buttons -->
+      <div class="flex justify-between items-center mt-4 sm:mt-0">
+        <button
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-2 sm:mt-0"
+          type="button"
+          (click)="navigateToHome()">
+          Continue Shopping
+        </button>
+        <button
+          class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mt-2 sm:mt-0"
+          type="button"
+          (click)="handleCheckout($event)">
+          Complete Purchase
+        </button>
+      </div>
     </div>
 
     <!-- Right side - Recommendations -->

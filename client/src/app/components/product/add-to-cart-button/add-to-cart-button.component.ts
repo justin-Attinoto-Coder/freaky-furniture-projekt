@@ -17,13 +17,12 @@ export class AddToCartButtonComponent {
   constructor(private cartService: CartService) {}
 
   handleAddToCart(): void {
-    const imageFileName = this.product.image.split('/').pop(); // Extract filename
     const cartItem: CartItem = {
       productId: this.product.id,
       name: this.product.name,
       price: this.product.price,
       quantity: this.quantity,
-      imageURL: `/images/${imageFileName}`,
+      imageURL: this.product.image, // Use the full image path from the product
       brand: this.product.brand,
       urlSlug: this.product.urlSlug
     };

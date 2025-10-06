@@ -112,8 +112,10 @@ export class CartComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleCheckout(event: Event): void {
-    event.preventDefault();
+  handleCheckout(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+    }
     console.log('Checkout initiated with data:', this.customerData);
 
     if (!this.isFormValid()) {
@@ -130,7 +132,9 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   onCustomerDataChange(event: Event): void {
-    console.log('Customer form changed:', event);
+    // Two-way binding handles the data updates automatically
+    // This method can be used for additional validation or logging if needed
+    console.log('Customer data updated:', this.customerData);
   }
 
   private isFormValid(): boolean {
@@ -151,7 +155,27 @@ export class CartComponent implements OnInit, OnDestroy {
       total: this.totalPrice
     });
 
-    this.router.navigate(['/checkout-success']);
+    // Validate customer data before sending
+    if (!this.customerData.fullName || !this.customerData.phoneNumber ||
+        !this.customerData.province || !this.customerData.city ||
+        !this.customerData.streetAddress || !this.customerData.postalCode) {
+      console.error('Invalid customer data:', this.customerData);
+      this.error = 'Please fill in all customer information fields';
+      return;
+    }
+
+    // Save customer data first
+    this.cartService.addCustomer(this.customerData).subscribe({
+      next: (response) => {
+        console.log('Customer data saved successfully:', response);
+        // Navigate to checkout success after saving customer data
+        this.router.navigate(['/checkout-confirmation']);
+      },
+      error: (error) => {
+        console.error('Error saving customer data:', error);
+        this.error = 'Failed to save customer information. Please try again.';
+      }
+    });
   }
 
   private loadRecommendedItems(): void {

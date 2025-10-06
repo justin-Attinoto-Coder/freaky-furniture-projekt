@@ -40,7 +40,7 @@ export class CartService {
       next: (items) => {
         const normalizedItems = items.map(item => ({
           ...item,
-          imageURL: item.imageURL?.replace(/\\/g, '/').replace(/^\/+/, '/') || '/images/placeholder.jpg'
+          imageURL: item.imageURL?.replace(/\\/g, '/') || item.imageURL
         }));
         console.log('Loaded cart items:', normalizedItems);
         this.cartItemsSubject.next(normalizedItems);
@@ -55,7 +55,7 @@ export class CartService {
   addCartItem(item: CartItem): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.apiUrl}/cart`, {
       ...item,
-      imageURL: item.imageURL?.replace(/\\/g, '/').replace(/^\/+/, '/') || '/images/placeholder.jpg'
+      imageURL: item.imageURL?.replace(/\\/g, '/') || item.imageURL
     }).pipe(
       tap((response) => {
         console.log('Added cart item:', item, 'Response:', response);

@@ -34,21 +34,37 @@ namespace FreakyFurnitureAPI.Controllers
                 var cartItems = await _context.Cart
                     .Where(c => c.UserId == userId)
                     .Include(c => c.Product)
-                    .Select(c => new
-                    {
-                        id = c.Id,
-                        productId = c.ProductId,
-                        name = c.Name, // Use cart name or product name
-                        price = c.Price,
-                        quantity = c.Quantity,
-                        imageURL = c.ImageURL,
-                        brand = c.Brand,
-                        urlSlug = c.UrlSlug
-                    })
                     .ToListAsync();
 
-                _logger.LogInformation($"Found {cartItems.Count} cart items for user {userId}");
-                return Ok(cartItems);
+                // Fix any incorrect image URLs in the database
+                foreach (var cartItem in cartItems)
+                {
+                    if (!string.IsNullOrEmpty(cartItem.ImageURL) && 
+                        cartItem.ImageURL.StartsWith("/images/") && 
+                        !cartItem.ImageURL.Contains("/products/") && 
+                        cartItem.Product != null && 
+                        !string.IsNullOrEmpty(cartItem.Product.Image))
+                    {
+                        cartItem.ImageURL = cartItem.Product.Image;
+                        _logger.LogInformation($"Fixed image URL for cart item {cartItem.Id}: {cartItem.ImageURL}");
+                    }
+                }
+                await _context.SaveChangesAsync();
+
+                var result = cartItems.Select(c => new
+                {
+                    id = c.Id,
+                    productId = c.ProductId,
+                    name = c.Name,
+                    price = c.Price,
+                    quantity = c.Quantity,
+                    imageURL = c.ImageURL,
+                    brand = c.Brand,
+                    urlSlug = c.UrlSlug
+                }).ToList();
+
+                _logger.LogInformation($"Found {result.Count} cart items for user {userId}");
+                return Ok(result);
             }
             catch (Exception ex)
             {
