@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace FreakyFurnitureAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/shipping-details")]
     public class ShippingDetailsController : ControllerBase
     {
         private readonly FurnitureDbContext _context;
