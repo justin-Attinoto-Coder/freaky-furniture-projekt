@@ -12,16 +12,22 @@ export class ReviewProductCardComponent {
   @Input() product: any = {};
   @Output() quantityChange = new EventEmitter<number>();
 
-  // Base URL for images
-readonly imageBaseUrl = 'https://freaky-angular-furniture-backend.onrender.com';
+  // Base URL for images - using ASP.NET Core API
+  readonly imageBaseUrl = 'http://localhost:5186';
+  
   // Compute image URL or fallback
   getImageUrl(): string {
     const imagePath = this.product.imageURL?.trim();
+    console.log('ReviewProductCard: Getting image URL for product:', this.product.name, 'imageURL:', imagePath);
+    
     if (imagePath) {
       // Handle relative paths (e.g., "/images/product.jpg")
-      return imagePath.startsWith('http') ? imagePath : `${this.imageBaseUrl}${imagePath}`;
+      const fullUrl = imagePath.startsWith('http') ? imagePath : `${this.imageBaseUrl}${imagePath}`;
+      console.log('ReviewProductCard: Full image URL:', fullUrl);
+      return fullUrl;
     }
     // Fallback placeholder image
+    console.log('ReviewProductCard: Using placeholder image for:', this.product.name);
     return 'https://via.placeholder.com/64?text=No+Image';
   }
 

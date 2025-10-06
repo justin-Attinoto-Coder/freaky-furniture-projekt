@@ -168,8 +168,19 @@ export class CartComponent implements OnInit, OnDestroy {
     this.cartService.addCustomer(this.customerData).subscribe({
       next: (response) => {
         console.log('Customer data saved successfully:', response);
-        // Navigate to checkout success after saving customer data
-        this.router.navigate(['/checkout-shipping']);
+        // Navigate to checkout-shipping with cart data
+        this.router.navigate(['/checkout-shipping'], {
+          state: {
+            customerDetails: this.customerData,
+            cartItems: this.cartItems,
+            totalPrice: this.totalPrice
+          }
+        }).then(success => {
+          console.log('Cart: Navigation to /checkout-shipping successful:', success, {
+            cartItems: this.cartItems,
+            totalPrice: this.totalPrice
+          });
+        });
       },
       error: (error) => {
         console.error('Error saving customer data:', error);
