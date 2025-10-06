@@ -52,6 +52,12 @@ export class CartService {
     });
   }
 
+  // Public method to refresh cart items from the server
+  refreshCart(): void {
+    console.log('CartService: Refreshing cart from server');
+    this.loadCartItems();
+  }
+
   addCartItem(item: CartItem): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.apiUrl}/cart`, {
       ...item,

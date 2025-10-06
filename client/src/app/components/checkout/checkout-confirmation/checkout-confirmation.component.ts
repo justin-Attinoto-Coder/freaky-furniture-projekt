@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CartService } from '../../../services/cart.service';
 import {
   faCheckCircle,
   faTruck,
@@ -53,9 +54,18 @@ export class CheckoutConfirmationComponent implements OnInit {
   showConfetti: boolean = true;
   imageBaseUrl: string = 'http://localhost:5186';
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private cartService: CartService
+  ) {}
 
   ngOnInit() {
+    // Refresh cart to reflect that it's been cleared (cart was cleared on order confirmation)
+    // This ensures the header cart icon shows 0 items immediately
+    this.cartService.refreshCart();
+    console.log('Checkout-Confirmation: Cart refreshed - should now show as empty');
+
     // Receive order data from router state
     const state = history.state;
     this.customerDetails = state.customerDetails || {};
