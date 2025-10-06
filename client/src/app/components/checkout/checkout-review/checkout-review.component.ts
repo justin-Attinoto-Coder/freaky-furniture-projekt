@@ -94,31 +94,33 @@ export class CheckoutReviewComponent implements OnInit {
       this.error = 'Item not found. Please try again.';
       return;
     }
+
     console.log('Checkout-Review: Updating quantity for productId:', productId, 'to:', quantity);
+
+    // Update UI optimistically first
+    this.cartItems = this.cartItems.map(item =>
+      item.productId === productId ? { ...item, quantity } : item
+    );
+    console.log('Checkout-Review: Updated cart items locally:', this.cartItems);
+    console.log('Checkout-Review: New totals - Subtotal:', this.subtotal, 'Shipping:', this.shippingFee, 'Grand Total:', this.grandTotal);
+
+    // Try to update in the backend (but don't fail if item not in cart)
+    // Only send quantity as the API expects UpdateCartItemRequest with just quantity
     this.http.put(`http://localhost:5186/api/cart/${productId}`, {
-      productId,
-      quantity,
-      name: item.name || 'Unknown Product',
-      price: item.price || 0,
-      imageURL: item.imageURL || '/images/default.jpg',
-      brand: item.brand || '',
-      urlSlug: item.urlSlug || ''
+      quantity
     }).subscribe({
       next: () => {
-        this.cartItems = this.cartItems.map(item =>
-          item.productId === productId ? { ...item, quantity } : item
-        );
-        console.log('Checkout-Review: Updated cart items:', this.cartItems);
-        console.log('Checkout-Review: New totals - Subtotal:', this.subtotal, 'Shipping:', this.shippingFee, 'Grand Total:', this.grandTotal);
+        console.log('Checkout-Review: Cart item updated in database');
         this.error = null;
       },
       error: (error) => {
-        console.error('Checkout-Review: Error updating quantity:', {
+        // Log the error but don't revert changes - we're in checkout flow
+        console.warn('Checkout-Review: Could not update cart in database (items may have been cleared):', {
           status: error.status,
-          message: error.message,
-          response: error.error
+          message: error.message
         });
-        this.error = 'Failed to update quantity. Please try again.';
+        // Keep the local changes - user is in active checkout
+        this.error = null;
       }
     });
   }
