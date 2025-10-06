@@ -1,0 +1,265 @@
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: #f0f;
+  animation: confettiFall 4s linear infinite;
+}
+
+.confetti:nth-child(1) {
+  left: 10%;
+  background: #ff6b6b;
+  animation-delay: 0s;
+}
+
+.confetti:nth-child(2) {
+  left: 20%;
+  background: #4ecdc4;
+  animation-delay: 0.3s;
+}
+
+.confetti:nth-child(3) {
+  left: 30%;
+  background: #ffe66d;
+  animation-delay: 0.6s;
+}
+
+.confetti:nth-child(4) {
+  left: 40%;
+  background: #95e1d3;
+  animation-delay: 0.9s;
+}
+
+.confetti:nth-child(5) {
+  left: 50%;
+  background: #f38181;
+  animation-delay: 1.2s;
+}
+
+.confetti:nth-child(6) {
+  left: 60%;
+  background: #aa96da;
+  animation-delay: 1.5s;
+}
+
+.confetti:nth-child(7) {
+  left: 70%;
+  background: #fcbad3;
+  animation-delay: 1.8s;
+}
+
+.confetti:nth-child(8) {
+  left: 80%;
+  background: #ffffd2;
+  animation-delay: 2.1s;
+}
+
+.confetti:nth-child(9) {
+  left: 90%;
+  background: #a8e6cf;
+  animation-delay: 2.4s;
+}
+
+.confetti:nth-child(10) {
+  left: 15%;
+  background: #ff8b94;
+  animation-delay: 0.2s;
+  width: 8px;
+  height: 8px;
+}
+
+.confetti:nth-child(11) {
+  left: 25%;
+  background: #c7ceea;
+  animation-delay: 0.5s;
+  width: 12px;
+  height: 12px;
+}
+
+.confetti:nth-child(12) {
+  left: 35%;
+  background: #ffeaa7;
+  animation-delay: 0.8s;
+  width: 8px;
+  height: 8px;
+}
+
+.confetti:nth-child(13) {
+  left: 45%;
+  background: #dfe6e9;
+  animation-delay: 1.1s;
+  width: 10px;
+  height: 10px;
+}
+
+.confetti:nth-child(14) {
+  left: 55%;
+  background: #74b9ff;
+  animation-delay: 1.4s;
+  width: 12px;
+  height: 12px;
+}
+
+.confetti:nth-child(15) {
+  left: 65%;
+  background: #a29bfe;
+  animation-delay: 1.7s;
+  width: 8px;
+  height: 8px;
+}
+
+.confetti:nth-child(16) {
+  left: 75%;
+  background: #fd79a8;
+  animation-delay: 2.0s;
+  width: 10px;
+  height: 10px;
+}
+
+.confetti:nth-child(17) {
+  left: 85%;
+  background: #fdcb6e;
+  animation-delay: 2.3s;
+  width: 12px;
+  height: 12px;
+}
+
+.confetti:nth-child(18) {
+  left: 95%;
+  background: #00b894;
+  animation-delay: 2.6s;
+  width: 8px;
+  height: 8px;
+}
+
+.confetti:nth-child(19) {
+  left: 12%;
+  background: #e17055;
+  animation-delay: 0.4s;
+  width: 10px;
+  height: 10px;
+}
+
+.confetti:nth-child(20) {
+  left: 88%;
+  background: #6c5ce7;
+  animation-delay: 2.8s;
+  width: 12px;
+  height: 12px;
+}
+
+/* Gradient backgrounds */
+.bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+/* Custom shadow effects */
+.shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Smooth transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Hover effects for cards */
+.bg-white:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
