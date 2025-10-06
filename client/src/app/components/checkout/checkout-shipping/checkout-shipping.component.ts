@@ -103,7 +103,23 @@ export class CheckoutShippingComponent {
       console.error('Checkout-Shipping: Form validation failed:', this.shippingDetails);
       return;
     }
-    this.http.post('http://localhost:5186/api/shipping-details', this.shippingDetails).subscribe({
+
+    // Convert camelCase to PascalCase for C# API
+    const shippingDetailsDto = {
+      FullName: this.shippingDetails.fullName,
+      PhoneNumber: this.shippingDetails.phoneNumber,
+      Province: this.shippingDetails.province,
+      City: this.shippingDetails.city,
+      StreetAddress: this.shippingDetails.streetAddress,
+      PostalCode: this.shippingDetails.postalCode,
+      ShippingMethod: this.shippingDetails.shippingMethod,
+      Carrier: this.shippingDetails.carrier,
+      DeliveryTime: this.shippingDetails.deliveryTime
+    };
+
+    console.log('Checkout-Shipping: Sending DTO to API:', shippingDetailsDto);
+
+    this.http.post('http://localhost:5186/api/shipping-details', shippingDetailsDto).subscribe({
       next: (response) => {
         console.log('Checkout-Shipping: Shipping details saved, response:', response);
         this.error = null;
