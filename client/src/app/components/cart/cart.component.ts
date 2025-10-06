@@ -169,7 +169,7 @@ export class CartComponent implements OnInit, OnDestroy {
       next: (response) => {
         console.log('Customer data saved successfully:', response);
         // Navigate to checkout success after saving customer data
-        this.router.navigate(['/checkout-confirmation']);
+        this.router.navigate(['/checkout-shipping']);
       },
       error: (error) => {
         console.error('Error saving customer data:', error);
