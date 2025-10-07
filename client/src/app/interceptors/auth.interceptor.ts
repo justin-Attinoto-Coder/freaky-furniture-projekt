@@ -11,10 +11,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = authService.getToken();
   let authReq = req;
 
-  // Updated public routes to match your ASP.NET Core API
-  const publicRoutes = ['/api/auth/login', '/api/auth/register', '/api/products', '/api/furniture'];
-  if (publicRoutes.some(route => req.url.includes(route))) {
-    console.log('AuthInterceptor: Public route, skipping token check:', req.url);
+  // Public routes - only GET requests for products/furniture and auth endpoints
+  const isAuthRoute = req.url.includes('/api/auth/login') || req.url.includes('/api/auth/register');
+  const isPublicGetRoute = (req.method === 'GET' && (req.url.includes('/api/products') || req.url.includes('/api/furniture') || req.url.includes('/api/categories')));
+
+  if (isAuthRoute || isPublicGetRoute) {
+    console.log('AuthInterceptor: Public route, skipping token check:', req.method, req.url);
     return next(req);
   }
 
