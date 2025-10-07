@@ -118,7 +118,7 @@ export class ProductService {
   }
 
   updateProduct(id: number, productData: Partial<CreateProductRequest>): Observable<ApiResponse<Product>> {
-    return this.http.put<ApiResponse<Product>>(`${this.apiUrl}/${id}`, productData, this.httpOptions).pipe(
+    return this.http.patch<ApiResponse<Product>>(`${this.apiUrl}/${id}`, productData, this.httpOptions).pipe(
       tap(response => {
         console.log('✅ Product updated successfully:', response.data);
       }),

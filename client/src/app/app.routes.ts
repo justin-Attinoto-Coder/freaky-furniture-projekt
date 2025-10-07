@@ -26,6 +26,7 @@ export const routes: Routes = [
   { path: 'admin', component: AdminDashboardComponent, children: [
     { path: 'table', component: AdminTableComponent },
     { path: 'new-product', component: AdminNewProductComponent },
+    { path: 'edit-product/:id', component: AdminNewProductComponent },
     { path: 'users', component: AdminUsersTableComponent },
     { path: '', redirectTo: 'table', pathMatch: 'full' }
   ]},

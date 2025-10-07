@@ -33,12 +33,24 @@ export class AdminTableComponent implements OnInit {
 
   handleEdit(id: number): void {
     console.log('Edit product with ID:', id);
-    // Navigate to edit page (not implemented)
+    this.router.navigate(['admin/edit-product', id]);
   }
 
   handleDelete(id: number): void {
     console.log('Delete product with ID:', id);
-    // Implement delete logic if needed
+    if (confirm('Are you sure you want to delete this product?')) {
+      this.productService.deleteProduct(id).subscribe({
+        next: () => {
+          console.log('Product deleted successfully');
+          // Refresh the list
+          this.ngOnInit();
+        },
+        error: (error) => {
+          console.error('Error deleting product:', error);
+          alert('Failed to delete product. Please try again.');
+        }
+      });
+    }
   }
 
   navigateToNewProduct(): void {
