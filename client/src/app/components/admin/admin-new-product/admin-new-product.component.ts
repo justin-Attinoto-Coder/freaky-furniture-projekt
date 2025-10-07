@@ -79,8 +79,8 @@ export class AdminNewProductComponent implements OnInit {
     const categoryMap: { [key: number]: string } = {
       1: 'mobler',
       2: 'forvaring',
-      3: 'detaljer',
-      4: 'textil'
+      3: 'textil',
+      4: 'detaljer'
     };
     return categoryMap[categoryId] || 'mobler';
   }
