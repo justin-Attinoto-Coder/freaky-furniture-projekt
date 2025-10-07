@@ -6,6 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faBoxOpen, faCreditCard, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 import { ReviewProductCardComponent } from '../review-product-card/review-product-card.component';
 import { OrderSummaryComponent } from '../../common/order-summary/order-summary.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-checkout-review',
@@ -60,7 +61,7 @@ export class CheckoutReviewComponent implements OnInit {
   }
 
   fetchCartItems() {
-    this.http.get('http://localhost:5186/api/cart').subscribe({
+    this.http.get(`${environment.apiBaseUrl}/api/cart`).subscribe({
       next: (data: any) => {
         this.cartItems = data.map((item: any) => ({
           ...item,
@@ -106,7 +107,7 @@ export class CheckoutReviewComponent implements OnInit {
 
     // Try to update in the backend (but don't fail if item not in cart)
     // Only send quantity as the API expects UpdateCartItemRequest with just quantity
-    this.http.put(`http://localhost:5186/api/cart/${productId}`, {
+    this.http.put(`${environment.apiBaseUrl}/api/cart/${productId}`, {
       quantity
     }).subscribe({
       next: () => {
@@ -127,7 +128,7 @@ export class CheckoutReviewComponent implements OnInit {
 
   handleConfirmOrder() {
     console.log('Checkout-Review: Confirming order, clearing cart');
-    this.http.delete('http://localhost:5186/api/cart/clear').subscribe({
+    this.http.delete(`${environment.apiBaseUrl}/api/cart/clear`).subscribe({
       next: () => {
         console.log('Checkout-Review: Cart cleared in the backend');
         this.cartItems = [];

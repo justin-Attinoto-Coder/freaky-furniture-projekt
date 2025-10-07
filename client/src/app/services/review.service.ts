@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 export interface Review {
   id: number;
@@ -31,7 +32,7 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class ReviewService {
-  private readonly apiUrl = 'http://localhost:5186/api/reviews';
+  private readonly apiUrl = `${environment.apiBaseUrl}/api/reviews`;
 
   private httpOptions = {
     headers: new HttpHeaders({

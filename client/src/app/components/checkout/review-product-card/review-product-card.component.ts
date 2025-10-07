@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-review-product-card',
@@ -13,7 +14,7 @@ export class ReviewProductCardComponent {
   @Output() quantityChange = new EventEmitter<number>();
 
   // Base URL for images - using ASP.NET Core API
-  readonly imageBaseUrl = 'http://localhost:5186';
+  readonly imageBaseUrl = environment.apiBaseUrl;
 
   // Compute image URL or fallback
   getImageUrl(): string {

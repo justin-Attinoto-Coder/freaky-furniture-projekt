@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface CartItem {
   id?: number;
@@ -29,7 +30,7 @@ export interface CustomerData {
 export class CartService {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   cartItems$: Observable<CartItem[]> = this.cartItemsSubject.asObservable();
-  private apiUrl = 'http://localhost:5186/api'; // Updated to ASP.NET Core API
+  private apiUrl = `${environment.apiBaseUrl}/api`; // Updated to ASP.NET Core API
 
   constructor(private http: HttpClient) {
     this.loadCartItems();

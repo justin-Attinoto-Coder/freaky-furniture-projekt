@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Product } from '../models/product';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 interface ProductResponse {
   products: Product[];
@@ -16,7 +17,7 @@ interface ProductResponse {
   providedIn: 'root'
 })
 export class SearchService {
-  private apiUrl = 'http://localhost:5186/api/products';
+  private apiUrl = `${environment.apiBaseUrl}/api/products`;
   private searchResults = new BehaviorSubject<Product[]>([]);
   private searchPerformed = new BehaviorSubject<boolean>(false);
   private searchQuery = new BehaviorSubject<string>('');

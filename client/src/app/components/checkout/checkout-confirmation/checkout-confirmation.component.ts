@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CartService } from '../../../services/cart.service';
+import { environment } from '../../../../environments/environment';
 import {
   faCheckCircle,
   faTruck,
@@ -52,7 +53,7 @@ export class CheckoutConfirmationComponent implements OnInit {
 
   // UI state
   showConfetti: boolean = true;
-  imageBaseUrl: string = 'http://localhost:5186';
+  imageBaseUrl: string = environment.apiBaseUrl;
 
   constructor(
     private router: Router,

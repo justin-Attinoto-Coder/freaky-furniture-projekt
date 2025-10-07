@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { Product } from '../models/product';
+import { environment } from '../../environments/environment';
 
 // Interface for creating new products
 export interface CreateProductRequest {
@@ -27,9 +28,9 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class ProductService {
-  // Fix: Use HTTP instead of HTTPS for localhost development
-  private apiUrl = 'http://localhost:5186/api/products'; // Changed from https to http
-  private baseImageUrl = 'http://localhost:5186';
+  // Use environment configuration for API URL
+  private apiUrl = `${environment.apiBaseUrl}/api/products`;
+  private baseImageUrl = environment.apiBaseUrl;
 
   private httpOptions = {
     headers: new HttpHeaders({

@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../environments/environment';
 
 interface AuthResponse {
   accessToken: string;
@@ -30,7 +31,7 @@ export interface AuthState {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5186/api/auth';
+  private apiUrl = `${environment.apiBaseUrl}/api/auth`;
   private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('token'));
   private roleSubject = new BehaviorSubject<string | null>(localStorage.getItem('role'));
   private usernameSubject = new BehaviorSubject<string | null>(localStorage.getItem('username'));

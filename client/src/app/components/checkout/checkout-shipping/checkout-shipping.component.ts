@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowLeft, faBoxOpen, faCreditCard, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-checkout-shipping',
@@ -128,7 +129,7 @@ export class CheckoutShippingComponent {
 
     console.log('Checkout-Shipping: Sending DTO to API:', shippingDetailsDto);
 
-    this.http.post('http://localhost:5186/api/shipping-details', shippingDetailsDto).subscribe({
+    this.http.post(`${environment.apiBaseUrl}/api/shipping-details`, shippingDetailsDto).subscribe({
       next: (response) => {
         console.log('Checkout-Shipping: Shipping details saved, response:', response);
         this.error = null;
