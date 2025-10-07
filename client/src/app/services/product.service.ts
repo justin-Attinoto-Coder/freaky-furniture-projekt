@@ -118,7 +118,32 @@ export class ProductService {
   }
 
   updateProduct(id: number, productData: Partial<CreateProductRequest>): Observable<ApiResponse<Product>> {
-    return this.http.patch<ApiResponse<Product>>(`${this.apiUrl}/${id}`, productData, this.httpOptions).pipe(
+    // Create JsonPatchDocument operations for all fields
+    const patchOperations = [];
+
+    if (productData.name !== undefined) {
+      patchOperations.push({ op: 'replace', path: '/name', value: productData.name });
+    }
+    if (productData.description !== undefined) {
+      patchOperations.push({ op: 'replace', path: '/description', value: productData.description });
+    }
+    if (productData.price !== undefined) {
+      patchOperations.push({ op: 'replace', path: '/price', value: productData.price });
+    }
+    if (productData.image !== undefined) {
+      patchOperations.push({ op: 'replace', path: '/image', value: productData.image });
+    }
+    if (productData.brand !== undefined) {
+      patchOperations.push({ op: 'replace', path: '/brand', value: productData.brand });
+    }
+    if (productData.sku !== undefined) {
+      patchOperations.push({ op: 'replace', path: '/sku', value: productData.sku });
+    }
+    if (productData.categoryId !== undefined) {
+      patchOperations.push({ op: 'replace', path: '/categoryId', value: productData.categoryId });
+    }
+
+    return this.http.patch<ApiResponse<Product>>(`${this.apiUrl}/${id}`, patchOperations, this.httpOptions).pipe(
       tap(response => {
         console.log('✅ Product updated successfully:', response.data);
       }),
