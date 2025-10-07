@@ -1,4 +1,19 @@
-# Freaky Furniture - Render.com Deployment Guide
+# Freaky Furniture - Render.com Deploym**Connection String Format:**
+
+```sql
+Host=nckapfsfgyljjkotvbyv.supabase.co;Port=5432;Database=postgres;Username=postgres;Password=your-service-role-key;SSL Mode=Require;Trust Server Certificate=true
+```
+
+**Important Notes:**
+
+- **IP Restrictions**: Supabase may block connections from unknown IPs. You might need to:
+  - Add your current IP to Supabase allowlist, OR
+  - Use Supabase connection pooling (recommended for production)
+  - Configure this after deployment on Render.com
+
+- **Connection Pooling**: For production, consider using Supabase's connection pooling:
+  - Go to Settings → Database → Connection Pooling
+  - Use the pooled connection string insteaduide
 **Why Azure?**
 
 - ✅ **Free tier available** but requires Azure subscription
@@ -54,10 +69,6 @@ Host=your-project-ref.supabase.co;Database=postgres;Username=postgres;Password=y
 **Setup:** Follow the automated script method below after creating an Azure account.
 
 ### 🐘 Option 3: Other Free PostgreSQL Services
-
-- **Neon**: Serverless PostgreSQL (512MB free)
-- **Railway**: PostgreSQL with 512MB free
-- **ElephantSQL**: PostgreSQL as a service (20MB-5GB free tiers)
 
 - **Neon**: Serverless PostgreSQL (512MB free)
 - **Railway**: PostgreSQL with 512MB free
