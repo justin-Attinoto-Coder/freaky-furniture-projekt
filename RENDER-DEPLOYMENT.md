@@ -1,63 +1,67 @@
 # Freaky Furniture - Render.com Deployment Guide
+**Why Azure?**
 
-This guide explains how to deploy the Freaky Furniture application to Render.com.
+- ✅ **Free tier available** but requires Azure subscription
+- ✅ **SQL Server compatible** (no code changes needed)
+- ✅ **Enterprise features** if you scale up
+
+**Setup:** Follow the automated script method below after creating an Azure account.
+
+### 🐘 Option 3: Other Free PostgreSQL Services
+
+- **Neon**: Serverless PostgreSQL (512MB free)
+- **Railway**: PostgreSQL with 512MB free
+- **ElephantSQL**: PostgreSQL as a service (20MB-5GB free tiers) explains how to deploy the Freaky Furniture application to Render.com.
 
 ## Prerequisites
 
 1. **Render.com Account**: Sign up at [render.com](https://render.com)
-2. **Azure SQL Database**: Since Render.com doesn't support SQL Server, we'll use Azure SQL Database
+2. **Database**: Choose from the options below (Supabase recommended for no-subscription setup)
 
-## Database Setup (Azure SQL Database)
+## Database Setup (Choose Your Option)
 
-### Option 1: Automated Setup (Recommended)
+### 🆓 Option 1: Supabase (Recommended - No Subscription Required)
 
-1. **Install Azure CLI**:
-   - Download from: [Microsoft Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows)
-   - Or install via Chocolatey: `choco install azure-cli`
+**Why Supabase?**
 
-2. **Run the setup script**:
+- ✅ **Free tier**: 500MB database, 50MB file storage, 2GB bandwidth
+- ✅ **No credit card required** to get started
+- ✅ **PostgreSQL** (works great with Entity Framework)
+- ✅ **Built-in features**: Authentication, real-time subscriptions, edge functions
+- ✅ **Easy setup**: Web-based dashboard
 
-   ```powershell
-   # Open PowerShell as Administrator
-   cd "C:\Workspace\JavaScript3-angular\freaky-furniture-projekt"
-   .\setup-azure-sql.ps1
-   ```
+**Quick Setup:**
 
-3. **Copy the connection string** from the output and update `appsettings.Production.json`
+1. Go to [supabase.com](https://supabase.com) and create a free account
+2. Create a new project
+3. Get your connection string from Settings → Database
+4. Update `appsettings.Production.json` with the Supabase connection string
 
-   Or use the automated script:
+**Connection String Format:**
 
-   ```powershell
-   .\update-connection-string.ps1 -ConnectionString "your-full-connection-string-here"
-   ```
+```sql
+Host=your-project-ref.supabase.co;Database=postgres;Username=postgres;Password=your-password;SSL Mode=Require;Trust Server Certificate=true
+```
 
-### Option 2: Manual Setup via Azure Portal
+### ☁️ Option 2: Azure SQL Database (Requires Subscription)
 
-1. **Create Azure SQL Database**:
-   - Go to [Azure Portal](https://portal.azure.com)
-   - Search for "SQL Database" and click "Create"
-   - **Basics**:
-     - Subscription: Your subscription
-     - Resource group: Create new "freaky-furniture-rg" or use existing
-     - Database name: `FreakyFurnitureDB`
-     - Server: Create new
-       - Server name: `freaky-furniture-sql` (must be globally unique)
-       - Location: East US (or your preferred region)
-       - Authentication: Use SQL authentication
-       - Server admin login: `freakyadmin`
-       - Password: Choose a strong password
-     - **Compute + storage**: Choose "Free" tier
-   - Click "Review + create" then "Create"
+**Why Azure?**
 
-2. **Configure Firewall**:
-   - After creation, go to your SQL server resource
-   - Under "Security" > "Networking"
-   - Add firewall rule: Allow all Azure services (0.0.0.0 - 0.0.0.0)
+- ✅ **Free tier available** but requires Azure subscription
+- ✅ **SQL Server compatible** (no code changes needed)
+- ✅ **Enterprise features** if you scale up
 
-3. **Get Connection String**:
-   - In your SQL Database resource, go to "Connection strings"
-   - Copy the "ADO.NET" connection string
-   - Replace `{your_password}` with your actual password
+**Setup:** Follow the automated script method below after creating an Azure account.
+
+### 🐘 Option 3: Other Free PostgreSQL Services
+
+- **Neon**: Serverless PostgreSQL (512MB free)
+- **Railway**: PostgreSQL with 512MB free
+- **ElephantSQL**: PostgreSQL as a service (20MB-5GB free tiers)
+
+- **Neon**: Serverless PostgreSQL (512MB free)
+- **Railway**: PostgreSQL with 512MB free
+- **ElephantSQL**: PostgreSQL as a service (20MB-5GB free tiers)
 
 ## Deployment Steps
 

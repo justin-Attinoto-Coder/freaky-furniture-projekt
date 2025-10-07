@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ay4vp0PpqRK4Fiu9Y4GbDTHn+KAKlTKTjv2iH+hpLJwzWy1rtWhwZ5i2gSkaejS6H0HlzqM5LS9r+wgoawRTeA==",
+  "dgSpecHash": "fXHQHtLoPmeS2IR7VzPF/ZPpm9+wCIzAq9jiidVl63eSyCVV+mKMWh6ys208uamJrrSPkAK0KoKaJqEGnyYLDQ==",
   "success": true,
   "projectFilePath": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\FreakyFurnitureAPI.csproj",
   "expectedPackageFiles": [
@@ -59,6 +59,8 @@
     "C:\\Users\\Justin Attinoto\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
     "C:\\Users\\Justin Attinoto\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\Justin Attinoto\\.nuget\\packages\\newtonsoft.json.bson\\1.0.2\\newtonsoft.json.bson.1.0.2.nupkg.sha512",
+    "C:\\Users\\Justin Attinoto\\.nuget\\packages\\npgsql\\9.0.2\\npgsql.9.0.2.nupkg.sha512",
+    "C:\\Users\\Justin Attinoto\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\9.0.2\\npgsql.entityframeworkcore.postgresql.9.0.2.nupkg.sha512",
     "C:\\Users\\Justin Attinoto\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.10\\sqlitepclraw.bundle_e_sqlite3.2.1.10.nupkg.sha512",
     "C:\\Users\\Justin Attinoto\\.nuget\\packages\\sqlitepclraw.core\\2.1.10\\sqlitepclraw.core.2.1.10.nupkg.sha512",
     "C:\\Users\\Justin Attinoto\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.10\\sqlitepclraw.lib.e_sqlite3.2.1.10.nupkg.sha512",
