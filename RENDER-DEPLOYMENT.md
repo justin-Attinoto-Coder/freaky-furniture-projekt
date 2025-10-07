@@ -9,24 +9,55 @@ This guide explains how to deploy the Freaky Furniture application to Render.com
 
 ## Database Setup (Azure SQL Database)
 
+### Option 1: Automated Setup (Recommended)
+
+1. **Install Azure CLI**:
+   - Download from: [Microsoft Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows)
+   - Or install via Chocolatey: `choco install azure-cli`
+
+2. **Run the setup script**:
+
+   ```powershell
+   # Open PowerShell as Administrator
+   cd "C:\Workspace\JavaScript3-angular\freaky-furniture-projekt"
+   .\setup-azure-sql.ps1
+   ```
+
+3. **Copy the connection string** from the output and update `appsettings.Production.json`
+
+   Or use the automated script:
+
+   ```powershell
+   .\update-connection-string.ps1 -ConnectionString "your-full-connection-string-here"
+   ```
+
+### Option 2: Manual Setup via Azure Portal
+
 1. **Create Azure SQL Database**:
    - Go to [Azure Portal](https://portal.azure.com)
-   - Create a new "SQL Database" resource
-   - Choose "Free" tier for development
-   - Note down the server name, database name, admin username, and password
+   - Search for "SQL Database" and click "Create"
+   - **Basics**:
+     - Subscription: Your subscription
+     - Resource group: Create new "freaky-furniture-rg" or use existing
+     - Database name: `FreakyFurnitureDB`
+     - Server: Create new
+       - Server name: `freaky-furniture-sql` (must be globally unique)
+       - Location: East US (or your preferred region)
+       - Authentication: Use SQL authentication
+       - Server admin login: `freakyadmin`
+       - Password: Choose a strong password
+     - **Compute + storage**: Choose "Free" tier
+   - Click "Review + create" then "Create"
 
 2. **Configure Firewall**:
-   - In Azure Portal, go to your SQL server
+   - After creation, go to your SQL server resource
    - Under "Security" > "Networking"
-   - Add your IP address to allow connections
-   - For production, you may need to allow all Azure services
+   - Add firewall rule: Allow all Azure services (0.0.0.0 - 0.0.0.0)
 
 3. **Get Connection String**:
-   - The connection string format should be:
-
-   ```sql
-   Server=tcp:your-server.database.windows.net,1433;Initial Catalog=your-database;Persist Security Info=False;User ID=your-admin-user;Password=your-password;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
-   ```
+   - In your SQL Database resource, go to "Connection strings"
+   - Copy the "ADO.NET" connection string
+   - Replace `{your_password}` with your actual password
 
 ## Deployment Steps
 
