@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://freaky-furniture-api.onrender.com'
+  apiBaseUrl: 'https://freaky-furniture-projekt.onrender.com'
 };

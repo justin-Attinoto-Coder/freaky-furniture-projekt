@@ -946,5 +946,32 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// Add health check endpoint
+app.MapGet("/", () => Results.Json(new { 
+    message = "Freaky Furniture API is running!", 
+    version = "1.0.0",
+    timestamp = DateTime.UtcNow,
+    environment = app.Environment.EnvironmentName
+}));
+
+app.MapGet("/health", () => Results.Json(new { 
+    status = "healthy", 
+    timestamp = DateTime.UtcNow 
+}));
+
+// Add API info endpoint
+app.MapGet("/api", () => Results.Json(new { 
+    message = "Freaky Furniture API", 
+    version = "1.0.0",
+    endpoints = new[] {
+        "/api/products",
+        "/api/categories", 
+        "/api/cart",
+        "/api/auth",
+        "/api/customers",
+        "/api/reviews"
+    }
+}));
+
 Console.WriteLine("🚀 API Server starting...");
 app.Run();
