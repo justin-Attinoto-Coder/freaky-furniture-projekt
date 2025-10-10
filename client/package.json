@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "dev": "ng serve",
-    "build": "ng build && cp src/_redirects dist/client/browser/_redirects",
+    "build": "ng build --configuration production && cp src/_redirects dist/client/browser/_redirects",
     "build:prod": "ng build --configuration production && cp src/_redirects dist/client/browser/_redirects",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
