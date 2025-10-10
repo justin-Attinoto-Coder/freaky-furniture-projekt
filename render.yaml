@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: freaky-furniture-api-backend
+    name: freaky-furniture-projekt
     runtime: docker
     plan: free
     env: docker
@@ -12,7 +12,7 @@ services:
         value: http://0.0.0.0:$PORT
 
   - type: web
-    name: freaky-furniture-webapp
+    name: freaky-furniture-projekt-1
     runtime: static
     plan: free
     buildCommand: cd client && npm ci && npm run build
