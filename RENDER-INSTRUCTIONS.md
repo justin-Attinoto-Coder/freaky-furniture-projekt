@@ -27,7 +27,7 @@ JwtSettings__SecretKey=supersecretkey12345678901234567890123456789012345
 
 ### Build Settings:
 - **Build Command:** `cd client && npm ci && npm run build`
-- **Publish Directory:** `client/dist/client`
+- **Publish Directory:** `client/dist/client/browser`
 
 ### Environment Variables:
 ```

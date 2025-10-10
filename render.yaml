@@ -16,7 +16,7 @@ services:
     runtime: static
     plan: free
     buildCommand: cd client && npm ci && npm run build
-    staticPublishPath: ./client/dist/client
+    staticPublishPath: ./client/dist/client/browser
     envVars:
       - key: NODE_VERSION
         value: "18"
