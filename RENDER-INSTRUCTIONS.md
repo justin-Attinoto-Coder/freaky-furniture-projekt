@@ -71,7 +71,7 @@ NODE_VERSION=18
 
 ### 1. **Update API Environment Variables in Render Dashboard:**
 ```bash
-ConnectionStrings__DefaultConnection=Host=nckapfsfgyljjkotvbyv.supabase.co;Port=5432;Database=postgres;Username=postgres;Password=pS3Ag7VoLzn2Yrfc;SSL Mode=Require;Trust Server Certificate=true
+ConnectionStrings__DefaultConnection=Host=newuouqyeaaoszzmqkej.supabase.co;Port=5432;Database=postgres;Username=postgres;Password=@YTrGDnw!7VcxHc;SSL Mode=Require;Trust Server Certificate=true
 JwtSettings__Issuer=FreakyFurnitureAPI
 JwtSettings__Audience=FreakyFurnitureClients
 ```
