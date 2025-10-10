@@ -18,7 +18,7 @@
 
 ASPNETCORE_ENVIRONMENT=Production
 ASPNETCORE_URLS=<http://0.0.0.0:$PORT>
-ConnectionStrings__DefaultConnection=Host=nckapfsfgyljjkotvbyv.supabase.co;Port=5432;Database=postgres;Username=postgres;Password=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ja2FwZnNmZ3lsamprb3R2Ynl2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODI5MDgwNCwiZXhwIjoyMDczODY2ODA0fQ.Jui9v92DQWytq14O1P7nZW-hjLW55eJ15-FNqHmw9V0;SSL Mode=Require;Trust Server Certificate=true
+ConnectionStrings__DefaultConnection=Host=nckapfsfgyljjkotvbyv.supabase.co;Port=5432;Database=postgres;Username=postgres;Password=pS3Ag7VoLzn2Yrfc;SSL Mode=Require;Trust Server Certificate=true
 JwtSettings__SecretKey=supersecretkey12345678901234567890123456789012345
 
 ## Frontend Static Site
@@ -55,13 +55,49 @@ NODE_VERSION=18
    - The environment.prod.ts is already configured for the new service name
    - Frontend will automatically connect to the correct API URL
 
+## Current Deployment Status
+
+### ✅ **API Service: freaky-furniture-projekt**
+- **URL:** https://freaky-furniture-projekt.onrender.com
+- **Status:** ✅ Live and responding
+- **Database:** ⚠️ Needs environment variable update with correct password
+
+### ✅ **Frontend Service: freaky-furniture-projekt-1** 
+- **URL:** https://freaky-furniture-projekt-1.onrender.com
+- **Status:** ✅ Live (after publish directory fix)
+- **API Connection:** ⚠️ Still using localhost - needs redeploy after package.json fix
+
+## 🚨 **CRITICAL NEXT STEPS:**
+
+### 1. **Update API Environment Variables in Render Dashboard:**
+```bash
+ConnectionStrings__DefaultConnection=Host=nckapfsfgyljjkotvbyv.supabase.co;Port=5432;Database=postgres;Username=postgres;Password=pS3Ag7VoLzn2Yrfc;SSL Mode=Require;Trust Server Certificate=true
+JwtSettings__Issuer=FreakyFurnitureAPI
+JwtSettings__Audience=FreakyFurnitureClients
+```
+
+### 2. **Redeploy API Service**
+- This will trigger `Database.EnsureCreated()` and create all furniture tables
+- Tables created: Products, Categories, Cart, Users, Reviews, PaymentDetails, ShippingDetails
+
+### 3. **Redeploy Frontend Service** 
+- This will use the production configuration to connect to the correct API URL
+- Frontend will stop trying to connect to localhost
+
+## Expected Final Result:
+- ✅ **API:** Creates furniture tables, seeds sample data, serves products
+- ✅ **Frontend:** Connects to production API, displays furniture store
+- ✅ **Database:** Contains both movies (existing) + furniture tables (new)
+
 ## Troubleshooting
 
-If you get "docker: command not found"
-
+If you get "docker: command not found":
 - Make sure you selected "Docker" as runtime for the API service
-  
-- Ensure build and start commands are LEFT EMPTY for Docker services
-  
+- Ensure build and start commands are LEFT EMPTY for Docker services  
 - Render will automatically detect and use your Dockerfile
+
+If API returns empty products:
+- Check Render logs for database connection errors
+- Verify environment variables are set correctly
+- Ensure Supabase project is active (not paused)
   
