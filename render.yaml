@@ -15,7 +15,7 @@ services:
     name: freaky-furniture-frontend
     runtime: static
     plan: free
-    buildCommand: cd client && npm ci && npm run build --configuration production
+    buildCommand: cd client && npm ci && npm run build
     staticPublishPath: ./client/dist/client
     envVars:
       - key: NODE_VERSION
