@@ -3,25 +3,20 @@ services:
     name: freaky-furniture-api
     runtime: docker
     plan: free
-    buildCommand: docker build -t freaky-furniture-api .
-    startCommand: docker run -p $PORT:80 freaky-furniture-api
+    env: docker
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
-      - key: ASPNETCORE_URLS
-        value: http://+:$PORT
-      - key: ConnectionStrings__DefaultConnection
-        sync: false # Set this in Render dashboard
-      - key: JwtSettings__SecretKey
-        generateValue: true
-        type: secret
+      - key: ASPNETCORE_URLS  
+        value: http://0.0.0.0:$PORT
 
   - type: web
     name: freaky-furniture-frontend
     runtime: static
     plan: free
-    buildCommand: cd client && npm install && npm run build --prod
+    buildCommand: cd client && npm ci && npm run build --configuration production
     staticPublishPath: ./client/dist/client
     envVars:
-      - key: API_BASE_URL
-        value: https://freaky-furniture-api.onrender.com
+      - key: NODE_VERSION
+        value: "18"
