@@ -2,6 +2,7 @@
 
 ## Backend API Service
 
+**Service Name:** freaky-furniture-api-backend  
 **Service Type:** Web Service  
 **Runtime:** Docker  
 **Repository:** https://github.com/justin-Attinoto-Coder/freaky-furniture-projekt  
@@ -21,6 +22,7 @@ JwtSettings__SecretKey=supersecretkey12345678901234567890123456789012345
 
 ## Frontend Static Site
 
+**Service Name:** freaky-furniture-webapp  
 **Service Type:** Static Site  
 **Repository:** https://github.com/justin-Attinoto-Coder/freaky-furniture-projekt  
 **Branch:** render-deployment  
@@ -52,9 +54,9 @@ NODE_VERSION=18
    - Deploy
 
 3. **Update Frontend API URL:**
-   - After API deploys, note the URL (e.g., https://freaky-furniture-api-xyz.onrender.com)
-   - Update client/src/environments/environment.prod.ts with actual API URL
-   - Redeploy frontend
+   - After API deploys, note the URL (should be: https://freaky-furniture-api-backend.onrender.com)
+   - The environment.prod.ts is already configured for the new service name
+   - Frontend will automatically connect to the correct API URL
 
 ## Troubleshooting:
 
