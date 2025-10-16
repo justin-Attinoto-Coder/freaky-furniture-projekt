@@ -1005,16 +1005,18 @@ using (var scope = app.Services.CreateScope())
         if (!await context.Recommended.AnyAsync() && await context.Products.AnyAsync())
         {
             var allProducts = await context.Products.Take(4).ToListAsync();
-            var recommendedItems = allProducts.Select(p => new Recommended 
-            { 
-                ProductId = p.Id 
+            var recommendedItems = allProducts.Select(p => new Recommended
+            {
+                ProductId = p.Id
             }).ToList();
-            
+
             await context.Recommended.AddRangeAsync(recommendedItems);
             await context.SaveChangesAsync();
-            
+
             logger.LogInformation($"✅ Created {recommendedItems.Count} recommended products");
         }
+
+        ReviewsDatabaseSeeder.Seed(context, logger);
     }
     catch (Exception ex)
     {
