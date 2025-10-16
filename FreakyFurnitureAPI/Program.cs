@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 using FreakyFurnitureAPI.Data;
 using FreakyFurnitureAPI.Models;
@@ -16,7 +17,62 @@ builder.Services.AddControllers()
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo 
+    { 
+        Title = "Freaky Furniture API", 
+        Version = "v1",
+        Description = "A comprehensive furniture store API with JWT authentication, supporting full CRUD operations for products, categories, cart management, reviews, and user authentication.",
+        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+        {
+            Name = "Freaky Furniture Support",
+            Email = "support@freakyfurniture.com"
+        },
+        License = new Microsoft.OpenApi.Models.OpenApiLicense
+        {
+            Name = "MIT License"
+        }
+    });
+    
+    // Enable annotations to respect [SwaggerOperation] and [SwaggerResponse] attributes
+    c.EnableAnnotations();
+    
+    // Add JWT Bearer Authentication to Swagger
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'",
+        Name = "Authorization",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT"
+    });
+    
+    // Add global security requirement so authorize button shows unlock icon
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+    
+    // Group endpoints by tags for better organization
+    c.TagActionsBy(api => new[] { api.GroupName ?? api.ActionDescriptor.RouteValues["controller"] });
+    c.DocInclusionPredicate((name, api) => true);
+    
+    // Customize schema generation for better date/time handling
+    c.MapType<DateTime>(() => new Microsoft.OpenApi.Models.OpenApiSchema { Type = "string", Format = "date-time" });
+    c.MapType<DateTimeOffset>(() => new Microsoft.OpenApi.Models.OpenApiSchema { Type = "string", Format = "date-time" });
+});
 
 builder.Services.AddDbContext<FurnitureDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -59,7 +115,26 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => 
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Freaky Furniture API v1");
+        c.ConfigObject.PersistAuthorization = true;
+        
+        // Enhanced UI configuration for VG requirements
+        c.DocumentTitle = "Freaky Furniture API - VG Documentation";
+        c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
+        c.DefaultModelsExpandDepth(-1); // Hide schemas section by default
+        c.DefaultModelExpandDepth(2);
+        c.DisplayRequestDuration();
+        c.EnableTryItOutByDefault();
+        
+        // Custom CSS and JS for better presentation
+        c.InjectStylesheet("/swagger-ui/custom.css");
+        c.InjectJavascript("/swagger-ui/custom.js");
+        
+        // Add custom footer
+        c.ConfigObject.AdditionalItems.Add("customFooter", "Freaky Furniture API - Backend-2 Course VG Project");
+    });
 }
 
 app.UseHttpsRedirection();
@@ -68,6 +143,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseCors();
+app.UseAuthentication();  // Add this line - CRITICAL for JWT!
 app.UseAuthorization();
 app.MapControllers();
 

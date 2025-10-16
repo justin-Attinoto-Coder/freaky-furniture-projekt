@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "L5NgvXEVT6JFojIjpFBqr53Q8UdbtsypDUiAQyr5Tj8=",
+  "Hash": "Q7IflgIJFwfQQ7Wou4zZFGvNLPNEu0aBh2rTkxOEtlw=",
   "Source": "FreakyFurnitureAPI",
   "BasePath": "_content/FreakyFurnitureAPI",
   "Mode": "Default",
@@ -851,6 +851,44 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\products\\textil\\freaky-furniture-ai-cs-9.jpg"
+    },
+    {
+      "Identity": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\swagger-ui\\custom.css",
+      "SourceId": "FreakyFurnitureAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\",
+      "BasePath": "_content/FreakyFurnitureAPI",
+      "RelativePath": "swagger-ui/custom.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\swagger-ui\\custom.css"
+    },
+    {
+      "Identity": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\swagger-ui\\custom.js",
+      "SourceId": "FreakyFurnitureAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\",
+      "BasePath": "_content/FreakyFurnitureAPI",
+      "RelativePath": "swagger-ui/custom.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\swagger-ui\\custom.js"
     }
   ]
 }

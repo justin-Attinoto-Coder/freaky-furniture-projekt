@@ -117,7 +117,7 @@ namespace FreakyFurnitureAPI.Controllers
             var expirationHours = int.Parse(jwtSettings["ExpirationInHours"] ?? "24");
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(secretKey);
+            var key = Encoding.UTF8.GetBytes(secretKey); // Changed from ASCII to UTF8
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

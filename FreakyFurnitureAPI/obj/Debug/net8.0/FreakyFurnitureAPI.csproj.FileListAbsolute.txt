@@ -201,3 +201,7 @@ C:\Workspace\JavaScript3-angular\freaky-furniture-projekt\FreakyFurnitureAPI\bin
 C:\Workspace\JavaScript3-angular\freaky-furniture-projekt\FreakyFurnitureAPI\bin\Debug\net8.0\runtimes\win-x64\native\e_sqlite3.dll
 C:\Workspace\JavaScript3-angular\freaky-furniture-projekt\FreakyFurnitureAPI\bin\Debug\net8.0\runtimes\win-x86\native\e_sqlite3.dll
 C:\Workspace\JavaScript3-angular\freaky-furniture-projekt\FreakyFurnitureAPI\bin\Debug\net8.0\FreakyFurnitureAPI.staticwebassets.runtime.json
+C:\Workspace\JavaScript3-angular\freaky-furniture-projekt\FreakyFurnitureAPI\bin\Debug\net8.0\Scrutor.dll
+C:\Workspace\JavaScript3-angular\freaky-furniture-projekt\FreakyFurnitureAPI\bin\Debug\net8.0\Swashbuckle.AspNetCore.Filters.dll
+C:\Workspace\JavaScript3-angular\freaky-furniture-projekt\FreakyFurnitureAPI\bin\Debug\net8.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
+C:\Workspace\JavaScript3-angular\freaky-furniture-projekt\FreakyFurnitureAPI\bin\Debug\net8.0\Swashbuckle.AspNetCore.Annotations.dll

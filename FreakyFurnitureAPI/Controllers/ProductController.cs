@@ -152,6 +152,21 @@ namespace FreakyFurnitureAPI.Controllers
             }
         }
 
+        // TEST: POST /api/products/test-auth (no auth required)
+        [HttpPost("test-auth")]
+        public IActionResult TestAuth()
+        {
+            var user = HttpContext.User;
+            var isAuthenticated = user.Identity?.IsAuthenticated ?? false;
+            var claims = user.Claims.Select(c => new { c.Type, c.Value }).ToList();
+            
+            return Ok(new { 
+                isAuthenticated,
+                claims,
+                message = "Auth test endpoint"
+            });
+        }
+
         // POST /api/products
         [HttpPost]
         [Authorize(Roles = "admin")]

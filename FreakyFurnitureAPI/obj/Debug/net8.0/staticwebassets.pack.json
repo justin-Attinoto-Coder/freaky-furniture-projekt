@@ -177,6 +177,14 @@
       "PackagePath": "staticwebassets\\images\\products\\textil\\freaky-furniture-ai-cs-9.jpg"
     },
     {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\swagger-ui\\custom.css",
+      "PackagePath": "staticwebassets\\swagger-ui\\custom.css"
+    },
+    {
+      "Id": "C:\\Workspace\\JavaScript3-angular\\freaky-furniture-projekt\\FreakyFurnitureAPI\\wwwroot\\swagger-ui\\custom.js",
+      "PackagePath": "staticwebassets\\swagger-ui\\custom.js"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.FreakyFurnitureAPI.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
