@@ -13,4 +13,8 @@ export class AiService {
   chat(message: string): Observable<{ reply: string }> {
     return this.http.post<{ reply: string }>(`${this.apiUrl}/chat`, { message });
   }
+
+  agentChat(message: string): Observable<{ reply: string }> {
+    return this.http.post<{ reply: string }>(`${this.apiUrl}/agent`, { message });
+  }
 }

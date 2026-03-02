@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faRobot, faTimes, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../../services/auth.service';
@@ -31,8 +30,7 @@ export class AiChatComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private aiService: AiService,
-    private router: Router
+    private aiService: AiService
   ) {}
 
   ngOnInit(): void {
@@ -45,11 +43,6 @@ export class AiChatComponent implements OnInit {
     this.isOpen = !this.isOpen;
   }
 
-  goToLogin(): void {
-    this.isOpen = false;
-    this.router.navigate(['/login'], { queryParams: { from: '/home' } });
-  }
-
   sendMessage(): void {
     const text = this.userMessage.trim();
     if (!text || this.isLoading) return;
@@ -58,7 +51,11 @@ export class AiChatComponent implements OnInit {
     this.userMessage = '';
     this.isLoading = true;
 
-    this.aiService.chat(text).subscribe({
+    const request$ = this.isLoggedIn
+      ? this.aiService.chat(text)
+      : this.aiService.agentChat(text);
+
+    request$.subscribe({
       next: response => {
         this.messages.push({ role: 'assistant', text: response.reply });
         this.isLoading = false;

@@ -10,6 +10,12 @@ const chatLimiter = rateLimit({
   message: { message: 'Too many requests, please try again later.' }
 });
 
+const agentLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  message: { message: 'Too many requests, please try again later.' }
+});
+
 const authenticate = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ message: 'Not authorized, no token' });
@@ -26,10 +32,14 @@ const authenticate = (req, res, next) => {
   }
 };
 
-router.post('/chat', chatLimiter, authenticate, async (req, res) => {
-  const { message } = req.body;
-  if (!message) return res.status(400).json({ message: 'Message is required' });
+const mockReplies = [
+  "Hello! I'm your Freaky Furniture assistant. How can I help you find the perfect piece?",
+  "Great question! We have a wide selection of furniture to match your style and budget.",
+  "I can help you find furniture that suits your home. What are you looking for?",
+  "Feel free to browse our categories: Möbler, Förvaring, Detaljer, and Textil!"
+];
 
+async function handleAiMessage(message, res) {
   if (process.env.OPENAI_API_KEY) {
     try {
       const response = await axios.post(
@@ -59,14 +69,28 @@ router.post('/chat', chatLimiter, authenticate, async (req, res) => {
     }
   }
 
-  const mockReplies = [
-    "Hello! I'm your Freaky Furniture assistant. How can I help you find the perfect piece?",
-    "Great question! We have a wide selection of furniture to match your style and budget.",
-    "I can help you find furniture that suits your home. What are you looking for?",
-    "Feel free to browse our categories: Möbler, Förvaring, Detaljer, and Textil!"
-  ];
   const reply = mockReplies[Math.floor(Math.random() * mockReplies.length)];
   res.json({ reply });
+}
+
+// Authenticated chat endpoint (requires JWT token)
+router.post('/chat', chatLimiter, authenticate, async (req, res) => {
+  const { message } = req.body;
+  if (!message) return res.status(400).json({ message: 'Message is required' });
+  if (typeof message !== 'string' || message.length > 1000) {
+    return res.status(400).json({ message: 'Message must be a string of 1000 characters or fewer' });
+  }
+  await handleAiMessage(message, res);
+});
+
+// Agent mode endpoint (no token required)
+router.post('/agent', agentLimiter, async (req, res) => {
+  const { message } = req.body;
+  if (!message) return res.status(400).json({ message: 'Message is required' });
+  if (typeof message !== 'string' || message.length > 1000) {
+    return res.status(400).json({ message: 'Message must be a string of 1000 characters or fewer' });
+  }
+  await handleAiMessage(message, res);
 });
 
 module.exports = router;
