@@ -11,6 +11,7 @@ const shippingDetailsRoutes = require('./routes/shipping-details');
 const customersDetailsRoutes = require('./routes/customers');
 const paymentDetailsRoutes = require('./routes/payment-details');
 const userRoutes = require('./routes/userRoutes');
+const aiRoutes = require('./routes/ai');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -29,6 +30,7 @@ app.use('/api/shipping-details', shippingDetailsRoutes);
 app.use('/api/customers', customersDetailsRoutes);
 app.use('/api/payment-details', paymentDetailsRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/ai', aiRoutes);
 console.log('Payment details route registered');
 
 app.get('/api/products/:id', (req, res) => {

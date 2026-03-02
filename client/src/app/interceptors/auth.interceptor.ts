@@ -12,7 +12,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   let authReq = req;
 
   // Skip token check for public routes
-  const publicRoutes = ['/api/users/login', '/api/users/register', '/api/customers', '/api/shipping-details', '/api/payment-details'];
+  const publicRoutes = ['/api/users/login', '/api/users/register', '/api/customers', '/api/shipping-details', '/api/payment-details', '/api/ai/agent'];
   if (publicRoutes.some(route => req.url.includes(route))) {
     console.log('AuthInterceptor: Public route, skipping token check:', req.url);
     return next(req);

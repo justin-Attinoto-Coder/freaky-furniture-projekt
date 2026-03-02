@@ -1,0 +1,76 @@
+<!-- Floating AI Chat Button -->
+<div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+
+  <!-- Chat Panel -->
+  <div
+    *ngIf="isOpen"
+    class="mb-3 w-80 bg-white rounded-lg shadow-xl flex flex-col border border-gray-200 overflow-hidden"
+    style="max-height: 28rem;"
+  >
+    <!-- Header -->
+    <div class="flex items-center justify-between bg-blue-600 text-white px-4 py-3">
+      <div class="flex items-center gap-2">
+        <fa-icon [icon]="faRobot"></fa-icon>
+        <span class="font-semibold text-sm">AI Assistant</span>
+        <span
+          *ngIf="!isLoggedIn"
+          class="text-xs bg-blue-500 rounded px-1.5 py-0.5 ml-1"
+          title="No sign-in required in agent mode"
+        >Agent Mode</span>
+      </div>
+      <button (click)="toggleChat()" class="hover:text-blue-200">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div class="flex-1 overflow-y-auto p-3 space-y-2" style="max-height: 18rem;">
+      <div *ngIf="messages.length === 0" class="text-gray-400 text-sm text-center mt-4">
+        Ask me anything about our furniture!
+      </div>
+      <div
+        *ngFor="let msg of messages"
+        [ngClass]="msg.role === 'user' ? 'flex justify-end' : 'flex justify-start'"
+      >
+        <div
+          [ngClass]="msg.role === 'user'
+            ? 'bg-blue-600 text-white rounded-xl rounded-br-none'
+            : 'bg-gray-100 text-gray-800 rounded-xl rounded-bl-none'"
+          class="px-3 py-2 text-sm max-w-xs"
+        >
+          {{ msg.text }}
+        </div>
+      </div>
+      <div *ngIf="isLoading" class="flex justify-start">
+        <div class="bg-gray-100 text-gray-500 rounded-xl px-3 py-2 text-sm">Thinking…</div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="border-t border-gray-200 p-2 flex gap-2">
+      <input
+        type="text"
+        [(ngModel)]="userMessage"
+        (keydown)="onKeyDown($event)"
+        placeholder="Type a message…"
+        class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400"
+      />
+      <button
+        (click)="sendMessage()"
+        [disabled]="isLoading || !userMessage.trim()"
+        class="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white rounded-lg px-3 py-2"
+      >
+        <fa-icon [icon]="faPaperPlane"></fa-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Toggle Button -->
+  <button
+    (click)="toggleChat()"
+    class="bg-blue-600 hover:bg-blue-700 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg text-xl"
+    aria-label="Open AI Assistant"
+  >
+    <fa-icon [icon]="faRobot"></fa-icon>
+  </button>
+</div>
